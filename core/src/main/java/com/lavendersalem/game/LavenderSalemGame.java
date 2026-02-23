@@ -1,32 +1,26 @@
 package com.lavendersalem.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.lavendersalem.game.screens.MenuGame;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class LavenderSalemGame extends ApplicationAdapter {
-    private SpriteBatch batch;
-    private Texture image;
+// Clase principal que hereda de game para gestionar los Screen con el Game Loop (crear,renderizar,pausa)
+public class LavenderSalemGame extends Game {
+    public SpriteBatch batch; // Se encarga de "apilar" todas las imagenes para enviarlas a la GPU
 
     @Override
     public void create() {
+        // Inicializar el batch al iniciar el juego
         batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
+        // Pasamos las pantallas (Screens) con setScreen al batch
+        this.setScreen(new MenuGame(this));
     }
-
     @Override
-    public void render() {
-        ScreenUtils.clear(0, 0, 0, 0);
-        batch.begin();
-        batch.draw(image, 140, 210);
-        batch.end();
+    public void render() { // Llama al reder del Screen activo para mostrarlo
+        super.render();
     }
-
     @Override
-    public void dispose() {
-        batch.dispose();
-        image.dispose();
+    public void dispose() { // Para cerrar el juego
+        batch.dispose(); // Limpia memoria ram
     }
 }
