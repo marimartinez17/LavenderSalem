@@ -2,6 +2,7 @@ package com.lavendersalem.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.lavendersalem.game.screens.GameScreen;
 import com.lavendersalem.game.screens.MenuGame;
 
 // Clase principal que hereda de game para gestionar los Screen con el Game Loop (crear,renderizar,pausa)
@@ -13,10 +14,10 @@ public class LavenderSalemGame extends Game {
         // Inicializar el batch al iniciar el juego
         batch = new SpriteBatch();
         // Pasamos las pantallas (Screens) con setScreen al batch
-        this.setScreen(new MenuGame(this));
+        this.setScreen(new GameScreen(this));
     }
     @Override
-    public void render() { // Llama al reder del Screen activo para mostrarlo
+    public void render() { // Llama al render del Screen activo para mostrarlo
         super.render();
     }
     @Override
