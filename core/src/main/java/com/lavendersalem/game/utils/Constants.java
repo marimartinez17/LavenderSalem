@@ -17,10 +17,10 @@ public class Constants {
     public static final int SALEM_LEFT = Input.Keys.A;
     public static final int SALEM_RIGHT = Input.Keys.D;
     // Fisicas generales
-    public static final float GRAVEDAD = -15f;
+    public static final float GRAVEDAD = -1200f;
     // Fisicas de Lavender
-    public static final float LAV_VELOY = 31f;
-    public static final float LAV_VELOX = 60f;
+    public static final float LAV_VELOY = 256f;
+    public static final float LAV_VELOX = 120f;
     // Fisicas de Salem
     public static final float SALEM_VELOY = 10.25f;
     public static final float SALEM_VELOX = 7f;
