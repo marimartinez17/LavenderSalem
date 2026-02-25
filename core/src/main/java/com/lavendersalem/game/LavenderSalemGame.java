@@ -2,10 +2,10 @@ package com.lavendersalem.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.lavendersalem.game.screens.GameScreen;
+import com.lavendersalemLS.game.screens.GameScreen;
 
 public class LavenderSalemGame extends Game {
-    public static LavenderSalemGame game; // Intanciar la clase para el cambio entre screens
+    public static LavenderSalemGame game;// Intanciar la clase para el cambio entre screens
     public SpriteBatch batch;
     @Override
     public void create() {
