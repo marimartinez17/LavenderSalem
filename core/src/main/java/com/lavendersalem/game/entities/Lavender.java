@@ -22,7 +22,7 @@ public class Lavender extends Player{
             velocidad.x += moviEnX;
         }
         if (Gdx.input.isKeyPressed(Constants.LAVE_LEFT)){
-            velocidad.x += -moviEnX;
+            velocidad.x -= moviEnX;
         }
         // Cuando salta aplicamos gravedad
         if (Gdx.input.isKeyPressed(Constants.LAVE_UP) && onSuelo){ // Si se presiona salta y el sprite esta en el suelo

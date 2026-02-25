@@ -16,7 +16,7 @@ public class GameScreen implements Screen {
     // Camara ortografica y viewPoint
     private OrthographicCamera camara;
     private Viewport viewport;
-    private Lavender lavender;
+    private final Lavender lavender;
     private ShapeRenderer shapeRenderer; // Para probrar con hitbox (rectangulo)
     // Constructor del Game
     public GameScreen(LavenderSalemGame game) {
