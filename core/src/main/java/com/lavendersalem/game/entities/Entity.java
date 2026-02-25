@@ -1,31 +1,32 @@
 package com.lavendersalem.game.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-abstract class Entity { // "Plantilla" para los sprites y entities
-    protected Vector2 posicion; // Para posicion y colisiones
-    protected Texture texture;
-    protected float velocidad;
-    protected int tamWidth, tamHeight;
-
-    // Constructor que se ejecuta al crear la entidad
-    public Entity(String rutaTexture, float x, float y, float velocidad, int tamWidth, int tamHeight) {
-        this.texture = new Texture(Gdx.files.internal(rutaTexture)); // Carga la imagen con la ruta
-        this.posicion = new Vector2(x,y); // Posicion en x y
-        this.velocidad = velocidad;
-        this.tamWidth = tamWidth;
-        this.tamHeight = tamHeight;
+public abstract class Entity {
+    // Todas las entidades posee una posicion y velocidad (x,y)
+    protected Vector2 posicion;
+    protected Vector2 velocidad;
+    // Tamaño para las coliciones
+    protected float tamWidth;
+    protected float tamHeight;
+    // Todos poseen un visual (sprites)
+    protected Texture spriteSheet;
+    protected TextureRegion currentFrame;
+    // Constructor
+    public Entity(float x, float y, float tamWidth, float tamHeight) {
+        this.posicion = new Vector2(x,y);
+        this.velocidad = new Vector2(0,0);
+        this.tamWidth = tamWidth; this.tamHeight = tamHeight;
     }
-    // Para movimientos de la entidad (Da la plantilla obligatoria para cada heredero de entity)
+    // Todas las entidades deben actualizarse (mov) y dibujarse
     public abstract void update(float delta);
-    // Para el dibujo de la entidad
-    public void draw(SpriteBatch batch) {
-        batch.draw(texture, posicion.x, posicion.y,tamWidth,tamHeight); // "Dibuja" la textura en la posicion
-    }
-    public void dispose() { // Para liberar memoria
-        texture.dispose();
+    public abstract void draw(SpriteBatch batch);
+    // Hitbox para colisiones (Rectangulo)
+    public Rectangle getBounds() {
+        return new Rectangle(posicion.x, posicion.y, tamWidth, tamHeight);
     }
 }

@@ -1,58 +1,59 @@
-package com.lavendersalem.game.screens;
+package com.lavendersalemLS.game.screens;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lavendersalem.game.LavenderSalemGame;
-import com.lavendersalem.game.entities.Player;
+import com.lavendersalem.game.entities.Lavender;
+import com.lavendersalem.game.utils.Constants;
 
 public class GameScreen implements Screen {
     private final LavenderSalemGame game;
-    // Camara y viewport
-    private OrthographicCamera camera;
+    // Camara ortografica y viewPoint
+    private OrthographicCamera camara;
     private Viewport viewport;
-    // Los player
-    private Player lavender;
-    private Player salem;
-
+    private Lavender lavender;
+    private ShapeRenderer shapeRenderer; // Para probrar con hitbox (rectangulo)
+    // Constructor del Game
     public GameScreen(LavenderSalemGame game) {
         this.game = game;
-        camera = new OrthographicCamera();
-        viewport = new FitViewport(640, 360, camera);
-        // Intanciar personajes
-        lavender = new Player("sprites/Lavender-Static.png", 100, 100, 200f, 16,32,
-            Input.Keys.UP, Input.Keys.DOWN, Input.Keys.LEFT, Input.Keys.RIGHT);
-        salem = new Player("sprites/salemleft-static.png", 50,50,100f,16,16,
-            Input.Keys.W, Input.Keys.S, Input.Keys.A, Input.Keys.D);
+        // Configurar la camara y viewport
+        camara = new OrthographicCamera();
+        viewport = new FitViewport(Constants.VIRTUAL_WIDTH, Constants.VIRTUAL_HEIGHT, camara);
+        lavender = new Lavender(50f,0f);
+        shapeRenderer = new ShapeRenderer();
     }
 
     @Override
-    public void show() {}
+    public void show() { // Se llama cuando el screen se activa
+    }
 
     @Override
     public void render(float delta) {
-        // Se llama al update del personaje
         lavender.update(delta);
-        salem.update(delta);
-        // Limpiar la pantalla (color blanco)
-        ScreenUtils.clear(247/255.0f,218/255.0f,255/255.0f,1);
-        // aplicar viewport (evitar que se distorcione la imagen), actualizar la camara y matriz (batch)
+        // Limpiar pantalla y dejar en fondo blanco
+        ScreenUtils.clear(Color.LIGHT_GRAY);
+        // aplicar viewport, actualizar camara y mantriz del batch
         viewport.apply();
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-        // Hacemos el dibujo
-        game.batch.begin();
-        lavender.draw(game.batch);
-        salem.draw(game.batch);
-        game.batch.end(); // Cerramos el dibujo
+        camara.update();
+        // Para prueba se dibuja el hitbox como rectangulo
+        shapeRenderer.setProjectionMatrix(camara.combined); // para que tome la matriz de la camara
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled); // Para "dibujar" el render
+        shapeRenderer.setColor(Color.PURPLE);
+        shapeRenderer.rect( // Para definir la posicion de aparicion y tamaño
+            lavender.getBounds().x, lavender.getBounds().y,
+            lavender.getBounds().width, lavender.getBounds().height
+        );
+        shapeRenderer.end(); // Termina el dibujo y manda al GPU
     }
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        viewport.update(width, height, true); // Para que si se redimenciona centre el viewport
     }
 
     @Override
@@ -66,7 +67,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        lavender.dispose(); // Se libera textura del personaje al cerrar la pantalla
-        salem.dispose();
+
     }
 }
