@@ -1,4 +1,4 @@
-package com.lavendersalemLS.game.screens;
+package com.lavendersalem.game.screens;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
