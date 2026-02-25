@@ -16,10 +16,10 @@ public class Player extends Entity{
         this.right = teclaRight;
     }
     @Override
-    public void update(float delta) { // Se ejecuta a 60fps
+    public void update(float delta) { // Se ejecuta a 60fps movimiento
         if (Gdx.input.isKeyPressed(up)){ // Retorna true si la tecla es presionada
             posicion.y += velocidad * delta; // +y para subir
-            // Con velocidad + delta es para que la texture se mueva 200 uni*seg sin importar la potencia de la PC
+            // Con velocidad * delta es para que la texture se mueva 200 uni*seg sin importar la potencia de la PC
         }
         if (Gdx.input.isKeyPressed(down)){
             posicion.y -= velocidad * delta;
@@ -32,9 +32,8 @@ public class Player extends Entity{
         }
         // Para delimitar la ventana
         if (posicion.x < 0) posicion.x = 0; // Limite izquierdo
-        if (posicion.x > 720 - tamWidth) posicion.x = 720 - tamWidth; // Limite Derecho
+        if (posicion.x > 640 - tamWidth) posicion.x = 640 - tamWidth; // Limite Derecho
         if (posicion.y < 0) posicion.y = 0; // Limite inferior
         if (posicion.y > 360 - tamHeight) posicion.y = 360 - tamHeight; // Limite superior
-
     }
 }

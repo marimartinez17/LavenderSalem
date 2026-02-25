@@ -21,10 +21,12 @@ public class GameScreen implements Screen {
     public GameScreen(LavenderSalemGame game) {
         this.game = game;
         camera = new OrthographicCamera();
-        viewport = new FitViewport(720, 360, camera);
+        viewport = new FitViewport(640, 360, camera);
         // Intanciar personajes
-        lavender = new Player("sprites/Lavender-Static.png", 100, 100, 200f, 32,64,
+        lavender = new Player("sprites/Lavender-Static.png", 100, 100, 200f, 16,32,
             Input.Keys.UP, Input.Keys.DOWN, Input.Keys.LEFT, Input.Keys.RIGHT);
+        salem = new Player("sprites/salemleft-static.png", 50,50,100f,16,16,
+            Input.Keys.W, Input.Keys.S, Input.Keys.A, Input.Keys.D);
     }
 
     @Override
@@ -34,6 +36,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         // Se llama al update del personaje
         lavender.update(delta);
+        salem.update(delta);
         // Limpiar la pantalla (color blanco)
         ScreenUtils.clear(247/255.0f,218/255.0f,255/255.0f,1);
         // aplicar viewport (evitar que se distorcione la imagen), actualizar la camara y matriz (batch)
@@ -43,6 +46,7 @@ public class GameScreen implements Screen {
         // Hacemos el dibujo
         game.batch.begin();
         lavender.draw(game.batch);
+        salem.draw(game.batch);
         game.batch.end(); // Cerramos el dibujo
     }
 
@@ -63,5 +67,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         lavender.dispose(); // Se libera textura del personaje al cerrar la pantalla
+        salem.dispose();
     }
 }
