@@ -22,6 +22,6 @@ public class Constants {
     public static final float LAV_VELOY = 256f;
     public static final float LAV_VELOX = 120f;
     // Fisicas de Salem
-    public static final float SALEM_VELOY = 10.25f;
-    public static final float SALEM_VELOX = 7f;
+    public static final float SALEM_VELOY = 256f;
+    public static final float SALEM_VELOX = 160f;
 }

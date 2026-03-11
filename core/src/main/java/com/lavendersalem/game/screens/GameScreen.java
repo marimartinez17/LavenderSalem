@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lavendersalem.game.LavenderSalemGame;
 import com.lavendersalem.game.entities.Lavender;
+import com.lavendersalem.game.entities.Salem;
 import com.lavendersalem.game.utils.Constants;
 
 public class GameScreen implements Screen {
@@ -17,6 +18,7 @@ public class GameScreen implements Screen {
     private OrthographicCamera camara;
     private Viewport viewport;
     private final Lavender lavender;
+    private final Salem salem;
     private ShapeRenderer shapeRenderer; // Para probrar con hitbox (rectangulo)
     // Constructor del Game
     public GameScreen(LavenderSalemGame game) {
@@ -25,6 +27,7 @@ public class GameScreen implements Screen {
         camara = new OrthographicCamera();
         viewport = new FitViewport(Constants.VIRTUAL_WIDTH, Constants.VIRTUAL_HEIGHT, camara);
         lavender = new Lavender(50f,0f);
+        salem = new Salem(100f,0f);
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -35,6 +38,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         lavender.update(delta);
+        salem.update(delta);
         // Limpiar pantalla y dejar en fondo blanco
         ScreenUtils.clear(Color.LIGHT_GRAY);
         // aplicar viewport, actualizar camara y mantriz del batch
@@ -47,6 +51,11 @@ public class GameScreen implements Screen {
         shapeRenderer.rect( // Para definir la posicion de aparicion y tamaño
             lavender.getBounds().x, lavender.getBounds().y,
             lavender.getBounds().width, lavender.getBounds().height
+        );
+        shapeRenderer.setColor(Color.GRAY);
+        shapeRenderer.rect(
+            salem.getBounds().x, salem.getBounds().y,
+            salem.getBounds().width, salem.getBounds().height
         );
         shapeRenderer.end(); // Termina el dibujo y manda al GPU
     }
