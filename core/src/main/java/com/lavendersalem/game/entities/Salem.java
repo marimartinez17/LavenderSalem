@@ -24,14 +24,20 @@ public class Salem extends Player{
         if (Gdx.input.isKeyPressed(Constants.SALEM_LEFT)){
             velocidad.x -= moviEnX;
         }
-        if (Gdx.input.isKeyJustPressed(Constants.SALEM_UP)){
+        if (Gdx.input.isKeyJustPressed(Constants.SALEM_UP)) {
+            tiempoBufferSalto = MAX_BUFFER_SALTO;
+        }
+        // Para optimizar salto
+        if (tiempoBufferSalto > 0) {
             if (onSuelo) {
                 velocidad.y = fuerzaSalto;
                 onSuelo = false;
-                dobleSalto = true; // Permite ejecutar el doble salto
+                dobleSalto = true; // Para permitir doble salto
+                tiempoBufferSalto = 0f;
             } else if (dobleSalto) {
-                velocidad.y = fuerzaSalto * 1.2f;
-                dobleSalto = false; // Se quita la opcion de doble salto
+                velocidad.y = fuerzaSalto;
+                dobleSalto = false; // Desactiva una vez hecho
+                tiempoBufferSalto = 0f;
             }
         }
     }
@@ -39,13 +45,6 @@ public class Salem extends Player{
     @Override
     public void update(float delta) {
         super.update(delta);
-        // Suelo practica
-        if (posicion.y <= 0) {
-            posicion.y = 0;
-            velocidad.y = 0;
-            onSuelo = true;
-            dobleSalto = false; // Mientras esta en suelo no puede hacer doble salto directo
-        }
     }
 
     @Override
