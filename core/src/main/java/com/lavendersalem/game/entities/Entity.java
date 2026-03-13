@@ -29,4 +29,12 @@ public abstract class Entity {
     public Rectangle getBounds() {
         return new Rectangle(posicion.x, posicion.y, tamWidth, tamHeight);
     }
+    // SETTERS PARA COLISIONES
+    public Vector2 getPosicion() { return posicion; }
+    public void setPosicionX(float x) { posicion.x = x; }
+    public void setPosicionY(float y) { posicion.y = y; }
+
+    public Vector2 getVelocidad() { return velocidad; }
+    public void setVelocidadX(float velox) { velocidad.x = velox; }
+    public void setVelocidadY(float veloy) { velocidad.y = veloy; }
 }
