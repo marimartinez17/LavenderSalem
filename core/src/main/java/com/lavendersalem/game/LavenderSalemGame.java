@@ -11,7 +11,7 @@ public class LavenderSalemGame extends Game {
     public void create() {
         game = this; // El coordinador de Screens (game) que es esta clase (principal)
         batch = new SpriteBatch(); // LLeva los assets "apilados" a la GPU
-        setScreen(new GameScreen(game));
+        setScreen(new GameScreen(game, 1));
     }
 
     @Override
