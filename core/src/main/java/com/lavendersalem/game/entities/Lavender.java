@@ -9,8 +9,7 @@ public class Lavender extends Player{
     private boolean esperaRescate = false;
     // Constructor (Crea a Lavender)
     public Lavender(float x, float y) {
-        super(x,y,16f,32f); // Posicion (x,y) y tamaño por PPM
-        this.vidas = 1;
+        super(x,y,16f,32f, 1); // Posicion (x,y) y tamaño por PPM
         this.moviEnX = Constants.LAV_VELOX;
         this.fuerzaSalto = Constants.LAV_VELOY;
     }
@@ -23,12 +22,11 @@ public class Lavender extends Player{
             return;
         }
         velocidad.x = 0; // Inicializamos la velocidad como tal en el eje X
-        // Cuando se mueva a la izquierda o derecha
         if (Gdx.input.isKeyPressed(Constants.LAVE_RIGHT)){
             velocidad.x += moviEnX;
         }
         if (Gdx.input.isKeyPressed(Constants.LAVE_LEFT)){
-            velocidad.x += -moviEnX;
+            velocidad.x -= moviEnX;
         }
         // Si se presiona salto, guardar en buffer
         if (Gdx.input.isKeyPressed(Constants.LAVE_UP)) {
@@ -58,9 +56,14 @@ public class Lavender extends Player{
     }
 
     @Override
+    public void resetear(float spawnX, float spawnY) {
+        super.resetear(spawnX, spawnY);
+        esperaRescate = false;
+    }
+
+    @Override
     public void update(float delta) {
         super.update(delta); // Aplica el sistema de salto y movimiento
-        /* ACA VAN LAS COLISIONES, INTERACCIONES Y DEMAS */
     }
     // Llama al batch de la clase principal
     @Override

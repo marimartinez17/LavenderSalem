@@ -13,7 +13,7 @@ public class SistemaVidas {
     private boolean esperaRescate = false;
     private float tiempoEsperaRes = 0f;
     private float lavenderMuertaX, lavenderMuertaY;
-    private boolean lavVivaFrameAnt = true, lavViva = true;
+    private boolean lavVivaFrameAnt = true;
 
     public SistemaVidas(Lavender lavender, Salem salem) {
         this.lavender = lavender;
@@ -55,7 +55,15 @@ public class SistemaVidas {
     }
 
     public boolean isGameOver() {
-        return !lavender.isVivo() && (!esperaRescate || salem.getVidas() <= 1);
+        return (!lavender.isVivo() || !salem.isVivo())
+            && (!esperaRescate || salem.getVidas() <= 1);
+    }
+
+    public void resetear() {
+        esperaRescate = false;
+        tiempoEsperaRes = 0f;
+        lavenderMuertaX = 0f; lavenderMuertaY = 0f;
+        lavVivaFrameAnt = true;
     }
     // GETTER PARA EL GAME
     public boolean isEsperaRescate() { return esperaRescate; }

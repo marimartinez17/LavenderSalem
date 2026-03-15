@@ -7,6 +7,7 @@ public abstract class Player extends Entity { // Player hereda de Entity porque 
     //Atributos de Player
     protected boolean onSuelo; // Si el personaje esta en el suelo
     protected boolean vivo;
+    protected int vidasInicial;
     protected int vidas; // Numero de vidas del personaje
     // Constantes físicas de cada persona (Definidas en Constants)
     protected float moviEnX; // Velocidad en carrera
@@ -15,10 +16,12 @@ public abstract class Player extends Entity { // Player hereda de Entity porque 
     protected float tiempoBufferSalto = 0f;
     protected static final float MAX_BUFFER_SALTO = 0.1f; // 100ms de ventana
     // Constructor
-    public Player(float x, float y, float tamWidth, float tamHeight) {
+    public Player(float x, float y, float tamWidth, float tamHeight, int vidasInicial) {
         super(x, y, tamWidth, tamHeight);
         this.onSuelo = false; // En false porque al aplicar gravedad queda sobre suelo
         this.vivo = true; // Siempre spawnea vivo
+        this.vidasInicial = vidasInicial;
+        this.vidas = vidasInicial;
     }
     // Para actualizar el estado y movimiento del player
     @Override
@@ -58,6 +61,15 @@ public abstract class Player extends Entity { // Player hereda de Entity porque 
         setOnSuelo(false);
         if (vidas <= 0) vivo = false;
     }
+
+    @Override
+    public void resetear(float spawnX, float spawnY) {
+        super.resetear(spawnX, spawnY);
+        vidas = vidasInicial;
+        vivo = true;
+        onSuelo = false;
+    }
+
     // GETTERS Y SETTER PARA EL GAMESCREEN
     public boolean isOnSuelo() { return onSuelo; }
     public void setOnSuelo(boolean onSuelo) { this.onSuelo = onSuelo; }

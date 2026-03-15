@@ -9,8 +9,7 @@ public class Salem extends Player{
     private boolean dobleSalto; // Para establecer el doble salto
     // Constructor para crear a Salem
     public Salem(float x, float y) {
-        super(x,y,16f,16f);
-        this.vidas = 3;
+        super(x,y,16f,16f, 3);
         this.moviEnX = Constants.SALEM_VELOX;
         this.fuerzaSalto = Constants.SALEM_VELOY;
         this.dobleSalto = false; // No puede hacer doble salto hasta intentar el primero
@@ -40,6 +39,11 @@ public class Salem extends Player{
                 tiempoBufferSalto = 0f;
             }
         }
+    }
+
+    @Override
+    public void resetear(float spawnX, float spawnY) {
+        super.resetear(spawnX, spawnY);
     }
 
     @Override
