@@ -8,6 +8,10 @@ public class Constants {
     public static final int VIRTUAL_HEIGHT = 360;
     public static final float PPM = 16f; // Pixels por metro
     public static final float DELTA_MAXIMO = 0.05f; // Maximo de fps
+    // Teclas especiales de Juego
+    public static final int PAUSE_ESC = Input.Keys.ESCAPE;
+    public static final int PAUSE_P = Input.Keys.P;
+    public static final int RESET_KEY = Input.Keys.R;
     // Teclas juego Lavender
     public static final int LAVE_UP = Input.Keys.UP;
     public static final int LAVE_LEFT = Input.Keys.LEFT;
