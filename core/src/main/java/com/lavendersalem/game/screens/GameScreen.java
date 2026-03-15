@@ -1,5 +1,6 @@
 package com.lavendersalem.game.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -8,11 +9,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lavendersalem.game.LavenderSalemGame;
 import com.lavendersalem.game.entities.Lavender;
 import com.lavendersalem.game.entities.Salem;
 import com.lavendersalem.game.utils.Constants;
+import com.lavendersalem.game.utils.Enums;
 import com.lavendersalem.game.world.SistemaColisiones;
 import com.lavendersalem.game.world.SistemaVidas;
 
@@ -21,9 +22,10 @@ public class GameScreen implements Screen {
     private final SistemaColisiones sistemaColisiones;
     //private final Level nivelActual; // Para alternar entre niveles
     private boolean pausado;
+    private final OverlayPausa overlayPausa;
     // Camara ortografica y viewPoint
     private final OrthographicCamera camara;
-    private final Viewport viewport;
+    private final FitViewport viewport;
     private final Lavender lavender;
     private final Salem salem;
     private final SistemaVidas sistemaVidas;
@@ -38,6 +40,7 @@ public class GameScreen implements Screen {
         // Configurar la camara y viewport
         camara = new OrthographicCamera();
         viewport = new FitViewport(Constants.VIRTUAL_WIDTH, Constants.VIRTUAL_HEIGHT, camara);
+        overlayPausa = new OverlayPausa(camara, viewport);
         lavender = new Lavender(48f,48f);
         salem = new Salem(60f,48f);
         sistemaVidas = new SistemaVidas(lavender, salem);
@@ -91,6 +94,10 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         delta = Math.min(delta, Constants.DELTA_MAXIMO);
         // Para pantalla de pausa
+        if (Gdx.input.isKeyJustPressed(Constants.PAUSE_ESC)
+            || Gdx.input.isKeyJustPressed(Constants.PAUSE_P)) {
+            pausado = !pausado;
+        }
         if (!pausado) {
             sistemaVidas.cederVidas(delta, 48f, 48f);
             if (sistemaVidas.isGameOver()) {
@@ -100,6 +107,10 @@ public class GameScreen implements Screen {
             // Lavender solo puede moverse si no espera rescate
             if (!sistemaVidas.isEsperaRescate()) {
                 sistemaColisiones.actualizarPlayer(lavender, delta, 48f, 48f);
+            }
+            // Reset
+            if (Gdx.input.isKeyJustPressed(Constants.RESET_KEY)) {
+                resetNivel();
             }
         }
         // Limpiar pantalla y dejar en fondo blanco
@@ -144,6 +155,30 @@ public class GameScreen implements Screen {
             shapeRenderer.rect(barraX, barraY, barraAncho * proporcion, barraAlto);
         }
         shapeRenderer.end(); // Termina el dibujo y manda al GPU
+        // Overlay de pausa sobre el juego
+        if (pausado) {
+            overlayPausa.dibujar();
+
+            Enums.AccionPausa accionPausa = overlayPausa.manejarClicks();
+            switch (accionPausa) {
+                case CONTINUAR -> pausado = false;
+                case RESET -> {
+                    resetNivel();
+                    pausado = false;
+                }
+                case MENU_PPAL -> {
+                    game.setScreen(new MenuPrincipal(game));
+                    dispose();
+                }
+                case NINGUNA -> {
+                }
+            }
+        }
+    }
+    private void resetNivel () {
+        lavender.resetear(48f, 48f);
+        salem.resetear(60f, 48f);
+        sistemaVidas.resetear();
     }
 
     @Override
@@ -163,6 +198,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         shapeRenderer.dispose(); // Libera los hitbox
+        overlayPausa.dispose();
     }
 
 }

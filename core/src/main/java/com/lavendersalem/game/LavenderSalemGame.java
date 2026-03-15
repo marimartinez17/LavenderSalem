@@ -2,7 +2,7 @@ package com.lavendersalem.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.lavendersalem.game.screens.GameScreen;
+import com.lavendersalem.game.screens.MenuPrincipal;
 
 public class LavenderSalemGame extends Game {
     public static LavenderSalemGame game; // Intanciar la clase para el cambio entre screens
@@ -11,7 +11,7 @@ public class LavenderSalemGame extends Game {
     public void create() {
         game = this; // El coordinador de Screens (game) que es esta clase (principal)
         batch = new SpriteBatch(); // LLeva los assets "apilados" a la GPU
-        setScreen(new GameScreen(game, 1));
+        setScreen(new MenuPrincipal(game));
     }
 
     @Override
