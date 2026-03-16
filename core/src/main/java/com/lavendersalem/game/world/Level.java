@@ -4,7 +4,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapLoader;
 
 public class Level {
-    private TiledMap mapaNivel;
+    private final TiledMap mapaNivel;
 
     public Level(int numeroNivel) {
         String ruta = "mapas/nivel" + numeroNivel + ".tmx";
