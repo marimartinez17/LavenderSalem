@@ -100,5 +100,4 @@ public class OverlayPausa {
         shapeRenderer.dispose();
         font.dispose();
     }
-
 }

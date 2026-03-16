@@ -83,7 +83,6 @@ public class GameScreen implements Screen {
         for (int x = 34; x < 37; x++) {
             tilesPeligros.add(new Rectangle(x * 16, -17, 16, 32));
         }
-
     }
 
     @Override

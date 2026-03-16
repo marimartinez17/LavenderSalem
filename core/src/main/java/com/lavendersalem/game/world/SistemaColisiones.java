@@ -26,7 +26,7 @@ public class SistemaColisiones {
         Rectangle tileEnX = obtenerTileColision(player, tilesSolidos);
         if (tileEnX != null) colisionEnX(player, tileEnX);
 
-        /// En Y
+        // En Y
         player.setOnSuelo(false);
         player.movEnY(delta);
         if (player.getPosicion().y < -80f) {
@@ -59,7 +59,7 @@ public class SistemaColisiones {
     private void colisionesEnY(Player player, Rectangle tile) {
         Rectangle perso = player.getBounds();
         // Sobre el tile
-        if ((perso.y + perso.height / 2) > (tile.y + tile.height / 2)) {
+        if (perso.y + (perso.height / 2) > tile.y + (tile.height / 2)) {
             player.setPosicionY(tile.y + tile.height);
             player.setVelocidadY(0); // Para que no traspase el tile
             player.setOnSuelo(true);

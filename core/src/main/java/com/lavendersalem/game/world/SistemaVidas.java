@@ -23,7 +23,7 @@ public class SistemaVidas {
     public void cederVidas(float delta, float spawnLavX, float spawnLavY) {
         if (esperaRescate) { // Si esta esperando rescate
             tiempoEsperaRes -= delta; // para resta del contrareloj
-            // Calculo de distancia por pit
+            // Calculo de distancia por tile
             float distancia = Vector2.dst(lavender.getPosicion().x, lavender.getPosicion().y,
                 salem.getPosicion().x, salem.getPosicion().y);
             // Validar en true si pasa
