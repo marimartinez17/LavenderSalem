@@ -1,0 +1,67 @@
+Lavender & Salem (Juego 2D pixelart tipo platformer con puzles coop a pantalla compartida)
+
+Personajes:
+1) Lavender (Bruja). 16x32 pixels. Mecanicas:
+    -. Una sola vida (Hecho)
+    -. Empujar bloques
+    -. Interactuar con palancas, placas y puertas especiales
+    -. Recibe vidas de Salem (Hecho)
+
+2) Salem (Gato). 16x16. Mecanicas:
+    -. Doble Salto (Hecho)
+    -. 3 vidas  (Hecho)
+    -. Interactuar con palancas y placas
+    -. Cede vidas a Lavender (Hecho)
+
+Enemigos:
+1) Murcielago. 16x16. Mecanicas:
+    -. IA básico (Sigue a los personajes cuando se encuentran cerca)
+
+Interactuables:
+1) Placas: Desbloquear puertas, levantar plataformas (tipo ascensor)
+2) Palancas: Funciona de forma similar a las placas pero mantienen el switch
+3) Troncos (bloques móviles): Funcionan como platarformas.
+
+Coleccionables:
+1) Pergaminos: Desbloquean scenesCut o assets
+2) Trozos de Varita: Se consiguen al final de cada nivel y son la "llave" para el siguiente nivel
+
+Mecanicas (sistemas) de juego:
+
+1) Sistema de Colisiones y Físicas basico:
+    -. Gravedad para objetos y entities (Hecho)
+    -. Colisiones contra tiles solidos  (Hecho)
+    -. Colisiones contra tiles peligrosos (Hecho)
+    -. Colisiones contra tiles interactuables (cajas)
+
+2) Sistema de Vidas: Para la mecánica de "traspaso" de vidas (Hecho)
+
+3) Sistema de Interactuables:
+    -. Elevadores / plataformas moviles (placas/palancas)
+    -. Apertura de puertas (placas/palancas)
+    -. Puertas especiales (Habilidad de Lavender)
+
+Pantallas de Juego:
+1) Menu Principal: (Hecho)
+    -. Jugar: apertura primer nivel o nivel actual (si ya se a jugado antes)
+    -. Niveles: muestra pantalla de seleccion de niveles
+    -. Opciones: muestra opciones
+    -. Salir: exit de la app
+
+2) GameScreen: Pantalla de juego
+    -. Se cargan los niveles en sí y gameloop. (Hecho)
+    -. Posee OverlayPause, para pausa del juego (Hecho)
+    *** Además las pantallas de win y game over (Por definir si son overlay y funcion)
+
+3) Niveles:
+    -. Muestra los niveles disponibles, superados y bloqueados.
+    -. Muestra las estrellas conseguidas por nivel
+    -. Muestra numero de coleccionables conseguidos y acceso a scencuts (assets)
+    -. Permite iniciar un nivel seleccionado
+
+4) Opciones:
+    -. Muestra opciones de configuracion de sonido (mute)
+    -. Muestra Créditos
+
+
+
