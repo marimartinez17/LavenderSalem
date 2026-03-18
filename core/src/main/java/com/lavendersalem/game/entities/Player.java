@@ -15,6 +15,8 @@ public abstract class Player extends Entity { // Player hereda de Entity porque 
     // Para optimizar el salto en mov
     protected float tiempoBufferSalto = 0f;
     protected static final float MAX_BUFFER_SALTO = 0.1f; // 100ms de ventana
+    // Para dibujado (sprites)
+    protected float timeAnimacion = 0f;
     // Constructor
     public Player(float x, float y, float tamWidth, float tamHeight, int vidasInicial) {
         super(x, y, tamWidth, tamHeight);
@@ -26,11 +28,14 @@ public abstract class Player extends Entity { // Player hereda de Entity porque 
     // Para actualizar el estado y movimiento del player
     @Override
     public void update(float delta) {
+        timeAnimacion += delta; // Acumula tiempo en cada frame
         if (tiempoBufferSalto > 0) tiempoBufferSalto -= delta; // Reducir buffer cada frame
         configMov();
         aplicGravedad(delta);
+        actualizarAnimacion();
     }
-    protected abstract void configMov(); // Cada player tiene su configuracion de movimientos
+    protected abstract void configMov(); // Cada player tiene su configuracion de Teclas
+    protected abstract void actualizarAnimacion(); // Cada palyer maneja sus frames
     // Para que el player quede sobre el suelo y en caso de salto aplica gravedad
     private void aplicGravedad(float delta) {
         if(!onSuelo){

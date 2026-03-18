@@ -41,6 +41,12 @@ Mecanicas (sistemas) de juego:
     -. Apertura de puertas (placas/palancas)
     -. Puertas especiales (Habilidad de Lavender)
 
+4) Sistema de Estrellas a Contrareloj:
+    -. De acuerdo al tiempo en que se complete el nivel asigna estrella:
+        * 1 estrella: Completar el nivel
+        * 2 estrella: Completarlo en X tiempo
+        * 3 estrella: Completarlo en menor tiempo posible
+
 Pantallas de Juego:
 1) Menu Principal: (Hecho)
     -. Jugar: apertura primer nivel o nivel actual (si ya se a jugado antes)
@@ -63,5 +69,7 @@ Pantallas de Juego:
     -. Muestra opciones de configuracion de sonido (mute)
     -. Muestra Créditos
 
+5) HUD:
+    -. Muestra Vidas, tiempo en nivel, coleccionable obtenido
 
 
