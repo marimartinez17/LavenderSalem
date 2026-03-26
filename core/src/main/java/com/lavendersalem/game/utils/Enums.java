@@ -7,4 +7,11 @@ public class Enums {
         RESET,
         MENU_PPAL
     }
+
+    public enum EstadoMurcielago{
+        PATRULLA,
+        PERSIGUE,
+        PAUSA,
+        REGRESA
+    }
 }
