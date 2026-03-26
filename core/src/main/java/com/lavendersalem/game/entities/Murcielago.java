@@ -79,7 +79,6 @@ public class Murcielago extends Enemy{
             tiempoPausa = Constants.MURCI_PAUSA;
         }
     }
-
     private void perseguir(float delta, Player objetivo) {
         // Diferencia de dis entre murcielago y objetivo por pitagoras
         float difX = (objetivo.getPosicion().x - posicion.x);
@@ -91,7 +90,6 @@ public class Murcielago extends Enemy{
             posicion.x += (difX / difDistancia) * Constants.MURCI_VELO * delta;
         }
     }
-
     private void pausa(float delta) {
         tiempoPausa -= delta;
 
@@ -99,7 +97,6 @@ public class Murcielago extends Enemy{
             estadoActual = Enums.EstadoMurcielago.PATRULLA;
         }
     }
-
     private void regresar(float delta) {
         if (posicion.x > limiteDer) {
             posicion.x -= Constants.MURCI_VELO * delta;
