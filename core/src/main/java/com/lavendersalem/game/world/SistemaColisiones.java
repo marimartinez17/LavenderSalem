@@ -2,6 +2,8 @@ package com.lavendersalem.game.world;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.lavendersalem.game.entities.Enemy;
+import com.lavendersalem.game.entities.Entity;
 import com.lavendersalem.game.entities.Player;
 
 public class SistemaColisiones {
@@ -38,9 +40,9 @@ public class SistemaColisiones {
         if (verificarPeligro(player, spawnX, spawnY)) return;
     }
     // SISTEMA DE COLISIONES
-    private Rectangle obtenerTileColision(Player player, Array<Rectangle> tiles) {
+    private Rectangle obtenerTileColision(Entity entidad, Array<Rectangle> tiles) {
         for (Rectangle tile : tiles) {
-            if (player.getBounds().overlaps(tile)){
+            if (entidad.getBounds().overlaps(tile)){
                 return tile; //Devuelve el tile con el que choca
             }
         }
@@ -59,7 +61,7 @@ public class SistemaColisiones {
     private void colisionesEnY(Player player, Rectangle tile) {
         Rectangle perso = player.getBounds();
         // Sobre el tile
-        if (perso.y + (perso.height / 2) > tile.y + (tile.height / 2)) {
+        if ((perso.y + perso.height / 2) > (tile.y + tile.height / 2)) {
             player.setPosicionY(tile.y + tile.height);
             player.setVelocidadY(0); // Para que no traspase el tile
             player.setOnSuelo(true);
@@ -74,11 +76,8 @@ public class SistemaColisiones {
         Rectangle perso = player.getBounds();
         for (Rectangle peligro : tilesPeligro) {
             // Zona de peligro expandida hacia arriba hasta el nivel del suelo
-            Rectangle zonaPeligro = new Rectangle(
-                peligro.x,
-                peligro.y,
-                peligro.width,
-                peligro.height // Se puede ajustar altura de acuerdo a donde este el tile
+            Rectangle zonaPeligro = new Rectangle( // Se puede ajustar de acuerdo a donde este el tile
+                peligro.x, peligro.y, peligro.width, peligro.height
             );
             if (perso.overlaps(zonaPeligro)) {
                 player.morir(spawnX, spawnY);
@@ -86,5 +85,29 @@ public class SistemaColisiones {
             }
         }
         return false;
+    }
+    // PARA ENEMIGOS
+    public void verificarEnemigo(Enemy enemigo, Player player, float spawnX, float spawnY) {
+        if (!player.isVivo() || !enemigo.isActivo()) return; // Si player esta muerto no hace nada
+
+        if (enemigo.getBounds().overlaps(player.getBounds())) {
+            player.morir(spawnX,spawnY);
+        }
+    }
+    public void actualizarEnemigo(Enemy enemigo, float delta) {
+        enemigo.update(delta);
+        if (!enemigo.isActivo()) return;
+
+        Rectangle tileEnX = obtenerTileColision(enemigo, tilesSolidos);
+        if (tileEnX != null) {
+            Rectangle bounds = enemigo.getBounds();
+            if (bounds.x + (bounds.width / 2) < tileEnX.x + (tileEnX.width / 2)) {
+                enemigo.setPosicionX(tileEnX.x - bounds.width);
+            } else {
+                enemigo.setPosicionX(tileEnX.x + tileEnX.width);
+            }
+            // Invertir dirección al chocar con pared
+            enemigo.setVelocidadX(-enemigo.getVelocidad().x);
+        }
     }
 }
