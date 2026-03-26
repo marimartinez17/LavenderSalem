@@ -10,7 +10,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.lavendersalem.game.LavenderSalemGame;
+import com.lavendersalem.game.entities.Enemy;
 import com.lavendersalem.game.entities.Lavender;
+import com.lavendersalem.game.entities.Murcielago;
 import com.lavendersalem.game.entities.Salem;
 import com.lavendersalem.game.utils.Constants;
 import com.lavendersalem.game.utils.Enums;
@@ -32,6 +34,7 @@ public class GameScreen implements Screen {
     private final ShapeRenderer shapeRenderer; // Para probrar con hitbox (rectangulo)
     private final Array<Rectangle> tilesSolidos;
     private final Array<Rectangle> tilesPeligros;
+    private final Array<Enemy> enemigos;
 
     // Constructor del Game
     public GameScreen(LavenderSalemGame game, int numeroNivel) {
@@ -47,6 +50,8 @@ public class GameScreen implements Screen {
         shapeRenderer = new ShapeRenderer();
         tilesSolidos = new Array<>();
         tilesPeligros = new Array<>();
+        enemigos = new Array<>();
+        enemigos.add(new Murcielago(200f, 20f, lavender, salem));
         crearTilesPrueba();
         sistemaColisiones = new SistemaColisiones(tilesSolidos, tilesPeligros);
     }
@@ -83,6 +88,7 @@ public class GameScreen implements Screen {
         for (int x = 34; x < 37; x++) {
             tilesPeligros.add(new Rectangle(x * 16, -17, 16, 32));
         }
+
     }
 
     @Override
@@ -98,15 +104,27 @@ public class GameScreen implements Screen {
             pausado = !pausado;
         }
         if (!pausado) {
+            for (Enemy en : enemigos) { // Actualizar enemigos
+                sistemaColisiones.actualizarEnemigo(en, delta);
+            }
+            // Lavender
+            if (!sistemaVidas.isEsperaRescate()) {
+                // Lavender solo puede moverse si no espera rescate
+                sistemaColisiones.actualizarPlayer(lavender, delta, 48f, 48f);
+                for (Enemy en : enemigos) {
+                    sistemaColisiones.verificarEnemigo(en, lavender, 48f, 48f);
+                }
+            }
+            // Carga el sistema de vidas
             sistemaVidas.cederVidas(delta, 48f, 48f);
             if (sistemaVidas.isGameOver()) {
                 System.out.println("GAME OVER");
             }
-            sistemaColisiones.actualizarPlayer(salem, delta, 60f, 48f);
-            // Lavender solo puede moverse si no espera rescate
-            if (!sistemaVidas.isEsperaRescate()) {
-                sistemaColisiones.actualizarPlayer(lavender, delta, 48f, 48f);
+            // Salem
+            for (Enemy en : enemigos) {
+                sistemaColisiones.verificarEnemigo(en, salem, 60f,48f);
             }
+            sistemaColisiones.actualizarPlayer(salem, delta, 60f, 48f);
             // Reset
             if (Gdx.input.isKeyJustPressed(Constants.RESET_KEY)) {
                 resetNivel();
@@ -129,16 +147,6 @@ public class GameScreen implements Screen {
         for (Rectangle tPeli : tilesPeligros) {
             shapeRenderer.rect(tPeli.x, tPeli.y, tPeli.width, tPeli.height);
         }
-        shapeRenderer.setColor(Color.PURPLE); // Lavender
-        shapeRenderer.rect( // Para definir la posicion de aparicion y tamaño
-            lavender.getBounds().x, lavender.getBounds().y,
-            lavender.getBounds().width, lavender.getBounds().height
-        );
-        shapeRenderer.setColor(Color.GRAY); // Salem
-        shapeRenderer.rect(
-            salem.getBounds().x, salem.getBounds().y,
-            salem.getBounds().width, salem.getBounds().height
-        );
         // Barra de rescate sobre Lavender
         if (sistemaVidas.isEsperaRescate()) {
             float barraAncho = 64f;
@@ -153,7 +161,21 @@ public class GameScreen implements Screen {
             shapeRenderer.setColor(Color.CORAL);
             shapeRenderer.rect(barraX, barraY, barraAncho * proporcion, barraAlto);
         }
+        // Murcielago
+        shapeRenderer.setColor(Color.RED);
+        for (Enemy e : enemigos) {
+            shapeRenderer.rect(e.getBounds().x, e.getBounds().y,
+                e.getBounds().width, e.getBounds().height
+            );
+        }
         shapeRenderer.end(); // Termina el dibujo y manda al GPU
+        // Para dibujar sprites
+        game.batch.setProjectionMatrix(camara.combined);
+        game.batch.begin();
+        salem.draw(game.batch);
+        lavender.draw(game.batch);
+        game.batch.end();
+
         // Overlay de pausa sobre el juego
         if (pausado) {
             overlayPausa.dibujar();
@@ -178,6 +200,7 @@ public class GameScreen implements Screen {
         lavender.resetear(48f, 48f);
         salem.resetear(60f, 48f);
         sistemaVidas.resetear();
+        for (Enemy e : enemigos) e.resetear(0f, 0f);
     }
 
     @Override
@@ -197,6 +220,8 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         shapeRenderer.dispose(); // Libera los hitbox
+        salem.dispose();
+        lavender.dispose();
         overlayPausa.dispose();
     }
 
