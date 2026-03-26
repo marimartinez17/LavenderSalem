@@ -23,7 +23,7 @@ public class SistemaVidas {
     public void cederVidas(float delta, float spawnLavX, float spawnLavY) {
         if (esperaRescate) { // Si esta esperando rescate
             tiempoEsperaRes -= delta; // para resta del contrareloj
-            // Calculo de distancia por tile
+            // Calculo de distancia por pit
             float distancia = Vector2.dst(lavender.getPosicion().x, lavender.getPosicion().y,
                 salem.getPosicion().x, salem.getPosicion().y);
             // Validar en true si pasa
@@ -41,8 +41,8 @@ public class SistemaVidas {
         } else { // Si esta normal
             if (lavVivaFrameAnt && !lavender.isVivo()) { // Para saber en que punto exacto muere
                 if (salem.getVidas() > 1) {
-                    lavenderMuertaX = lavender.getPosicion().x;
-                    lavenderMuertaY = lavender.getPosicion().y;
+                    lavenderMuertaX = lavender.getPosMuerteX();
+                    lavenderMuertaY = lavender.getPosMuerteY();
                     // Se activa el rescate
                     esperaRescate = true;
                     tiempoEsperaRes = Constants.TIEMPO_RESCATE;
