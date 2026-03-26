@@ -24,13 +24,19 @@ public class Constants {
     public static final int SALEM_ACTION = Input.Keys.E;
     // Fisicas generales
     public static final float GRAVEDAD = -1024f;
+    public static final float MIN_TIEMPO_SALTO = 0.05f;
     // Fisicas de Lavender
     public static final float LAV_VELOY = 256f;
-    public static final float LAV_VELOX = 120f;
+    public static final float LAV_VELOX = 100f;
     // Fisicas de Salem
     public static final float SALEM_VELOY = 256f;
-    public static final float SALEM_VELOX = 160f;
+    public static final float SALEM_VELOX = 120f;
     // Sistema de Vidas
     public static final float TIEMPO_RESCATE = 5f;
     public static final float DIS_MAX_RESCATE = 64f;
+    // Murcielago
+    public static final float MURCI_VELO = 50f;
+    public static final float MURCI_RANGO_PATRU = 80f;
+    public static final float MURCI_RANGO_DETEC = 64f;
+    public static final float MURCI_PAUSA = 0.3f; // Tiempo de pausa en limites
 }
