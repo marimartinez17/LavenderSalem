@@ -2,19 +2,23 @@ package com.lavendersalem.game.world;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
-import com.lavendersalem.game.entities.Enemy;
-import com.lavendersalem.game.entities.Entity;
-import com.lavendersalem.game.entities.Player;
+import com.lavendersalem.game.entities.*;
+import com.lavendersalem.game.utils.Constants;
 
 public class SistemaColisiones {
     private final Array<Rectangle> tilesSolidos;
     private final Array<Rectangle> tilesPeligro;
+    private final Array<Enemy> enemigos;
+    private final Array<Caja> cajas;
 
-    public SistemaColisiones(Array<Rectangle> tilesSolidos, Array<Rectangle> tilesPeligro) {
+    public SistemaColisiones(Array<Rectangle> tilesSolidos, Array<Rectangle> tilesPeligro,
+                             Array<Enemy> enemigos, Array<Caja> cajas) {
         this.tilesSolidos = tilesSolidos;
         this.tilesPeligro = tilesPeligro;
+        this.enemigos = enemigos;
+        this.cajas = cajas;
     }
-
+    // ACTUALIZAR COLISIONES PLAYER
     public void actualizarPlayer(Player player, float delta, float spawnX, float spawnY) {
         if (!player.isVivo()) return;
         player.update(delta); // Para input mov y gravedad
@@ -27,7 +31,7 @@ public class SistemaColisiones {
         player.movEnX(delta);
         Rectangle tileEnX = obtenerTileColision(player, tilesSolidos);
         if (tileEnX != null) colisionEnX(player, tileEnX);
-
+        for (Caja c : cajas) colisionPlayerCaja(player, c);
         // En Y
         player.setOnSuelo(false);
         player.movEnY(delta);
@@ -37,9 +41,10 @@ public class SistemaColisiones {
         }
         Rectangle tileEnY = obtenerTileColision(player, tilesSolidos);
         if (tileEnY != null) colisionesEnY(player, tileEnY);
-        if (verificarPeligro(player, spawnX, spawnY)) return;
+        for (Caja c : cajas) colisionPlayerCaja(player, c);
+        if (verificarPeligro(player, spawnX, spawnY));
     }
-    // SISTEMA DE COLISIONES
+    // SISTEMA DE COLISIONES BASICO
     private Rectangle obtenerTileColision(Entity entidad, Array<Rectangle> tiles) {
         for (Rectangle tile : tiles) {
             if (entidad.getBounds().overlaps(tile)){
@@ -79,35 +84,149 @@ public class SistemaColisiones {
             Rectangle zonaPeligro = new Rectangle( // Se puede ajustar de acuerdo a donde este el tile
                 peligro.x, peligro.y, peligro.width, peligro.height
             );
-            if (perso.overlaps(zonaPeligro)) {
-                player.morir(spawnX, spawnY);
+            if (perso.overlaps(zonaPeligro) && (player instanceof Salem salem)) {
+                salem.morir(spawnX, spawnY);
                 return true;
             }
         }
         return false;
     }
     // PARA ENEMIGOS
-    public void verificarEnemigo(Enemy enemigo, Player player, float spawnX, float spawnY) {
-        if (!player.isVivo() || !enemigo.isActivo()) return; // Si player esta muerto no hace nada
-
-        if (enemigo.getBounds().overlaps(player.getBounds())) {
-            player.morir(spawnX,spawnY);
-        }
-    }
     public void actualizarEnemigo(Enemy enemigo, float delta) {
         enemigo.update(delta);
         if (!enemigo.isActivo()) return;
 
         Rectangle tileEnX = obtenerTileColision(enemigo, tilesSolidos);
         if (tileEnX != null) {
-            Rectangle bounds = enemigo.getBounds();
-            if (bounds.x + (bounds.width / 2) < tileEnX.x + (tileEnX.width / 2)) {
-                enemigo.setPosicionX(tileEnX.x - bounds.width);
+            Rectangle enemigoBounds = enemigo.getBounds();
+            if (enemigoBounds.x + (enemigoBounds.width / 2) < tileEnX.x + (tileEnX.width / 2)) {
+                enemigo.setPosicionX(tileEnX.x - enemigoBounds.width);
             } else {
                 enemigo.setPosicionX(tileEnX.x + tileEnX.width);
             }
             // Invertir dirección al chocar con pared
             enemigo.setVelocidadX(-enemigo.getVelocidad().x);
         }
+        for (Caja c : cajas) colisionEnemigoCaja(enemigo, c);
+    }
+    public void verificarEnemigo(Enemy enemigo, Player player, float spawnX, float spawnY) {
+        if (!player.isVivo() || !enemigo.isActivo()) return; // Si player esta muerto no hace nada
+
+        if (enemigo.getBounds().overlaps(player.getBounds())) {
+            if (player instanceof Lavender) {
+                player.tocadoPorEnemigo();
+            } else {
+                player.morir(spawnX, spawnY);
+            }
+        }
+    }
+    // PARA CAJA MOVIL
+    public void actualizarCaja(Caja caja, Lavender lavender, float delta) {
+        caja.update(delta);
+        //Colisiones en x
+        caja.movEnX(delta);
+        Rectangle tileEnX = obtenerTileColision(caja, tilesSolidos);
+        if (tileEnX != null) {
+            Rectangle cajaBounds = caja.getBounds();
+            if ((cajaBounds.x + cajaBounds.width / 2f) > (tileEnX.x + tileEnX.height / 2f)) {
+                caja.setPosicionX(tileEnX.x - cajaBounds.width);
+            } else {
+                caja.setPosicionX(tileEnX.x + tileEnX.width);
+            }
+            caja.setVelocidadX(0);
+        }
+        caja.movEnY(delta);
+        caja.setOnSuelo(false);
+        Rectangle tileEnY = obtenerTileColision(caja, tilesSolidos);
+        if (tileEnY != null) {
+            Rectangle cajaBounds = caja.getBounds();
+            if ((cajaBounds.y + cajaBounds.height / 2f) > (tileEnY.y + tileEnY.height / 2f)) {
+                caja.setPosicionY(tileEnY.y + tileEnY.height);
+                caja.setVelocidadY(0);
+                caja.setOnSuelo(true);
+            } else {
+                caja.setPosicionY(tileEnY.y - cajaBounds.height);
+                caja.setVelocidadY(0);
+            }
+        }
+        empujeCaja(lavender, caja);
+    }
+    private void empujeCaja(Lavender lavender, Caja caja) {
+        Rectangle cuerpoLav = lavender.getBounds();
+        Rectangle cuerpoCaja = caja.getBounds();
+
+        if(!cuerpoLav.overlaps(cuerpoCaja)) return;
+
+        float centroLav = cuerpoLav.getX() + cuerpoLav.getWidth() / 2f;
+        float centroCaja = cuerpoCaja.getX() + cuerpoCaja.getWidth() / 2f;
+
+        if (centroLav < centroCaja) { //Lavender por la izq
+            caja.setPosicionX(cuerpoLav.x + cuerpoLav.width);
+            caja.setVelocidadX(lavender.getVelocidad().x);
+        } else {
+            caja.setPosicionX(cuerpoLav.x - cuerpoCaja.width);
+            caja.setVelocidadX(-lavender.getVelocidad().x);
+        }
+        caja.setVelocidadX(0f);
+        // Verificar si la caja chocó con un tile después del empuje
+        Rectangle tileEnX = obtenerTileColision(caja, tilesSolidos);
+        if (tileEnX != null) {
+            Rectangle bounds = caja.getBounds();
+            if (bounds.x + bounds.width / 2 < tileEnX.x + tileEnX.width / 2) {
+                caja.setPosicionX(tileEnX.x - bounds.width);
+            } else {
+                caja.setPosicionX(tileEnX.x + tileEnX.width);
+            }
+            caja.setVelocidadX(0);
+            // También detiene a Lavender para que no atraviese la caja
+            lavender.setVelocidadX(0);
+            lavender.setPosicionX(centroLav < centroCaja ? caja.getBounds().x - cuerpoLav.width
+                : caja.getBounds().x + caja.getBounds().width);
+        }
+    }
+    private void colisionPlayerCaja(Player player, Caja caja) {
+        if (!player.isVivo()) return;
+
+        Rectangle boundsPlayer = player.getBounds();
+        Rectangle boundsCaja = caja.getBounds();
+        if (!boundsPlayer.overlaps(boundsCaja)) return;
+
+        float altoCaja = boundsCaja.y + boundsCaja.height;
+
+        if (boundsPlayer.y > boundsCaja.height) {
+            player.setPosicionY(altoCaja);
+            player.setVelocidadY(0f);
+            player.setOnSuelo(true);
+        } else {
+            if (player instanceof Lavender lavender) {
+                empujeCaja(lavender, caja);
+                return;
+            }
+            float centroPlayerX = boundsPlayer.x + boundsPlayer.width / 2f;
+            float centroCajaX = boundsCaja.x + boundsCaja.width / 2f;
+
+            if (centroPlayerX > centroCajaX) {
+                player.setPosicionX(boundsCaja.x + boundsCaja.width);
+            } else {
+                player.setPosicionX(boundsCaja.x - boundsPlayer.width);
+            }
+            player.setVelocidadX(0f);
+        }
+    }
+    private void colisionEnemigoCaja(Enemy enemigo, Caja caja) {
+        if (!enemigo.isActivo()) return;
+        Rectangle boundEnemigo = enemigo.getBounds();
+        Rectangle boundsCaja = caja.getBounds();
+
+        if (!boundEnemigo.overlaps(boundsCaja)) return;
+        float centroEnemigo = boundEnemigo.x + boundEnemigo.width / 2f;
+        float centroCaja = boundsCaja.x + boundsCaja.width / 2f;
+
+        if (centroEnemigo > centroCaja) {
+            enemigo.setPosicionX(boundsCaja.x + boundsCaja.width);
+        } else {
+            enemigo.setPosicionX(boundsCaja.x - boundEnemigo.width);
+        }
+        enemigo.setVelocidadX(-enemigo.getVelocidad().x);
     }
 }

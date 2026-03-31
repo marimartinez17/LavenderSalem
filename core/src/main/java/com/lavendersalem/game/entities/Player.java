@@ -12,6 +12,7 @@ public abstract class Player extends Entity { // Player hereda de Entity porque 
     protected boolean vivo;
     protected int vidasInicial;
     protected int vidas; // Numero de vidas del personaje
+    protected boolean tocadoEnemigo = false;
     // Constantes físicas de cada persona (Definidas en Constants)
     protected float moviEnX; // Velocidad en carrera
     protected float fuerzaSalto; // Para el salto de cada personaje (contraresta gravedad)
@@ -80,6 +81,12 @@ public abstract class Player extends Entity { // Player hereda de Entity porque 
             batch.draw(currentFrame, posicion.x, posicion.y, tamWidth, tamHeight);
         }
     }
+    public void tocadoPorEnemigo() {
+        tocadoEnemigo = true;
+    }
+    public void resetTocadoPorEnemigo() {
+        tocadoEnemigo = false;
+    }
     /* PARA CUANDO MUERE O RESPAWNEA */
     public void morir(float spawnX, float spawnY) {
         vidas--;
@@ -109,6 +116,8 @@ public abstract class Player extends Entity { // Player hereda de Entity porque 
 
     public int getVidas() { return vidas; }
     public void setVidas(int vidas) { this.vidas = vidas; }
+
+    public boolean isTocadoEnemigo() { return tocadoEnemigo; }
 
     // Elimina basura de la grafica
     public abstract void dispose();

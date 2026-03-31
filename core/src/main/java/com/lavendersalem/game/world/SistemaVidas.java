@@ -39,6 +39,11 @@ public class SistemaVidas {
                 lavender.setVivo(false);
             }
         } else { // Si esta normal
+            // Detectar si Lavender fue tocada por enemigo
+            if (lavender.isTocadoEnemigo()) {
+                lavender.resetTocadoPorEnemigo();
+                lavender.morir(spawnLavX, spawnLavY);
+            }
             if (lavVivaFrameAnt && !lavender.isVivo()) { // Para saber en que punto exacto muere
                 if (salem.getVidas() > 1) {
                     lavenderMuertaX = lavender.getPosMuerteX();

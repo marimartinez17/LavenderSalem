@@ -10,10 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.lavendersalem.game.LavenderSalemGame;
-import com.lavendersalem.game.entities.Enemy;
-import com.lavendersalem.game.entities.Lavender;
-import com.lavendersalem.game.entities.Murcielago;
-import com.lavendersalem.game.entities.Salem;
+import com.lavendersalem.game.entities.*;
 import com.lavendersalem.game.utils.Constants;
 import com.lavendersalem.game.utils.Enums;
 import com.lavendersalem.game.world.SistemaColisiones;
@@ -35,6 +32,7 @@ public class GameScreen implements Screen {
     private final Array<Rectangle> tilesSolidos;
     private final Array<Rectangle> tilesPeligros;
     private final Array<Enemy> enemigos;
+    private final Array<Caja> cajas;
 
     // Constructor del Game
     public GameScreen(LavenderSalemGame game, int numeroNivel) {
@@ -52,8 +50,10 @@ public class GameScreen implements Screen {
         tilesPeligros = new Array<>();
         enemigos = new Array<>();
         enemigos.add(new Murcielago(200f, 20f, lavender, salem));
+        cajas = new Array<>();
+        cajas.add(new Caja(150f, 16f));
         crearTilesPrueba();
-        sistemaColisiones = new SistemaColisiones(tilesSolidos, tilesPeligros);
+        sistemaColisiones = new SistemaColisiones(tilesSolidos, tilesPeligros, enemigos, cajas);
     }
     private void crearTilesPrueba() {
         /* BORDES */
@@ -104,25 +104,25 @@ public class GameScreen implements Screen {
             pausado = !pausado;
         }
         if (!pausado) {
-            for (Enemy en : enemigos) { // Actualizar enemigos
-                sistemaColisiones.actualizarEnemigo(en, delta);
+            for (Enemy e : enemigos) {
+                sistemaColisiones.actualizarEnemigo(e, delta);
             }
-            // Lavender
-            if (!sistemaVidas.isEsperaRescate()) {
-                // Lavender solo puede moverse si no espera rescate
+            for (Caja c : cajas) {
+                sistemaColisiones.actualizarCaja(c, lavender, delta);
+            }
+            //Lavender
+            if (!lavender.isEsperaRescate()) {
                 sistemaColisiones.actualizarPlayer(lavender, delta, 48f, 48f);
-                for (Enemy en : enemigos) {
-                    sistemaColisiones.verificarEnemigo(en, lavender, 48f, 48f);
+                for (Enemy e : enemigos) {
+                    sistemaColisiones.verificarEnemigo(e, lavender, 48f, 48f);
                 }
             }
-            // Carga el sistema de vidas
+            // Sistema de vidas
             sistemaVidas.cederVidas(delta, 48f, 48f);
-            if (sistemaVidas.isGameOver()) {
-                System.out.println("GAME OVER");
-            }
+            if (sistemaVidas.isGameOver()) System.out.println("GAME OVER");
             // Salem
-            for (Enemy en : enemigos) {
-                sistemaColisiones.verificarEnemigo(en, salem, 60f,48f);
+            for (Enemy e : enemigos) {
+                sistemaColisiones.verificarEnemigo(e, salem, 60f, 48f);
             }
             sistemaColisiones.actualizarPlayer(salem, delta, 60f, 48f);
             // Reset
@@ -168,6 +168,12 @@ public class GameScreen implements Screen {
                 e.getBounds().width, e.getBounds().height
             );
         }
+        //CAJA
+        shapeRenderer.setColor(Color.ORANGE);
+        for (Caja c : cajas) {
+            shapeRenderer.rect(c.getBounds().x, c.getBounds().y,
+                c.getBounds().width, c.getBounds().height);
+        }
         shapeRenderer.end(); // Termina el dibujo y manda al GPU
         // Para dibujar sprites
         game.batch.setProjectionMatrix(camara.combined);
@@ -201,6 +207,7 @@ public class GameScreen implements Screen {
         salem.resetear(60f, 48f);
         sistemaVidas.resetear();
         for (Enemy e : enemigos) e.resetear(0f, 0f);
+        for (Caja c : cajas) c.resetear(150f, 16f);
     }
 
     @Override
