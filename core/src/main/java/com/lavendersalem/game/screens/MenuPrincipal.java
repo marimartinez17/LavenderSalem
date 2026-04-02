@@ -65,7 +65,7 @@ public class MenuPrincipal implements Screen {
             viewport.unproject(click); // Para pasar a coor. virtual
 
             if (btnJugar.contains(click.x, click.y)) {
-                game.setScreen(new GameScreen(game,1));
+                game.setScreen(new PlayScreen(game,1));
                 dispose();
                 return;
             }
