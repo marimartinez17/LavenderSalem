@@ -19,8 +19,8 @@ public class Hud {
     private Viewport viewport;
     private Integer worldTimer;
     private float timeCount;
-    private int collectedCrystals;
-    private int level;
+    private Integer collectedCrystals;
+    private Integer level;
 
     // txt labels
     Label countdownLabel;
@@ -49,14 +49,14 @@ public class Hud {
         worldLabel = new Label("LEVEL",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         crystalsLabel = new Label("CRYSTALS",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
-        countdownLabel = new Label(String.format("%03", worldTimer),new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        levelLabel = new Label(String.format("%02",level),new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        collectedLabel = new Label(String.format("%02",collectedCrystals)+" / 3",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        countdownLabel = new Label(String.format("%03d", worldTimer),new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        levelLabel = new Label(String.format("%02d",level),new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        collectedLabel = new Label(collectedCrystals+" / 3",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         // expands to the end of the screen
         // with expandX, each component has an equal width
         table.add(timeLabel).expandX().padTop(10);
-        table.add(levelLabel).expandX().padTop(10);
+        table.add(worldLabel).expandX().padTop(10);
         table.add(crystalsLabel).expandX().padTop(10);
 
         table.row();
