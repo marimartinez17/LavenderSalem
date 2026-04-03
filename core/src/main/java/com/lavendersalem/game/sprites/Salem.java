@@ -62,8 +62,8 @@ public class Salem extends Player {
     }
 
     @Override
-    public void resetear(float spawnX, float spawnY) {
-        super.resetear(spawnX, spawnY);
+    public void resetear() {
+        super.resetear();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class Salem extends Player {
     public void update(float delta) {
         super.update(delta);
     }
-     
+
 
     // Elimina basura de la grafica*/
     @Override
