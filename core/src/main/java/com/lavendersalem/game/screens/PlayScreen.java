@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lavendersalem.game.LavenderSalemGame;
 import com.lavendersalem.game.sprites.Lavender;
 import com.lavendersalem.game.sprites.Salem;
-import com.lavendersalem.game.tools.B2WorldCreator;
+import com.lavendersalem.game.tools.LevelCreator;
 import com.lavendersalem.game.utils.B2DVars;
 
 public class PlayScreen implements Screen {
@@ -68,7 +68,7 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0,-9.8f), true);
         b2dr = new Box2DDebugRenderer();
 
-        new B2WorldCreator(world, map);
+        new LevelCreator(world, map);
 
         lavender = new Lavender(world,20,20,16,32);
         salem = new Salem(world, 20,20,16,16);
@@ -116,7 +116,7 @@ public class PlayScreen implements Screen {
         update(delta);
 
         // clear game screen with black
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // render game map

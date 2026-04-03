@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lavendersalem.game.utils.B2DVars;
+import com.lavendersalem.game.utils.Enums;
 
 public class Lavender extends Player {
     private boolean esperaRescate = false;

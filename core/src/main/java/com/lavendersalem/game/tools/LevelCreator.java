@@ -4,14 +4,12 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.lavendersalem.game.sprites.Crystal;
-import com.lavendersalem.game.sprites.InteractiveTileObject;
 import com.lavendersalem.game.utils.B2DVars;
 
-public class B2WorldCreator {
-    public B2WorldCreator(World world, TiledMap map) {
+public class LevelCreator {
+    public LevelCreator(World world, TiledMap map) {
 // create body and fixture variables
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();

@@ -18,7 +18,8 @@ public abstract class Player extends Sprite {
     private float height;
 
     // para animación
-    protected boolean miraDer = true;
+    protected boolean miraDer;
+    protected boolean miraFront;
 
     // Para sprites
     protected Texture sheetIdle;
@@ -44,6 +45,7 @@ public abstract class Player extends Sprite {
     // Estado del sprite para mostrar animacion
     protected State currentState;
     protected State previousState;
+    protected float stateTimer;
 
     public Player(World world, float x, float y, float width, float height) {
         this.world = world;
@@ -54,6 +56,9 @@ public abstract class Player extends Sprite {
 
         currentState = State.STANDING;
         previousState = State.STANDING;
+        stateTimer = 0f;
+        miraDer = true;
+
         definePlayer();
 
         setBounds(0,0,width / B2DVars.PPM,height / B2DVars.PPM);
@@ -77,7 +82,58 @@ public abstract class Player extends Sprite {
 
     public void update(float delta) {
         setPosition((b2body.getPosition().x - getWidth() / 2  ), (b2body.getPosition().y - getHeight() / 2  - 0.01f));
+
         handleInput();
+        setRegion(getFrame(delta));
+    }
+
+    public TextureRegion getFrame(float delta) {
+        currentState = getState();
+        TextureRegion region;
+
+        if (b2body.getLinearVelocity().x > 0){
+            miraDer = true;
+        } else if (b2body.getLinearVelocity().x < 0){
+            miraDer = false;
+        }
+
+        // Seleccionar animación del sprite según estado
+        switch (currentState) {
+            case JUMPING:
+                region = miraDer ? animSaltarDer.getKeyFrame(stateTimer) : animSaltarIzq.getKeyFrame(stateTimer);
+                break;
+            case RUNNING:
+                region = miraDer ? animCaminarDer.getKeyFrame(stateTimer,true) : animCaminarIzq.getKeyFrame(stateTimer,true);
+                break;
+            case FALLING:
+                region = miraDer ? animSaltarDer.getKeyFrame(3) : animSaltarIzq.getKeyFrame(3);
+            case STANDING:
+            default:
+                region = animIdle.getKeyFrame(stateTimer,true);
+                break;
+        }
+
+        // si el estado cambia, transicionar y reiniciar el timer
+        stateTimer = (currentState == previousState)  ? stateTimer + delta : 0f;
+
+        previousState = currentState;
+        return region;
+    }
+
+    public State getState() {
+        if (b2body.getLinearVelocity().y > 0) {
+            return State.JUMPING;
+        } else if (b2body.getLinearVelocity().y < 0) {
+            return State.FALLING;
+        } else if (b2body.getLinearVelocity().x != 0) {
+            return State.RUNNING;
+        } else {
+            return State.STANDING;
+        }
+    }
+
+    public void setState(State state) {
+        this.currentState = state;
     }
 
     // Elimina basura de la grafica

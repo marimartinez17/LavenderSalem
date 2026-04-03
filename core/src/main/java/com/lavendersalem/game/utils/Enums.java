@@ -18,7 +18,8 @@ public class Enums {
     public enum State {
         JUMPING,
         STANDING,
-        RUNNING
+        RUNNING,
+        FALLING,
     }
 
 }
