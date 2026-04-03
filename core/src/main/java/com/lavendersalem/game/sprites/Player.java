@@ -90,10 +90,6 @@ public abstract class Player extends Sprite {
         fdef.shape = shape;
         b2body.createFixture(fdef);
 
-        // create box shape for player foot
-        shape.setAsBox(6/B2DVars.PPM, (height/2)/B2DVars.PPM);
-        fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData("foot");
     }
 
 

@@ -13,6 +13,7 @@ public class InteractiveTileObject {
     protected TiledMapTile tile;
     protected Rectangle bounds;
     protected Body body;
+    protected Fixture fixture;
 
     public InteractiveTileObject(World world, TiledMap map, Rectangle bounds) {
         this.world = world;
