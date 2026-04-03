@@ -115,7 +115,7 @@ public class PlayScreen implements Screen {
 
 
         // clear game screen with black
-        Gdx.gl.glClearColor(0.09f, 0.09f, 0.09f, 1);
+        Gdx.gl.glClearColor(0.18f, 0.18f, 0.18f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // render game map
