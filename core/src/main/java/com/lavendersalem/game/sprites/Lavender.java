@@ -18,6 +18,8 @@ public class Lavender extends Player {
         super(world, x, y, width, height);
         // Spritsheets
         sheetIdle = new Texture(Gdx.files.internal("sprites/lavender/Lavender-idle-sheet.png"));
+        sheetIdleIzq = new Texture(Gdx.files.internal("sprites/lavender/Lavender-idleleft-sheet.png"));
+        sheetIdleDer = new Texture(Gdx.files.internal("sprites/lavender/Lavender-idleright-sheet.png"));
         sheetCaminarIzq = new Texture(Gdx.files.internal("sprites/lavender/Lavender-walkleft-sheet.png"));
         sheetCaminarDer = new Texture(Gdx.files.internal("sprites/lavender/Lavender-walkright-sheet.png"));
         sheetSaltoIzq = new Texture(Gdx.files.internal("sprites/lavender/Lavender-jumpleft-sheet.png"));
@@ -26,6 +28,8 @@ public class Lavender extends Player {
         sheetInteractDer = new Texture(Gdx.files.internal("sprites/lavender/Lavender-interactright-sheet.png"));
         // Crear animaciones en 0 porque hay una sola fila y con 0.15f tiempo de frame
         animIdle = new Animation<>(0.25f, TextureRegion.split(sheetIdle, 16, 32)[0]);
+        animIdleIzq = new Animation<>(0.25f, TextureRegion.split(sheetIdleIzq, 16, 32)[0]);
+        animIdleDer = new Animation<>(0.25f, TextureRegion.split(sheetIdleDer, 16, 32)[0]);
         animCaminarIzq = new Animation<>(0.2f, TextureRegion.split(sheetCaminarIzq, 16, 32)[0]);
         animCaminarDer = new Animation<>(0.2f, TextureRegion.split(sheetCaminarDer, 16, 32)[0]);
         animSaltarIzq = new Animation<>(0.2f, TextureRegion.split(sheetSaltoIzq, 16, 32)[0]);

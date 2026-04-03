@@ -17,6 +17,8 @@ public class Salem extends Player {
         super(world, x, y, width, height);
         // Spritsheets
         sheetIdle = new Texture(Gdx.files.internal("sprites/salem/salem-idle-sheet.png"));
+        sheetIdleIzq = new Texture(Gdx.files.internal("sprites/salem/salem-idleleft-sheet.png"));
+        sheetIdleDer = new Texture(Gdx.files.internal("sprites/salem/salem-idle-sheet.png"));
         sheetCaminarIzq = new Texture(Gdx.files.internal("sprites/salem/salem-walkleft-sheet.png"));
         sheetCaminarDer = new Texture(Gdx.files.internal("sprites/salem/salem-walkright-sheet.png"));
         sheetSaltoIzq = new Texture(Gdx.files.internal("sprites/salem/salem-jumpleft-sheet.png"));
@@ -25,6 +27,8 @@ public class Salem extends Player {
         sheetInteractDer = new Texture(Gdx.files.internal("sprites/salem/salem-interactright-sheet.png"));
         // Crear animaciones en 0 porque hay una sola fila y con 0.15f tiempo de frame
         animIdle = new Animation<>(0.25f, TextureRegion.split(sheetIdle, 16, 16)[0]);
+        animIdleIzq = new Animation<>(0.25f, TextureRegion.split(sheetIdleIzq, 16, 16)[0]);
+        animIdleDer = new Animation<>(0.25f, TextureRegion.split(sheetIdle, 16, 16)[0]);
         animCaminarIzq = new Animation<>(0.2f, TextureRegion.split(sheetCaminarIzq, 16, 16)[0]);
         animCaminarDer = new Animation<>(0.2f, TextureRegion.split(sheetCaminarDer, 16, 16)[0]);
         animSaltarIzq = new Animation<>(0.2f, TextureRegion.split(sheetSaltoIzq, 16, 16)[0]);

@@ -23,6 +23,8 @@ public abstract class Player extends Sprite {
 
     // Para sprites
     protected Texture sheetIdle;
+    protected Texture sheetIdleDer;
+    protected Texture sheetIdleIzq;
     protected Texture sheetCaminarIzq;
     protected Texture sheetCaminarDer;
     protected Texture sheetSaltoDer;
@@ -31,6 +33,8 @@ public abstract class Player extends Sprite {
     protected Texture sheetInteractIzq;
     // Para cada frame de animaciones
     protected Animation<TextureRegion> animIdle;
+    protected Animation<TextureRegion> animIdleDer;
+    protected Animation<TextureRegion> animIdleIzq;
     protected Animation<TextureRegion> animCaminarDer;
     protected Animation<TextureRegion> animCaminarIzq;
     protected Animation<TextureRegion> animSaltarDer;
@@ -106,10 +110,9 @@ public abstract class Player extends Sprite {
                 region = miraDer ? animCaminarDer.getKeyFrame(stateTimer,true) : animCaminarIzq.getKeyFrame(stateTimer,true);
                 break;
             case FALLING:
-                region = miraDer ? animSaltarDer.getKeyFrame(3) : animSaltarIzq.getKeyFrame(3);
             case STANDING:
             default:
-                region = animIdle.getKeyFrame(stateTimer,true);
+                region = miraDer ? animIdleDer.getKeyFrame(stateTimer,true) : animIdleIzq.getKeyFrame(stateTimer);
                 break;
         }
 
