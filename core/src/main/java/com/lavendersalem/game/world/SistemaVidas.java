@@ -2,20 +2,20 @@ package com.lavendersalem.game.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.lavendersalem.game.entities.Lavender;
-import com.lavendersalem.game.entities.Salem;
+import com.lavendersalem.game.entities.Lavender2;
+import com.lavendersalem.game.entities.Salem2;
 import com.lavendersalem.game.utils.Constants;
 
 public class SistemaVidas {
-    private final Lavender lavender;
-    private final Salem salem;
+    private final Lavender2 lavender;
+    private final Salem2 salem;
 
     private boolean esperaRescate = false;
     private float tiempoEsperaRes = 0f;
     private float lavenderMuertaX, lavenderMuertaY;
     private boolean lavVivaFrameAnt = true;
 
-    public SistemaVidas(Lavender lavender, Salem salem) {
+    public SistemaVidas(Lavender2 lavender, Salem2 salem) {
         this.lavender = lavender;
         this.salem = salem;
     }

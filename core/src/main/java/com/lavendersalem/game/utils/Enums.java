@@ -14,4 +14,11 @@ public class Enums {
         PAUSA,
         REGRESA
     }
+
+    public enum State {
+        JUMPING,
+        STANDING,
+        RUNNING
+    }
+
 }

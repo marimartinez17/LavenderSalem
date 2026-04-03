@@ -25,8 +25,8 @@ public class GameScreen implements Screen {
     // Camara ortografica y viewPoint
     private final OrthographicCamera camara;
     private final FitViewport viewport;
-    private final Lavender lavender;
-    private final Salem salem;
+    private final Lavender2 lavender;
+    private final Salem2 salem;
     private final SistemaVidas sistemaVidas;
     private final ShapeRenderer shapeRenderer; // Para probrar con hitbox (rectangulo)
     private final Array<Rectangle> tilesSolidos;
@@ -42,8 +42,8 @@ public class GameScreen implements Screen {
         camara = new OrthographicCamera();
         viewport = new FitViewport(Constants.VIRTUAL_WIDTH, Constants.VIRTUAL_HEIGHT, camara);
         overlayPausa = new OverlayPausa(camara, viewport);
-        lavender = new Lavender(48f,48f);
-        salem = new Salem(60f,48f);
+        lavender = new Lavender2(48f,48f);
+        salem = new Salem2(60f,48f);
         sistemaVidas = new SistemaVidas(lavender, salem);
         shapeRenderer = new ShapeRenderer();
         tilesSolidos = new Array<>();

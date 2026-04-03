@@ -3,7 +3,6 @@ package com.lavendersalem.game.world;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.lavendersalem.game.entities.*;
-import com.lavendersalem.game.utils.Constants;
 
 public class SistemaColisiones {
     private final Array<Rectangle> tilesSolidos;
@@ -19,7 +18,7 @@ public class SistemaColisiones {
         this.cajas = cajas;
     }
     // ACTUALIZAR COLISIONES PLAYER
-    public void actualizarPlayer(Player player, float delta, float spawnX, float spawnY) {
+    public void actualizarPlayer(Player2 player, float delta, float spawnX, float spawnY) {
         if (!player.isVivo()) return;
         player.update(delta); // Para input mov y gravedad
         // Si cae demasiado muere
@@ -53,7 +52,7 @@ public class SistemaColisiones {
         }
         return null;
     }
-    private void colisionEnX(Player player, Rectangle tile) {
+    private void colisionEnX(Player2 player, Rectangle tile) {
         Rectangle perso = player.getBounds();
         // Ver de donde viene tomando el centro del tile y la pos del perso
         if (perso.x + (perso.width / 2) < tile.x + (tile.width / 2)) {
@@ -63,7 +62,7 @@ public class SistemaColisiones {
         }
         player.setVelocidadX(0); // Para que no pueda traspaar el tile
     }
-    private void colisionesEnY(Player player, Rectangle tile) {
+    private void colisionesEnY(Player2 player, Rectangle tile) {
         Rectangle perso = player.getBounds();
         // Sobre el tile
         if ((perso.y + perso.height / 2) > (tile.y + tile.height / 2)) {
@@ -77,14 +76,14 @@ public class SistemaColisiones {
         }
     }
     // PARA TILES PELIGRO
-    private boolean verificarPeligro(Player player, float spawnX, float spawnY) {
+    private boolean verificarPeligro(Player2 player, float spawnX, float spawnY) {
         Rectangle perso = player.getBounds();
         for (Rectangle peligro : tilesPeligro) {
             // Zona de peligro expandida hacia arriba hasta el nivel del suelo
             Rectangle zonaPeligro = new Rectangle( // Se puede ajustar de acuerdo a donde este el tile
                 peligro.x, peligro.y, peligro.width, peligro.height
             );
-            if (perso.overlaps(zonaPeligro) && (player instanceof Salem salem)) {
+            if (perso.overlaps(zonaPeligro) && (player instanceof Salem2 salem)) {
                 salem.morir(spawnX, spawnY);
                 return true;
             }
@@ -109,11 +108,11 @@ public class SistemaColisiones {
         }
         for (Caja c : cajas) colisionEnemigoCaja(enemigo, c);
     }
-    public void verificarEnemigo(Enemy enemigo, Player player, float spawnX, float spawnY) {
+    public void verificarEnemigo(Enemy enemigo, Player2 player, float spawnX, float spawnY) {
         if (!player.isVivo() || !enemigo.isActivo()) return; // Si player esta muerto no hace nada
 
         if (enemigo.getBounds().overlaps(player.getBounds())) {
-            if (player instanceof Lavender) {
+            if (player instanceof Lavender2) {
                 player.tocadoPorEnemigo();
             } else {
                 player.morir(spawnX, spawnY);
@@ -121,7 +120,7 @@ public class SistemaColisiones {
         }
     }
     // PARA CAJA MOVIL
-    public void actualizarCaja(Caja caja, Lavender lavender, float delta) {
+    public void actualizarCaja(Caja caja, Lavender2 lavender, float delta) {
         caja.update(delta);
         //Colisiones en x
         caja.movEnX(delta);
@@ -151,7 +150,7 @@ public class SistemaColisiones {
         }
         empujeCaja(lavender, caja);
     }
-    private void empujeCaja(Lavender lavender, Caja caja) {
+    private void empujeCaja(Lavender2 lavender, Caja caja) {
         Rectangle cuerpoLav = lavender.getBounds();
         Rectangle cuerpoCaja = caja.getBounds();
 
@@ -184,7 +183,7 @@ public class SistemaColisiones {
                 : caja.getBounds().x + caja.getBounds().width);
         }
     }
-    private void colisionPlayerCaja(Player player, Caja caja) {
+    private void colisionPlayerCaja(Player2 player, Caja caja) {
         if (!player.isVivo()) return;
 
         Rectangle boundsPlayer = player.getBounds();
@@ -198,7 +197,7 @@ public class SistemaColisiones {
             player.setVelocidadY(0f);
             player.setOnSuelo(true);
         } else {
-            if (player instanceof Lavender lavender) {
+            if (player instanceof Lavender2 lavender) {
                 empujeCaja(lavender, caja);
                 return;
             }

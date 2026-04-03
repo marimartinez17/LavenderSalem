@@ -10,10 +10,10 @@ import com.lavendersalem.game.utils.Constants;
 
 import static com.lavendersalem.game.utils.Constants.MIN_TIEMPO_SALTO;
 
-public class Salem extends Player{
+public class Salem2 extends Player2 {
     private boolean dobleSalto; // Para establecer el doble salto
     // Constructor para crear a Salem
-    public Salem(float x, float y) {
+    public Salem2(float x, float y) {
         super(x,y,16f,16f, 3);
         this.moviEnX = Constants.SALEM_VELOX;
         this.fuerzaSalto = Constants.SALEM_VELOY;

@@ -12,10 +12,10 @@ public class Murcielago extends Enemy{
     private boolean moviDer = true;
     private float tiempoPausa = 0; // Contador para pausa
     // Se le pasa a lavender y salem para las distancias
-    private final Lavender lavender;
-    private final Salem salem;
+    private final Lavender2 lavender;
+    private final Salem2 salem;
 
-    public Murcielago(float x, float y, Lavender lavender, Salem salem) {
+    public Murcielago(float x, float y, Lavender2 lavender, Salem2 salem) {
         super(x, y, 16f, 16f);
         // Calculo
         this.limiteIzq = x - (Constants.MURCI_RANGO_PATRU / 2);
@@ -28,7 +28,7 @@ public class Murcielago extends Enemy{
     public void update(float delta) {
         if (!activo) return;
         // Detectar si hay un objetivo cerca
-        Player objetivo = objetivoCerca();
+        Player2 objetivo = objetivoCerca();
 
         if (objetivo != null) { // Si hay jugador cerca
             estadoActual = Enums.EstadoMurcielago.PERSIGUE;
@@ -44,7 +44,7 @@ public class Murcielago extends Enemy{
         }
     }
 
-    private Player objetivoCerca() {
+    private Player2 objetivoCerca() {
         // Calcular la distancia con pitagoras
         float distLav = Vector2.dst(posicion.x, posicion.y, lavender.getPosicion().x, lavender.getPosicion().y);
         float distSal = Vector2.dst(posicion.x, posicion.y, salem.getPosicion().x, salem.getPosicion().y);
@@ -79,7 +79,7 @@ public class Murcielago extends Enemy{
             tiempoPausa = Constants.MURCI_PAUSA;
         }
     }
-    private void perseguir(float delta, Player objetivo) {
+    private void perseguir(float delta, Player2 objetivo) {
         // Diferencia de dis entre murcielago y objetivo por pitagoras
         float difX = (objetivo.getPosicion().x - posicion.x);
         float difY = (objetivo.getPosicion().y - posicion.y);

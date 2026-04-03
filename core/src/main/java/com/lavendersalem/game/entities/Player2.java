@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.lavendersalem.game.utils.Constants;
 
-public abstract class Player extends Entity { // Player hereda de Entity porque es para entidades jugables
+public abstract class Player2 extends Entity { // Player hereda de Entity porque es para entidades jugables
     //Atributos de Player
     protected boolean onSuelo; // Si el personaje esta en el suelo
     protected boolean vivo;
@@ -19,7 +19,7 @@ public abstract class Player extends Entity { // Player hereda de Entity porque 
     protected boolean miraDer = true;
     // Para optimizar el salto en mov
     protected float tiempoBufferSalto = 0f;
-    protected static final float MAX_BUFFER_SALTO = 0.1f; // 100ms de ventana
+    public static final float MAX_BUFFER_SALTO = 0.1f; // 100ms de ventana
     // Para sprites
     protected Texture sheetIdle;
     protected Texture sheetCaminarIzq;
@@ -40,7 +40,7 @@ public abstract class Player extends Entity { // Player hereda de Entity porque 
     protected float timeAnimacion = 0f;
     protected float tiempoEnAire = 0f;
     // Constructor
-    public Player(float x, float y, float tamWidth, float tamHeight, int vidasInicial) {
+    public Player2(float x, float y, float tamWidth, float tamHeight, int vidasInicial) {
         super(x, y, tamWidth, tamHeight);
         this.onSuelo = false; // En false porque al aplicar gravedad queda sobre suelo
         this.vivo = true; // Siempre spawnea vivo

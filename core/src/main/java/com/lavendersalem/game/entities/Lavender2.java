@@ -10,11 +10,11 @@ import com.lavendersalem.game.utils.Constants;
 
 import static com.lavendersalem.game.utils.Constants.MIN_TIEMPO_SALTO;
 
-public class Lavender extends Player{
+public class Lavender2 extends Player2 {
     private boolean esperaRescate = false;
     private float posMuerteX, posMuerteY;
     // Constructor (Crea a Lavender)
-    public Lavender(float x, float y) {
+    public Lavender2(float x, float y) {
         super(x,y,16f,32f, 1); // Posicion (x, y) y tamaño por PPM
         this.moviEnX = Constants.LAV_VELOX;
         this.fuerzaSalto = Constants.LAV_VELOY;

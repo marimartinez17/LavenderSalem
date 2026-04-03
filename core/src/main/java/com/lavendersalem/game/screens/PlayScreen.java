@@ -1,28 +1,28 @@
 package com.lavendersalem.game.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lavendersalem.game.LavenderSalemGame;
-import com.lavendersalem.game.utils.Constants;
+import com.lavendersalem.game.sprites.Lavender;
+import com.lavendersalem.game.sprites.Salem;
+import com.lavendersalem.game.tools.B2WorldCreator;
+import com.lavendersalem.game.utils.B2DVars;
 
 public class PlayScreen implements Screen {
+
+    //private Jugador player;
+    private Lavender lavender;
+    private Salem salem;
+
     private LavenderSalemGame game;
     private int lvl;
     private Hud hud;
@@ -49,7 +49,7 @@ public class PlayScreen implements Screen {
         gameCam = new OrthographicCamera();
 
         // mantain aspect ratio
-        gamePort = new FitViewport(480, 416, gameCam);
+        gamePort = new FitViewport(480 / B2DVars.PPM, 416 / B2DVars.PPM, gameCam);
 
         // game HUD for crystals/timer/level info
         hud = new Hud(game.batch, lvl);
@@ -60,45 +60,48 @@ public class PlayScreen implements Screen {
         int width = (int) map.getProperties().get("width", Integer.class);
         int height = (int) map.getProperties().get("height", Integer.class);
 
-        renderer = new OrthogonalTiledMapRenderer(map);
-        gameCam.position.set(480/2, 416/2, 0);
 
-        world = new World(new Vector2(0,0), true);
+        renderer = new OrthogonalTiledMapRenderer(map, 1/ B2DVars.PPM);
+
+        gameCam.position.set((480 / 2f) / B2DVars.PPM, (416 / 2f) / B2DVars.PPM, 0);
+
+        world = new World(new Vector2(0,-9.8f), true);
         b2dr = new Box2DDebugRenderer();
 
-        BodyDef bdef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fdef = new FixtureDef();
-        Body body;
+        new B2WorldCreator(world, map);
 
-/*        // Print names of tiled layers
-        System.out.println("Map has " + map.getLayers().size() + " layers:");
-        for (int i = 0; i < map.getLayers().size(); i++) {
-            System.out.println("  [" + i + "] " + map.getLayers().get(i).getName());
-        }*/
+        lavender = new Lavender(world,20,20,16,32);
+        salem = new Salem(world, 20,20,16,16);
 
-        for (MapObject object: map.getLayers().get("platforms").getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
-
-            body = world.createBody(bdef);
-
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2); // divided by two bcs it is located in the center of the boxes
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
     }
 
-    public void handleInput(float delta){
-        if (Gdx.input.isTouched()){
-            gameCam.position.y += 100 * delta;
+/*    public void handleInput(float delta){
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)){
+            player.b2body.applyLinearImpulse(new Vector2(0,2f),player.b2body.getWorldCenter(),true);
         }
-    }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2){
+            player.b2body.applyLinearImpulse(new Vector2(0.08f,0f),player.b2body.getWorldCenter(),true);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x <= 2){
+            player.b2body.applyLinearImpulse(new Vector2(-0.08f,0f),player.b2body.getWorldCenter(),true);
+        }
+    }*/
 
     public void update(float delta) {
+        //handleInput(delta);
+
+        // how bodies react to collisions
+        world.step(1/60f, 6, 2);
+
+        gameCam.zoom = 0.5f;
+        gameCam.position.x = lavender.b2body.getPosition().x;
+        gameCam.position.y = lavender.b2body.getPosition().y;
+        lavender.update(delta);
+        salem.update(delta);
+        //update camera
         gameCam.update();
+        // tell renderer to only draw what the camera sees
         renderer.setView(gameCam);
 
     }
@@ -123,6 +126,12 @@ public class PlayScreen implements Screen {
         b2dr.render(world,gameCam.combined);
 
         // set our batch to render what the camera sees
+        game.batch.setProjectionMatrix(gameCam.combined);
+        game.batch.begin();
+        lavender.draw(game.batch);
+        salem.draw(game.batch);
+        game.batch.end();
+
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
     }
@@ -149,6 +158,9 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        map.dispose();
+        renderer.dispose();
+        b2dr.dispose();
+        world.dispose();
     }
 }
