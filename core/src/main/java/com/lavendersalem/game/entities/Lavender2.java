@@ -118,14 +118,7 @@ public class Lavender2 extends Player2 {
         vivo = true; // No muere hasta culminar contrareloj
     }
 
-    public void recibirVida (float spawX, float spawY) {
-        vidas++;
-        esperaRescate = false;
-        vivo = true;
-        posicion.set(spawX, spawY);
-        velocidad.set(0,0);
-        setOnSuelo(false); // Para que mantega sobre el suelo
-    }
+
 
     @Override
     public void update(float delta) {

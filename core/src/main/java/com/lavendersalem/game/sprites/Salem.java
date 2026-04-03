@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lavendersalem.game.utils.B2DVars;
@@ -60,9 +62,20 @@ public class Salem extends Player {
     }
 
     @Override
-    public void update(float delta) {
-        super.update(delta); // Aplica el sistema de salto y movimiento
+    public void resetear(float spawnX, float spawnY) {
+        super.resetear(spawnX, spawnY);
     }
+
+    @Override
+    public void morir() {
+        super.morir();
+    }
+
+    @Override
+    public void update(float delta) {
+        super.update(delta);
+    }
+     
 
     // Elimina basura de la grafica*/
     @Override

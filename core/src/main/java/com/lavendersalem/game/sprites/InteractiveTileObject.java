@@ -31,5 +31,7 @@ public class InteractiveTileObject {
         shape.setAsBox(bounds.getWidth() / 2 / B2DVars.PPM, bounds.getHeight() / 2 / B2DVars.PPM); // divided by two bcs it is located in the center of the boxes
         fdef.shape = shape;
         body.createFixture(fdef);
+
+
     }
 }

@@ -15,6 +15,7 @@ import com.lavendersalem.game.LavenderSalemGame;
 import com.lavendersalem.game.sprites.Lavender;
 import com.lavendersalem.game.sprites.Salem;
 import com.lavendersalem.game.tools.LevelCreator;
+import com.lavendersalem.game.tools.WorldContactListener;
 import com.lavendersalem.game.utils.B2DVars;
 
 public class PlayScreen implements Screen {
@@ -70,23 +71,12 @@ public class PlayScreen implements Screen {
 
         new LevelCreator(world, map);
 
+        // loading player sprites
         lavender = new Lavender(world,20,20,16,32);
         salem = new Salem(world, 20,20,16,16);
 
+        world.setContactListener(new WorldContactListener());
     }
-
-/*    public void handleInput(float delta){
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)){
-            player.b2body.applyLinearImpulse(new Vector2(0,2f),player.b2body.getWorldCenter(),true);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2){
-            player.b2body.applyLinearImpulse(new Vector2(0.08f,0f),player.b2body.getWorldCenter(),true);
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x <= 2){
-            player.b2body.applyLinearImpulse(new Vector2(-0.08f,0f),player.b2body.getWorldCenter(),true);
-        }
-    }*/
 
     public void update(float delta) {
         //handleInput(delta);
@@ -116,7 +106,7 @@ public class PlayScreen implements Screen {
         update(delta);
 
         // clear game screen with black
-        Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+        Gdx.gl.glClearColor(0.09f, 0.09f, 0.09f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // render game map

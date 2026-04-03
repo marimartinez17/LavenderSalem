@@ -14,7 +14,7 @@ import com.lavendersalem.game.entities.*;
 import com.lavendersalem.game.utils.Constants;
 import com.lavendersalem.game.utils.Enums;
 import com.lavendersalem.game.world.SistemaColisiones;
-import com.lavendersalem.game.world.SistemaVidas;
+import com.lavendersalem.game.world.SistemaVidas2;
 
 public class GameScreen implements Screen {
     private final LavenderSalemGame game;
@@ -27,7 +27,7 @@ public class GameScreen implements Screen {
     private final FitViewport viewport;
     private final Lavender2 lavender;
     private final Salem2 salem;
-    private final SistemaVidas sistemaVidas;
+    private final SistemaVidas2 sistemaVidas;
     private final ShapeRenderer shapeRenderer; // Para probrar con hitbox (rectangulo)
     private final Array<Rectangle> tilesSolidos;
     private final Array<Rectangle> tilesPeligros;
@@ -44,7 +44,7 @@ public class GameScreen implements Screen {
         overlayPausa = new OverlayPausa(camara, viewport);
         lavender = new Lavender2(48f,48f);
         salem = new Salem2(60f,48f);
-        sistemaVidas = new SistemaVidas(lavender, salem);
+        sistemaVidas = new SistemaVidas2(lavender, salem);
         shapeRenderer = new ShapeRenderer();
         tilesSolidos = new Array<>();
         tilesPeligros = new Array<>();

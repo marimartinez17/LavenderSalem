@@ -55,9 +55,7 @@ public class Lavender extends Player {
             b2body.applyLinearImpulse(new Vector2(-0.08f,0f),b2body.getWorldCenter(),true);
             miraDer = false;
         }
-
-
-        // Si esta esperando no mueve
+        // Si esta esperando no se mueve
         if (esperaRescate) {
             b2body.applyLinearImpulse(new Vector2(0,0),b2body.getWorldCenter(),true);
             return;
@@ -66,8 +64,46 @@ public class Lavender extends Player {
     }
 
     @Override
+    public TextureRegion getFrame(float delta) {
+        if (esperaRescate){
+            stateTimer = 0f;
+        }
+
+        TextureRegion frame = super.getFrame(delta);
+
+        if (esperaRescate){
+            frame = miraDer ? animIdleDer.getKeyFrame(stateTimer) : animIdleIzq.getKeyFrame(stateTimer);
+
+        }
+        return frame;
+    }
+
+    @Override
     public void update(float delta) {
         super.update(delta); // Aplica el sistema de salto y movimiento
+    }
+
+    @Override
+    public void resetear(float spawnX, float spawnY) {
+        super.resetear(spawnX, spawnY);
+        esperaRescate = false;
+    }
+
+    public void recibirVida () {
+        vidas++;
+        esperaRescate = false;
+        vivo = true;
+        // SET POSITION
+        b2body.applyLinearImpulse(new Vector2(0f,0f),b2body.getWorldCenter(),true);
+        //setOnSuelo(false); // Para que mantega sobre el suelo
+    }
+
+    public void morirEspera () {
+        // Bloquea a lavender en el sitio y activa esperaRescate
+        //posicion.set(posX, posY);
+        b2body.applyLinearImpulse(new Vector2(0f,0f),b2body.getWorldCenter(),true);
+        esperaRescate = true;
+        vivo = true; // No muere hasta culminar contrareloj
     }
 
     // Elimina basura de la grafica*/
