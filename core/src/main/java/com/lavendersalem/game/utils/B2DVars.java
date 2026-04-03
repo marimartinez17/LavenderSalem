@@ -27,7 +27,5 @@ public class B2DVars {
 
     //player/sprite constants for box2D
     public static final short BIT_PLAYER = 16;
-    public static final short BIT_LAVENDER = 17;
-    public static final short BIT_SALEM = 18;
     public static final float PPM = 100f;
 }

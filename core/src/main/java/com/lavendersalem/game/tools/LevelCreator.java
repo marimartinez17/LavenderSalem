@@ -33,6 +33,8 @@ public class LevelCreator {
 
             shape.setAsBox(rect.getWidth() / 2 / B2DVars.PPM, rect.getHeight() / 2 / B2DVars.PPM); // divided by two bcs it is located in the center of the boxes
             fdef.shape = shape;
+            fdef.filter.categoryBits = B2DVars.PLATFORMS;
+            fdef.filter.maskBits = B2DVars.BIT_PLAYER;
             body.createFixture(fdef);
         }
 

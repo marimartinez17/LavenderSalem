@@ -88,8 +88,16 @@ public abstract class Player extends Sprite {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox((width / 2)/B2DVars.PPM, (height/2)/B2DVars.PPM);
         fdef.shape = shape;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fdef.filter.maskBits = B2DVars.PLATFORMS;
         b2body.createFixture(fdef);
 
+        // create box shape for player foot
+        shape.setAsBox(((width - 2) / 2 /B2DVars.PPM), ((height + 0.01f) /2/B2DVars.PPM));
+        fdef.isSensor = true;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fdef.filter.maskBits = B2DVars.PLATFORMS;
+        b2body.createFixture(fdef).setUserData("foot");
     }
 
 

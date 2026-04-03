@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lavendersalem.game.utils.B2DVars;
 import com.lavendersalem.game.utils.Enums;
@@ -86,16 +84,6 @@ public class Lavender extends Player {
         return frame;
     }
 
-    @Override
-    public void definePlayer(){
-        super.definePlayer();
-        // create box shape for player foot
-        FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(6/B2DVars.PPM, (12)/B2DVars.PPM);
-        fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData("foot");
-    }
 
     @Override
     public void update(float delta) {
