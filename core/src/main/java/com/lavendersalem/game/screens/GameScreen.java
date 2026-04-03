@@ -14,7 +14,6 @@ import com.lavendersalem.game.entities.*;
 import com.lavendersalem.game.utils.Constants;
 import com.lavendersalem.game.utils.Enums;
 import com.lavendersalem.game.world.SistemaColisiones;
-import com.lavendersalem.game.world.SistemaVidas2;
 
 public class GameScreen implements Screen {
     private final LavenderSalemGame game;

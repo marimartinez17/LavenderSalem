@@ -2,8 +2,6 @@ package com.lavendersalem.game.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.lavendersalem.game.entities.Lavender2;
-import com.lavendersalem.game.entities.Salem2;
 import com.lavendersalem.game.sprites.Lavender;
 import com.lavendersalem.game.sprites.Salem;
 import com.lavendersalem.game.utils.Constants;
