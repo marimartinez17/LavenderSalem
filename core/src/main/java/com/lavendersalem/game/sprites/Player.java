@@ -167,7 +167,8 @@ public abstract class Player extends Sprite {
         this.currentState = state;
     }
 
-    public void resetear(float spawnX, float spawnY) {
+    public void resetear() {
+        // falta set position
         vidas = vidasInicial;
         vivo = true;
         onSuelo = false;

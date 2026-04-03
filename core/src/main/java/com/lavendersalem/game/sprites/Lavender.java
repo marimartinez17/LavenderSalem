@@ -11,12 +11,16 @@ import com.lavendersalem.game.utils.B2DVars;
 import com.lavendersalem.game.utils.Enums;
 
 public class Lavender extends Player {
+
     private boolean esperaRescate = false;
     private float posMuerteX, posMuerteY;
+
     // Constructor (Crea a Lavender)
     public Lavender(World world, float x, float y, float width, float height) {
+
         super(world, x, y, width, height);
-        // Spritsheets
+
+        // Spritesheets
         sheetIdle = new Texture(Gdx.files.internal("sprites/lavender/Lavender-idle-sheet.png"));
         sheetIdleIzq = new Texture(Gdx.files.internal("sprites/lavender/Lavender-idleleft-sheet.png"));
         sheetIdleDer = new Texture(Gdx.files.internal("sprites/lavender/Lavender-idleright-sheet.png"));
@@ -26,6 +30,7 @@ public class Lavender extends Player {
         sheetSaltoDer = new Texture(Gdx.files.internal("sprites/lavender/Lavender-jumpright-sheet.png"));
         sheetInteractIzq = new Texture(Gdx.files.internal("sprites/lavender/Lavender-interactleft-sheet.png"));
         sheetInteractDer = new Texture(Gdx.files.internal("sprites/lavender/Lavender-interactright-sheet.png"));
+
         // Crear animaciones en 0 porque hay una sola fila y con 0.15f tiempo de frame
         animIdle = new Animation<>(0.25f, TextureRegion.split(sheetIdle, 16, 32)[0]);
         animIdleIzq = new Animation<>(0.25f, TextureRegion.split(sheetIdleIzq, 16, 32)[0]);
@@ -36,6 +41,7 @@ public class Lavender extends Player {
         animSaltarDer = new Animation<>(0.2f, TextureRegion.split(sheetSaltoDer, 16, 32)[0]);
         animInteractuarIzq = new Animation<>(0.2f, TextureRegion.split(sheetInteractIzq, 16, 32)[0]);
         animInteractuarDer = new Animation<>(0.2f, TextureRegion.split(sheetInteractDer, 16, 32)[0]);
+
         // Se config el frame inicial
         currentFrame = TextureRegion.split(sheetIdle, 16, 32)[0][0];
         setRegion(currentFrame);
@@ -84,8 +90,7 @@ public class Lavender extends Player {
     }
 
     @Override
-    public void resetear(float spawnX, float spawnY) {
-        super.resetear(spawnX, spawnY);
+    public void resetear() {
         esperaRescate = false;
     }
 
