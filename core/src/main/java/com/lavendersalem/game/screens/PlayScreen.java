@@ -20,7 +20,7 @@ import com.lavendersalem.game.utils.B2DVars;
 
 public class PlayScreen implements Screen {
 
-    //private Jugador player;
+    // player sprites
     private Lavender lavender;
     private Salem salem;
 
@@ -55,45 +55,53 @@ public class PlayScreen implements Screen {
         // game HUD for crystals/timer/level info
         hud = new Hud(game.batch, lvl);
 
+        // load tiled map
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("maps/nivel1/nivel1.tmx");
 
+        // get width and height of the tilemap for the game camera (provisional)
         int width = (int) map.getProperties().get("width", Integer.class);
         int height = (int) map.getProperties().get("height", Integer.class);
-
-
         renderer = new OrthogonalTiledMapRenderer(map, 1/ B2DVars.PPM);
 
-        gameCam.position.set((480 / 2f) / B2DVars.PPM, (416 / 2f) / B2DVars.PPM, 0);
+        // establishing game camera position
+        gameCam.position.set((width / 2f) / B2DVars.PPM, (height / 2f) / B2DVars.PPM, 0);
 
+        // creating box2D world
         world = new World(new Vector2(0,-9.8f), true);
+
+        // rendering debug lines (to visualize the collisions)
         b2dr = new Box2DDebugRenderer();
 
+        // load level
         new LevelCreator(world, map);
 
         // loading player sprites
         lavender = new Lavender(world,20,20,16,32);
         salem = new Salem(world, 20,20,16,16);
 
+        // establish contact listener
         world.setContactListener(new WorldContactListener());
     }
 
     public void update(float delta) {
-        //handleInput(delta);
-
         // how bodies react to collisions
         world.step(1/60f, 6, 2);
 
+        // setting up camera to follow Lavender (provisional)
         gameCam.zoom = 0.5f;
         gameCam.position.x = lavender.b2body.getPosition().x;
         gameCam.position.y = lavender.b2body.getPosition().y;
+
+        // update player sprites
         lavender.update(delta);
         salem.update(delta);
+
         //update camera
         gameCam.update();
+
         // tell renderer to only draw what the camera sees
         renderer.setView(gameCam);
-
     }
 
     @Override

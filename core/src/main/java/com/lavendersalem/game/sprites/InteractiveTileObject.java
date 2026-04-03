@@ -25,7 +25,6 @@ public class InteractiveTileObject {
 
         bdef.type = BodyDef.BodyType.StaticBody;
         bdef.position.set((bounds.getX() + bounds.getWidth() / 2)/ B2DVars.PPM, (bounds.getY() + bounds.getHeight() / 2)/ B2DVars.PPM);
-
         body = world.createBody(bdef);
 
         shape.setAsBox(bounds.getWidth() / 2 / B2DVars.PPM, bounds.getHeight() / 2 / B2DVars.PPM); // divided by two bcs it is located in the center of the boxes
