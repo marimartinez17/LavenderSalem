@@ -2,11 +2,13 @@ package com.lavendersalem.game.sprites;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.lavendersalem.game.LavenderSalemGame;
 import com.lavendersalem.game.utils.B2DVars;
 import com.lavendersalem.game.utils.Enums;
 
@@ -51,6 +53,8 @@ public class Lavender extends Player {
     protected void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && onSuelo){
             b2body.applyLinearImpulse(new Vector2(0,2f),b2body.getWorldCenter(),true);
+            // play jumping sound
+            LavenderSalemGame.manager.get("sounds/WAV/Jump.wav", Sound.class).play();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && b2body.getLinearVelocity().x <= 2){
             b2body.applyLinearImpulse(new Vector2(0.08f,0f),b2body.getWorldCenter(),true);

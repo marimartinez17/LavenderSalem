@@ -2,8 +2,10 @@ package com.lavendersalem.game.tools;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.lavendersalem.game.LavenderSalemGame;
 import com.lavendersalem.game.screens.Hud;
 import com.lavendersalem.game.sprites.Crystal;
 import com.lavendersalem.game.sprites.InteractiveTileObject;
@@ -28,6 +30,7 @@ public class WorldContactListener implements ContactListener {
 
             if (object.getUserData() == "crystal"){
                 bodiesToRemove.add(object.getBody());
+                LavenderSalemGame.manager.get("sounds/WAV/Powerup.wav", Sound.class).play();
                 Hud.addCrystal();
             }
         }

@@ -2,6 +2,7 @@ package com.lavendersalem.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -50,6 +51,8 @@ public class PlayScreen implements Screen {
     private Box2DDebugRenderer b2dr; // to visualize the underlying physics simulation
     private WorldContactListener contactListener;
 
+    // Music
+    private Music music;
 
     // Constructor
     public PlayScreen(LavenderSalemGame game, int lvl) {
@@ -97,9 +100,12 @@ public class PlayScreen implements Screen {
         salem = new Salem(world, 200,200,16,16);
         lastMovement = new Vector2(lavender.b2body.getPosition().x, lavender.b2body.getPosition().y);
 
-
         // establish contact listener
         world.setContactListener(contactListener);
+
+        music = LavenderSalemGame.manager.get("music/powder.mp3", Music.class);
+        music.setLooping(true);
+        music.play();
     }
 
     public void update(float delta) {
