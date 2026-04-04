@@ -95,6 +95,7 @@ public abstract class Player extends Sprite {
         // create box shape for player foot
         shape.setAsBox(((width - 2) / 2 /B2DVars.PPM), ((height + 0.01f) /2/B2DVars.PPM));
         fdef.isSensor = true;
+        // collision filtering
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
         fdef.filter.maskBits = B2DVars.PLATFORMS;
         b2body.createFixture(fdef).setUserData("foot");

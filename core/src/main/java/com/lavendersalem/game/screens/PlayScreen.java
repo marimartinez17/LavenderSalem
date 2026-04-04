@@ -31,6 +31,7 @@ public class PlayScreen implements Screen {
     // Camera and viewport attributes
     private OrthographicCamera gameCam;
     private Viewport gamePort;
+    private Vector2 lastMovement;
 
     // Tiled map attributes
     private TmxMapLoader mapLoader;
@@ -79,6 +80,8 @@ public class PlayScreen implements Screen {
         // loading player sprites
         lavender = new Lavender(world,20,20,16,32);
         salem = new Salem(world, 20,20,16,16);
+        lastMovement = new Vector2(lavender.b2body.getPosition().x, lavender.b2body.getPosition().y);
+
 
         // establish contact listener
         world.setContactListener(new WorldContactListener());
@@ -88,10 +91,24 @@ public class PlayScreen implements Screen {
         // how bodies react to collisions
         world.step(1/60f, 6, 2);
 
-        // setting up camera to follow Lavender (provisional)
+
         gameCam.zoom = 0.5f;
-        gameCam.position.x = lavender.b2body.getPosition().x;
-        gameCam.position.y = lavender.b2body.getPosition().y;
+
+        // get velocity in the x-axis
+        float salemVelX   = salem.b2body.getLinearVelocity().x;
+        float lavenderVelX = lavender.b2body.getLinearVelocity().x;
+
+        // setting up camera to follow the last player who moved
+        if (salemVelX != 0f){
+            lastMovement.set(salem.b2body.getPosition().x, salem.b2body.getPosition().y);
+        } else if (lavenderVelX != 0f){
+            lastMovement.set(lavender.b2body.getPosition().x,lavender.b2body.getPosition().y);
+        }
+
+        // change position of the camera to the last movement and use LERP for linear interpolation
+        gameCam.position.x += (lastMovement.x - gameCam.position.x) * B2DVars.CAM_LERP;
+        gameCam.position.y += (lastMovement.y - gameCam.position.y) * B2DVars.CAM_LERP;
+
 
         // update player sprites
         lavender.update(delta);
