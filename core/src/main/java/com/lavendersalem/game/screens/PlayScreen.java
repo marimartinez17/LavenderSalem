@@ -9,9 +9,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lavendersalem.game.LavenderSalemGame;
+import com.lavendersalem.game.sprites.Crystal;
+import com.lavendersalem.game.sprites.Crystal2;
 import com.lavendersalem.game.sprites.Lavender;
 import com.lavendersalem.game.sprites.Salem;
 import com.lavendersalem.game.tools.LevelCreator;
@@ -23,6 +26,11 @@ public class PlayScreen implements Screen {
     // player sprites
     private Lavender lavender;
     private Salem salem;
+
+    // collectionables
+    private Array<Crystal2> crystals;
+    private int numCrystals;
+    private int totalCrystals;
 
     private LavenderSalemGame game;
     private int lvl;
@@ -41,11 +49,14 @@ public class PlayScreen implements Screen {
     // Box2D Variables
     private World world; // to create a simulation world
     private Box2DDebugRenderer b2dr; // to visualize the underlying physics simulation
+    private WorldContactListener contactListener;
+
 
     // Constructor
     public PlayScreen(LavenderSalemGame game, int lvl) {
         this.game = game;
         this.lvl = lvl;
+        contactListener = new WorldContactListener();
 
         // To follow the characters through cam world
         gameCam = new OrthographicCamera();
@@ -53,8 +64,6 @@ public class PlayScreen implements Screen {
         // mantain aspect ratio
         gamePort = new FitViewport(480 / B2DVars.PPM, 416 / B2DVars.PPM, gameCam);
 
-        // game HUD for crystals/timer/level info
-        hud = new Hud(game.batch, lvl);
 
         // load tiled map
         mapLoader = new TmxMapLoader();
@@ -75,7 +84,14 @@ public class PlayScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
 
         // load level
-        new LevelCreator(world, map);
+
+        LevelCreator levelCreator = new LevelCreator(world, map);
+        crystals = levelCreator.getCrystals();
+        totalCrystals = crystals.size;
+
+        // game HUD for crystals/timer/level info
+        hud = new Hud(game.batch, lvl, totalCrystals);
+
 
         // loading player sprites
         lavender = new Lavender(world,200,200,16,32);
@@ -84,13 +100,12 @@ public class PlayScreen implements Screen {
 
 
         // establish contact listener
-        world.setContactListener(new WorldContactListener());
+        world.setContactListener(contactListener);
     }
 
     public void update(float delta) {
         // how bodies react to collisions
         world.step(1/60f, 6, 2);
-
 
         gameCam.zoom = 0.5f;
 
@@ -109,10 +124,31 @@ public class PlayScreen implements Screen {
         gameCam.position.x += (lastMovement.x - gameCam.position.x) * B2DVars.CAM_LERP;
         gameCam.position.y += (lastMovement.y - gameCam.position.y) * B2DVars.CAM_LERP;
 
+        // remove crystals
+        Array<Body> bodies = contactListener.getBodiesToRemove();
+
+        // it's important to remove after
+        for (int i = 0; i < bodies.size; i++) {
+            Body b = bodies.get(i);
+            crystals.removeValue((Crystal2) b.getUserData(), true);
+            world.destroyBody(b);
+            lavender.collectCrystals();
+            salem.collectCrystals();
+        }
+        bodies.clear();
+
+        numCrystals = lavender.getNumCrystals() + salem.getNumCrystals();
+
+        // update collected crystals in hud
+        hud.setCollectedCrystals(numCrystals);
 
         // update player sprites
         lavender.update(delta);
         salem.update(delta);
+
+        for (int i=0;i<crystals.size;i++){
+            crystals.get(i).update(delta);
+        }
 
         //update camera
         gameCam.update();
@@ -130,7 +166,6 @@ public class PlayScreen implements Screen {
     public void render(float delta) {
         update(delta);
 
-
         // clear game screen with black
         Gdx.gl.glClearColor(0.18f, 0.18f, 0.18f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -143,9 +178,17 @@ public class PlayScreen implements Screen {
 
         // set our batch to render what the camera sees
         game.batch.setProjectionMatrix(gameCam.combined);
+
         game.batch.begin();
         lavender.draw(game.batch);
         salem.draw(game.batch);
+        //draw crystals
+
+        //draw crystals
+        for (int i=0;i<crystals.size;i++){
+            crystals.get(i).render(game.batch);
+        }
+
         game.batch.end();
 
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);

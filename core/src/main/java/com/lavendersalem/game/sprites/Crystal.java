@@ -12,8 +12,8 @@ import java.awt.*;
 public class Crystal extends InteractiveTileObject {
 
     //protected Fixture fixture;
-    public Crystal(World world, TiledMap map, Rectangle bounds, short bit) {
-        super(world,map,bounds,bit);
+    public Crystal(World world, TiledMap map, Rectangle bounds, short bit, String userData) {
+        super(world,map,bounds,bit,userData);
         bit = B2DVars.OBJECTS_CRYSTALS;
         fixture.setUserData(this);
     }
@@ -21,4 +21,5 @@ public class Crystal extends InteractiveTileObject {
     public void hit(){
         Gdx.app.log("Crystal","Collision");
     }
+
 }

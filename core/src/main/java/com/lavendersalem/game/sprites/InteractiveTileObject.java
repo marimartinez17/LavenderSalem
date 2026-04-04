@@ -1,5 +1,6 @@
 package com.lavendersalem.game.sprites;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
@@ -15,12 +16,14 @@ public abstract class InteractiveTileObject {
     protected Body body;
     protected Fixture fixture;
     protected short bit;
+    protected String userData;
 
-    public InteractiveTileObject(World world, TiledMap map, Rectangle bounds, short bit) {
+    public InteractiveTileObject(World world, TiledMap map, Rectangle bounds, short bit, String userData) {
         this.world = world;
         this.map = map;
         this.bounds = bounds;
         this.bit = bit;
+        this.userData = userData;
 
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
@@ -32,6 +35,8 @@ public abstract class InteractiveTileObject {
 
         shape.setAsBox(bounds.getWidth() / 2 / B2DVars.PPM, bounds.getHeight() / 2 / B2DVars.PPM); // divided by two bcs it is located in the center of the boxes
         fdef.shape = shape;
+        fdef.filter.categoryBits = bit;
+        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
         body.createFixture(fdef);
 
         fixture = body.createFixture(fdef);

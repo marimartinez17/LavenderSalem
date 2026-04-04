@@ -32,7 +32,7 @@ public class Hud implements Disposable {
     Label worldLabel;
     Label collectedLabel;
 
-    public Hud(SpriteBatch sb, int level) {
+    public Hud(SpriteBatch sb, int level, int totalCrystals) {
         this.level = level;
         worldTimer = 300;
         timeCount = 0;
@@ -52,7 +52,7 @@ public class Hud implements Disposable {
 
         countdownLabel = new Label(String.format("%03d", worldTimer),new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         levelLabel = new Label(String.format("%02d",level),new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        collectedLabel = new Label(collectedCrystals+" / 3",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        collectedLabel = new Label(collectedCrystals+" / "+totalCrystals,new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         // expands to the end of the screen
         // with expandX, each component has an equal width
@@ -71,5 +71,9 @@ public class Hud implements Disposable {
     @Override
     public void dispose(){
         stage.dispose();
+    }
+
+    public void setCollectedCrystals(Integer collectedCrystals){
+        this.collectedCrystals = collectedCrystals;
     }
 }

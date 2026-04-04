@@ -3,9 +3,12 @@ package com.lavendersalem.game.tools;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.lavendersalem.game.sprites.InteractiveTileObject;
 
 public class WorldContactListener implements ContactListener {
+    private Array<Body> bodiesToRemove = new Array<Body>();
+
     // comienzo de la colision
     @Override
     public void beginContact(Contact contact) {
@@ -22,7 +25,23 @@ public class WorldContactListener implements ContactListener {
             }
         }
 
+        if (fixtureA.getUserData() != null && fixtureA.getUserData().equals("crystal")) {
+            // remove crystal
+            System.out.println("Remove crystal");
+            bodiesToRemove.add(fixtureA.getBody());
+        }
+
+        if (fixtureB.getUserData() != null && fixtureB.getUserData().equals("crystal")) {
+            // remove crystal
+            System.out.println("Remove crystal");
+            bodiesToRemove.add(fixtureB.getBody());
+        }
+
     }
+    public Array<Body> getBodiesToRemove() {
+        return bodiesToRemove;
+    }
+
     // fin de la colision
     @Override
     public void endContact(Contact contact) {

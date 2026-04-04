@@ -22,6 +22,10 @@ public abstract class Player extends Sprite {
     // Dirección de la animación
     protected boolean miraDer;
 
+    // manejo de coleccionables (cristales)
+    private int numCrystals;
+    private int totalCrystals;
+
     //Atributos de Player
     protected boolean onSuelo; // Si el personaje esta en el suelo
     protected boolean vivo;
@@ -197,6 +201,24 @@ public abstract class Player extends Sprite {
     public void setVidas(int vidas) { this.vidas = vidas; }
 
     public boolean isTocadoEnemigo() { return tocadoEnemigo; }
+
+
+    public int getNumCrystals() {
+        return numCrystals;
+    }
+
+    public void collectCrystals() {
+        numCrystals = numCrystals++;
+    }
+
+    public int setTotalCrystals(int i) {
+        return totalCrystals = 1;
+    }
+
+    public int getTotalCrystals() {
+        return totalCrystals;
+    }
+
 
     // Elimina basura de la grafica
     public abstract void dispose();
