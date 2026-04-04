@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lavendersalem.game.LavenderSalemGame;
 import com.lavendersalem.game.sprites.Crystal;
-import com.lavendersalem.game.sprites.Crystal2;
 import com.lavendersalem.game.sprites.Lavender;
 import com.lavendersalem.game.sprites.Salem;
 import com.lavendersalem.game.tools.LevelCreator;
@@ -28,7 +27,7 @@ public class PlayScreen implements Screen {
     private Salem salem;
 
     // collectionables
-    private Array<Crystal2> crystals;
+    private Array<Crystal> crystals;
     private int numCrystals;
     private int totalCrystals;
 
@@ -130,7 +129,7 @@ public class PlayScreen implements Screen {
         // it's important to remove after
         for (int i = 0; i < bodies.size; i++) {
             Body b = bodies.get(i);
-            crystals.removeValue((Crystal2) b.getUserData(), true);
+            crystals.removeValue((Crystal) b.getUserData(), true);
             world.destroyBody(b);
             lavender.collectCrystals();
             salem.collectCrystals();
@@ -145,6 +144,9 @@ public class PlayScreen implements Screen {
         // update player sprites
         lavender.update(delta);
         salem.update(delta);
+
+        //update hud
+        hud.update(delta);
 
         for (int i=0;i<crystals.size;i++){
             crystals.get(i).update(delta);

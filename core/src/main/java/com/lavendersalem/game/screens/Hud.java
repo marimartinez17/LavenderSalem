@@ -20,20 +20,23 @@ public class Hud implements Disposable {
     private Viewport viewport;
     private Integer worldTimer;
     private float timeCount;
-    private Integer collectedCrystals;
+    private boolean timeUp; // true when the world timer reaches 0
+    private static Integer collectedCrystals; // static so that it can be accessed more easily from the playscreen without creating a reference
+    private static Integer totalCrystals;
     private Integer level;
 
     // txt labels
-    Label countdownLabel;
-    Label timeLabel;
-    Label crystalsLabel;
+    private Label countdownLabel;
+    private Label timeLabel;
+    private Label crystalsLabel;
     // value labels
-    Label levelLabel;
-    Label worldLabel;
-    Label collectedLabel;
+    private Label levelLabel;
+    private Label worldLabel;
+    private static Label collectedLabel;
 
     public Hud(SpriteBatch sb, int level, int totalCrystals) {
         this.level = level;
+        this.totalCrystals = totalCrystals;
         worldTimer = 300;
         timeCount = 0;
         collectedCrystals = 0;
@@ -67,6 +70,26 @@ public class Hud implements Disposable {
 
         stage.addActor(table);
     }
+
+    public void update(float delta){
+        timeCount += delta;
+        while (timeCount >= 1 ){
+            if (worldTimer > 0){
+                worldTimer--;
+            } else {
+                timeUp = true;
+            }
+            countdownLabel.setText(String.format("%03d", worldTimer));
+            timeCount = 0;
+        }
+
+    }
+
+    public static void addCrystal(){
+        collectedCrystals++;
+        collectedLabel.setText(String.format(collectedCrystals+" / "+totalCrystals));
+    }
+
 
     @Override
     public void dispose(){

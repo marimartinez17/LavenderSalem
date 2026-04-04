@@ -1,25 +1,19 @@
 package com.lavendersalem.game.sprites;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.*;
-import com.lavendersalem.game.utils.B2DVars;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.Body;
 
-import java.awt.*;
+public class Crystal extends Collectable{
+    public Crystal(Body body) {
+        super(body);
 
-public class Crystal extends InteractiveTileObject {
+        Texture texture = new Texture(Gdx.files.internal("sprites/crystal/crystal.png"));
+        TextureRegion[] sprites = TextureRegion.split(texture, 16,16)[0];
+        setAnimation(sprites, 1/12f);
 
-    //protected Fixture fixture;
-    public Crystal(World world, TiledMap map, Rectangle bounds, short bit, String userData) {
-        super(world,map,bounds,bit,userData);
-        bit = B2DVars.OBJECTS_CRYSTALS;
-        fixture.setUserData(this);
+        width = sprites[0].getRegionWidth();
+        height = sprites[0].getRegionHeight();
     }
-    @Override
-    public void hit(){
-        Gdx.app.log("Crystal","Collision");
-    }
-
 }

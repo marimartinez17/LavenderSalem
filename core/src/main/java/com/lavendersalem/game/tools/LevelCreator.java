@@ -8,11 +8,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.lavendersalem.game.sprites.Crystal;
-import com.lavendersalem.game.sprites.Crystal2;
 import com.lavendersalem.game.utils.B2DVars;
 
 public class LevelCreator {
-    private Array<Crystal2> crystals = new Array<>();
+    private Array<Crystal> crystals = new Array<>();
 
     public LevelCreator(World world, TiledMap map) {
 // create body and fixture variables
@@ -44,7 +43,7 @@ public class LevelCreator {
             body.createFixture(fdef);
         }
 
-        crystals = new Array<Crystal2>();
+        crystals = new Array<Crystal>();
 
         MapLayer layer = new MapLayer();
         layer = map.getLayers().get("objects-crystals");
@@ -67,7 +66,7 @@ public class LevelCreator {
 
             body = world.createBody(bDef);
 
-            Crystal2 c = new Crystal2(body);
+            Crystal c = new Crystal(body);
             body.createFixture(fDef).setUserData("crystal");
             body.setUserData(c);
 
@@ -75,5 +74,5 @@ public class LevelCreator {
         }
     }
 
-    public Array<Crystal2> getCrystals() { return crystals; }
+    public Array<Crystal> getCrystals() { return crystals; }
 }

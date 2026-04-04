@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.lavendersalem.game.screens.Hud;
+import com.lavendersalem.game.sprites.Crystal;
 import com.lavendersalem.game.sprites.InteractiveTileObject;
 
 public class WorldContactListener implements ContactListener {
@@ -17,26 +19,18 @@ public class WorldContactListener implements ContactListener {
 
         if (fixtureA.getUserData()== "foot" || fixtureB.getUserData() == "foot"){
 
-            Fixture head = fixtureA.getUserData() == "foot" ? fixtureA : fixtureB;
-            Fixture object = head == fixtureA ? fixtureB : fixtureA;
+            Fixture foot = fixtureA.getUserData() == "foot" ? fixtureA : fixtureB;
+            Fixture object = foot == fixtureA ? fixtureB : fixtureA;
 
-            if (object.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(object.getUserData().getClass())){
+            if (object.getUserData() != null && object.getUserData() instanceof InteractiveTileObject){
                 ((InteractiveTileObject) object.getUserData()).hit();
             }
-        }
 
-        if (fixtureA.getUserData() != null && fixtureA.getUserData().equals("crystal")) {
-            // remove crystal
-            System.out.println("Remove crystal");
-            bodiesToRemove.add(fixtureA.getBody());
+            if (object.getUserData() == "crystal"){
+                bodiesToRemove.add(object.getBody());
+                Hud.addCrystal();
+            }
         }
-
-        if (fixtureB.getUserData() != null && fixtureB.getUserData().equals("crystal")) {
-            // remove crystal
-            System.out.println("Remove crystal");
-            bodiesToRemove.add(fixtureB.getBody());
-        }
-
     }
     public Array<Body> getBodiesToRemove() {
         return bodiesToRemove;
