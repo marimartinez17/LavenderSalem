@@ -32,8 +32,6 @@ public abstract class InteractiveTileObject {
 
         shape.setAsBox(bounds.getWidth() / 2 / B2DVars.PPM, bounds.getHeight() / 2 / B2DVars.PPM); // divided by two bcs it is located in the center of the boxes
         fdef.shape = shape;
-        fdef.filter.categoryBits = bit;
-        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
         body.createFixture(fdef);
 
         fixture = body.createFixture(fdef);

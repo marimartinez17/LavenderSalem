@@ -48,8 +48,8 @@ public class Salem extends Player {
     // Configuramos movimiento
     @Override
     protected void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W) && currentState != Enums.State.JUMPING) {
-            b2body.applyLinearImpulse(new Vector2(0, 2f), b2body.getWorldCenter(), true);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W) && onSuelo) {
+            b2body.applyLinearImpulse(new Vector2(0, 2.8f), b2body.getWorldCenter(), true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D) && b2body.getLinearVelocity().x <= 2) {
             b2body.applyLinearImpulse(new Vector2(0.08f, 0f), b2body.getWorldCenter(), true);

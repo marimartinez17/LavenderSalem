@@ -12,7 +12,8 @@ public class WorldContactListener implements ContactListener {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
 
-        if (fixtureA.getUserData() == "foot" || fixtureB.getUserData() == "foot"){
+        if (fixtureA.getUserData()== "foot" || fixtureB.getUserData() == "foot"){
+
             Fixture head = fixtureA.getUserData() == "foot" ? fixtureA : fixtureB;
             Fixture object = head == fixtureA ? fixtureB : fixtureA;
 

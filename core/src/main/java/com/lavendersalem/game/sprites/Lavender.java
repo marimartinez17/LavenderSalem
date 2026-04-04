@@ -49,9 +49,8 @@ public class Lavender extends Player {
     // Configuramos movimiento
     @Override
     protected void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && currentState != Enums.State.JUMPING){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && onSuelo){
             b2body.applyLinearImpulse(new Vector2(0,2f),b2body.getWorldCenter(),true);
-            onSuelo = false;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && b2body.getLinearVelocity().x <= 2){
             b2body.applyLinearImpulse(new Vector2(0.08f,0f),b2body.getWorldCenter(),true);

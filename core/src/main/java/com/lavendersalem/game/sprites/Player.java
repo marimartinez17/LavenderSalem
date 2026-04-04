@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.lavendersalem.game.tools.WorldContactListener;
 import com.lavendersalem.game.utils.B2DVars;
 import com.lavendersalem.game.utils.Enums.*;
 
@@ -100,6 +101,7 @@ public abstract class Player extends Sprite {
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
         fdef.filter.maskBits = B2DVars.PLATFORMS;
         b2body.createFixture(fdef).setUserData("foot");
+
     }
 
 
@@ -158,13 +160,17 @@ public abstract class Player extends Sprite {
     }
 
     public State getState() {
-        if (b2body.getLinearVelocity().y > 0) {
+        if ((b2body.getLinearVelocity().y > 0)) {
+            onSuelo = false;
             return State.JUMPING;
         } else if (b2body.getLinearVelocity().y < 0) {
+            onSuelo = false;
             return State.FALLING;
         } else if (b2body.getLinearVelocity().x != 0) {
+            onSuelo = true;
             return State.RUNNING;
         } else {
+            onSuelo = true;
             return State.STANDING;
         }
     }

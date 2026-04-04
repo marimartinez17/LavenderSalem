@@ -78,8 +78,8 @@ public class PlayScreen implements Screen {
         new LevelCreator(world, map);
 
         // loading player sprites
-        lavender = new Lavender(world,20,20,16,32);
-        salem = new Salem(world, 20,20,16,16);
+        lavender = new Lavender(world,200,200,16,32);
+        salem = new Salem(world, 200,200,16,16);
         lastMovement = new Vector2(lavender.b2body.getPosition().x, lavender.b2body.getPosition().y);
 
 
