@@ -118,10 +118,14 @@ public class PlayScreen implements Screen {
         float salemVelX   = salem.b2body.getLinearVelocity().x;
         float lavenderVelX = lavender.b2body.getLinearVelocity().x;
 
+        // get velocity in the Y-axis
+        float salemVelY   = salem.b2body.getLinearVelocity().y;
+        float lavenderVelY = lavender.b2body.getLinearVelocity().y;
+
         // setting up camera to follow the last player who moved
-        if (salemVelX != 0f){
+        if (salemVelX != 0f || salemVelY != 0f) {
             lastMovement.set(salem.b2body.getPosition().x, salem.b2body.getPosition().y);
-        } else if (lavenderVelX != 0f){
+        } else if (lavenderVelX != 0f || lavenderVelY != 0f) {
             lastMovement.set(lavender.b2body.getPosition().x,lavender.b2body.getPosition().y);
         }
 
