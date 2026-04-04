@@ -67,6 +67,7 @@ public abstract class Player extends Sprite {
         currentState = State.STANDING;
         previousState = State.STANDING;
         stateTimer = 0f;
+        onSuelo = true;
         miraDer = true;
 
         definePlayer();

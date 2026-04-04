@@ -24,6 +24,7 @@ public class B2DVars {
     public static final short OBJECTS_ENEMIES = 13;
     public static final short OBJECTS_PORTALS = 14;
     public static final short OBJECTS_CRYSTALS= 15;
+    public static final short OBJECTS_PRIZE= 16;
 
     //player/sprite constants for box2D
     public static final short BIT_PLAYER = 16;

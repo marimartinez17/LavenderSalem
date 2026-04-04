@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lavendersalem.game.utils.B2DVars;
+import com.lavendersalem.game.utils.Enums;
 
 public class Salem extends Player {
     private boolean dobleSalto;
@@ -47,7 +48,7 @@ public class Salem extends Player {
     // Configuramos movimiento
     @Override
     protected void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W) && currentState != Enums.State.JUMPING) {
             b2body.applyLinearImpulse(new Vector2(0, 2f), b2body.getWorldCenter(), true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D) && b2body.getLinearVelocity().x <= 2) {

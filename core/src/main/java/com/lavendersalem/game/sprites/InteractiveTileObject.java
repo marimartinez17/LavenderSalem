@@ -7,18 +7,20 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.lavendersalem.game.utils.B2DVars;
 
-public class InteractiveTileObject {
+public abstract class InteractiveTileObject {
     protected World world;
     protected TiledMap map;
     protected TiledMapTile tile;
     protected Rectangle bounds;
     protected Body body;
     protected Fixture fixture;
+    protected short bit;
 
-    public InteractiveTileObject(World world, TiledMap map, Rectangle bounds) {
+    public InteractiveTileObject(World world, TiledMap map, Rectangle bounds, short bit) {
         this.world = world;
         this.map = map;
         this.bounds = bounds;
+        this.bit = bit;
 
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
@@ -30,8 +32,12 @@ public class InteractiveTileObject {
 
         shape.setAsBox(bounds.getWidth() / 2 / B2DVars.PPM, bounds.getHeight() / 2 / B2DVars.PPM); // divided by two bcs it is located in the center of the boxes
         fdef.shape = shape;
+        fdef.filter.categoryBits = bit;
+        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
         body.createFixture(fdef);
 
-
+        fixture = body.createFixture(fdef);
     }
+
+    public abstract void hit();
 }

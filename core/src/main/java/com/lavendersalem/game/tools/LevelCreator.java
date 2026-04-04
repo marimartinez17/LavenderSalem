@@ -41,7 +41,7 @@ public class LevelCreator {
         // Create fixtures -> crystals/gems :)
         for (MapObject object: map.getLayers().get("objects-crystals").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            new Crystal(world,map,rect);
+            new Crystal(world,map,rect,B2DVars.OBJECTS_CRYSTALS);
         }
         //lavender = new Lavender(200f,222f);
     }

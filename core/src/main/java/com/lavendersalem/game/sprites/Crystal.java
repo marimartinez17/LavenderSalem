@@ -1,5 +1,6 @@
 package com.lavendersalem.game.sprites;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
@@ -11,10 +12,13 @@ import java.awt.*;
 public class Crystal extends InteractiveTileObject {
 
     //protected Fixture fixture;
-    public Crystal(World world, TiledMap map, Rectangle bounds) {
-        super(world,map,bounds);
-
-        //fixture.setUserData(this);
-
+    public Crystal(World world, TiledMap map, Rectangle bounds, short bit) {
+        super(world,map,bounds,bit);
+        bit = B2DVars.OBJECTS_CRYSTALS;
+        fixture.setUserData(this);
+    }
+    @Override
+    public void hit(){
+        Gdx.app.log("Crystal","Collision");
     }
 }
