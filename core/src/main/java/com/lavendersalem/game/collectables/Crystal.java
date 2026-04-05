@@ -1,11 +1,11 @@
-package com.lavendersalem.game.sprites;
+package com.lavendersalem.game.collectables;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 
-public class Crystal extends Collectable{
+public class Crystal extends Collectable {
     public Crystal(Body body) {
         super(body);
 

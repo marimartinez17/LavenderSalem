@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.lavendersalem.game.screens.PlayScreen;
-import com.lavendersalem.game.sprites.Crystal;
+import com.lavendersalem.game.collectables.Crystal;
 import com.lavendersalem.game.utils.B2DVars;
 
 public class LevelCreator {
