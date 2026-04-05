@@ -96,7 +96,4 @@ public class Hud implements Disposable {
         stage.dispose();
     }
 
-    public void setCollectedCrystals(Integer collectedCrystals){
-        this.collectedCrystals = collectedCrystals;
-    }
 }

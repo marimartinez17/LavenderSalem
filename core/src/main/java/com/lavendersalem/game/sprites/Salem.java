@@ -21,6 +21,7 @@ public class Salem extends Player {
     // Constructor (Crea a Lavender)
     public Salem(PlayScreen screen, float x, float y, float width, float height) {
         super(screen, x, y, width, height);
+        b2body.setUserData("salem");
         // Spritsheets
         sheetIdle = new Texture(Gdx.files.internal("sprites/salem/salem-idle-sheet.png"));
         sheetIdleIzq = new Texture(Gdx.files.internal("sprites/salem/salem-idleleft-sheet.png"));

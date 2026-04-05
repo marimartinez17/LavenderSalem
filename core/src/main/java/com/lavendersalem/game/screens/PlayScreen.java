@@ -146,11 +146,6 @@ public class PlayScreen implements Screen {
         }
         bodies.clear();
 
-        numCrystals = lavender.getNumCrystals() + salem.getNumCrystals();
-
-        // update collected crystals in hud
-        hud.setCollectedCrystals(numCrystals);
-
         // update player sprites
         lavender.update(delta);
         salem.update(delta);
