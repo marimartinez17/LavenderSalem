@@ -19,7 +19,14 @@ public class Enums {
         JUMPING,
         STANDING,
         RUNNING,
-        FALLING,
+        FALLING
+    }
+
+    public enum EnemyState {
+        MOVING,
+        ATTACKING,
+        DAMAGING,
+        DYING
     }
 
 }

@@ -26,9 +26,14 @@ public class B2DVars {
     public static final short OBJECTS_CRYSTALS= 15;
     public static final short OBJECTS_PRIZE= 16;
 
+
     //player/sprite constants for box2D
-    public static final short BIT_PLAYER = 16;
+    public static final short BIT_PLAYER = 17;
     public static final float PPM = 100f;
+
+    //enemy sprite constants for box2D
+    public static final short BIT_ENEMY = 18;
+    public static final short OBJECTS_OBSTACLES= 19;
 
     //for camera smoothness (lineal interpolation)
     public static final float CAM_LERP = 0.1f;

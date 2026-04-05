@@ -75,6 +75,23 @@ public class LevelCreator {
 
             crystals.add(c);
         }
+
+        // create invisible career for enemies
+        for (MapObject object: map.getLayers().get("objects-obstacles").getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2)/ B2DVars.PPM, (rect.getY() + rect.getHeight() / 2)/ B2DVars.PPM);
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 / B2DVars.PPM, rect.getHeight() / 2 / B2DVars.PPM); // divided by two bcs it is located in the center of the boxes
+            fdef.shape = shape;
+            fdef.filter.categoryBits = B2DVars.OBJECTS_OBSTACLES;
+            fdef.filter.maskBits = B2DVars.BIT_ENEMY;
+            body.createFixture(fdef);
+        }
+
     }
 
     public Array<Crystal> getCrystals() { return crystals; }

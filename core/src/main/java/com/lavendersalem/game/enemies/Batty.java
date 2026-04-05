@@ -1,0 +1,89 @@
+package com.lavendersalem.game.enemies;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.lavendersalem.game.screens.PlayScreen;
+import com.lavendersalem.game.utils.B2DVars;
+import com.lavendersalem.game.utils.Enums;
+
+public class Batty extends Enemy{
+    // Para sprites
+    protected Texture sheetAttackDer;
+    protected Texture sheetAttackIzq;
+    protected Texture sheetMoveIzq;
+    protected Texture sheetMoveDer;
+    protected Texture sheetDamageDer;
+    protected Texture sheetDamageIzq;
+    protected Texture sheetDieDer;
+    protected Texture sheetDieIzq;
+    // Para cada frame de animaciones
+    protected Animation<TextureRegion> animAttackDer;
+    protected Animation<TextureRegion> animAttackIzq;
+    protected Animation<TextureRegion> animMoveIzq;
+    protected Animation<TextureRegion> animMoveDer;
+    protected Animation<TextureRegion> animDamageDer;
+    protected Animation<TextureRegion> animDamageIzq;
+    protected Animation<TextureRegion> animDieIzq;
+    protected Animation<TextureRegion> animDieDer;
+    protected boolean miraDer;
+    protected String estadoAnim = "";
+    protected float timeAnimacion = 0f;
+    protected TextureRegion currentFrame;
+
+    // Estado del sprite para mostrar animacion
+    protected Enums.State currentState;
+    protected Enums.State previousState;
+    protected float stateTimer;
+
+
+    public Batty(PlayScreen screen, float x, float y) {
+        super(screen, x, y);
+        miraDer = true;
+        // load textures
+        sheetAttackDer = new Texture(Gdx.files.internal("sprites/bat/BatAttack-right.png"));
+        sheetAttackIzq = new Texture(Gdx.files.internal("sprites/bat/BatAttack.png"));
+        sheetMoveDer = new Texture(Gdx.files.internal("sprites/bat/BatMovement-right.png"));
+        sheetMoveIzq = new Texture(Gdx.files.internal("sprites/bat/BatMovement.png"));
+        sheetDamageDer = new Texture(Gdx.files.internal("sprites/bat/Batdamaged-right.png"));
+        sheetDamageIzq = new Texture(Gdx.files.internal("sprites/bat/Batdamaged.png"));
+        sheetDieDer = new Texture(Gdx.files.internal("sprites/bat/BatDeath-right.png"));
+        sheetDieIzq = new Texture(Gdx.files.internal("sprites/bat/BatDeath.png"));
+        // load animations and divide spritesheets
+        animAttackDer = new Animation<>(0.25f, TextureRegion.split(sheetAttackDer, 16, 32)[0]);
+        animAttackIzq = new Animation<>(0.25f, TextureRegion.split(sheetAttackIzq, 16, 32)[0]);
+        animMoveDer = new Animation<>(0.2f, TextureRegion.split(sheetMoveDer, 16, 32)[0]);
+        animMoveIzq = new Animation<>(0.2f, TextureRegion.split(sheetMoveIzq, 16, 32)[0]);
+        animDamageDer = new Animation<>(0.2f, TextureRegion.split(sheetDamageDer, 16, 32)[0]);
+        animDamageIzq = new Animation<>(0.2f, TextureRegion.split(sheetDamageIzq, 16, 32)[0]);
+        animDieDer = new Animation<>(0.2f, TextureRegion.split(sheetDieDer, 16, 32)[0]);
+        animDieIzq = new Animation<>(0.2f, TextureRegion.split(sheetDieIzq, 16, 32)[0]);
+    }
+
+    @Override
+    protected void defineEnemy() {
+        // create body from bodydef
+        BodyDef bdef = new BodyDef();
+
+        float width = 32f;
+        float height = 32f;
+
+        // create box shape for player collision box
+        bdef.position.set(x / B2DVars.PPM,y/B2DVars.PPM );
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        b2body = world.createBody(bdef);
+
+        // create fixturedef for player collision box
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(width / 2 / B2DVars.PPM);
+        fdef.filter.categoryBits = B2DVars.BIT_ENEMY;
+        fdef.filter.maskBits = B2DVars.PLATFORMS | B2DVars.BIT_PLAYER | B2DVars.OBJECTS_OBSTACLES;
+        fdef.shape = shape;
+        b2body.createFixture(fdef);
+    }
+}

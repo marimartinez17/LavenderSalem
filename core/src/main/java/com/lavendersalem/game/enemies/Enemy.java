@@ -8,7 +8,9 @@ import com.lavendersalem.game.screens.PlayScreen;
 public abstract class Enemy extends Sprite {
     protected World world;
     protected PlayScreen screen;
-    public Body body;
+    protected float x;
+    protected float y;
+    public Body b2body;
 
     public Enemy (PlayScreen screen, float x, float y){
         this.world = screen.getWorld();
