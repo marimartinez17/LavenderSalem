@@ -7,13 +7,16 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.lavendersalem.game.screens.PlayScreen;
 import com.lavendersalem.game.sprites.Crystal;
 import com.lavendersalem.game.utils.B2DVars;
 
 public class LevelCreator {
     private Array<Crystal> crystals = new Array<>();
 
-    public LevelCreator(World world, TiledMap map) {
+    public LevelCreator(PlayScreen screen) {
+        World world = screen.getWorld();
+        TiledMap map = screen.getMap();
 // create body and fixture variables
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();

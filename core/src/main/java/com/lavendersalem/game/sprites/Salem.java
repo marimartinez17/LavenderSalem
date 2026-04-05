@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lavendersalem.game.LavenderSalemGame;
+import com.lavendersalem.game.screens.PlayScreen;
 import com.lavendersalem.game.utils.B2DVars;
 import com.lavendersalem.game.utils.Enums;
 
@@ -18,8 +19,8 @@ public class Salem extends Player {
     private boolean dobleSalto;
 
     // Constructor (Crea a Lavender)
-    public Salem(World world, float x, float y, float width, float height) {
-        super(world, x, y, width, height);
+    public Salem(PlayScreen screen, float x, float y, float width, float height) {
+        super(screen, x, y, width, height);
         // Spritsheets
         sheetIdle = new Texture(Gdx.files.internal("sprites/salem/salem-idle-sheet.png"));
         sheetIdleIzq = new Texture(Gdx.files.internal("sprites/salem/salem-idleleft-sheet.png"));

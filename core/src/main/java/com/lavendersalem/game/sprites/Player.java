@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.lavendersalem.game.screens.PlayScreen;
 import com.lavendersalem.game.tools.WorldContactListener;
 import com.lavendersalem.game.utils.B2DVars;
 import com.lavendersalem.game.utils.Enums.*;
@@ -62,8 +63,8 @@ public abstract class Player extends Sprite {
     protected State previousState;
     protected float stateTimer;
 
-    public Player(World world, float x, float y, float width, float height) {
-        this.world = world;
+    public Player(PlayScreen screen, float x, float y, float width, float height) {
+        this.world = screen.getWorld();
         this.x = x;
         this.y = y;
         this.width = width;

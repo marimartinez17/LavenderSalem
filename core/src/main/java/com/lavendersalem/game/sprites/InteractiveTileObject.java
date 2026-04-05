@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.lavendersalem.game.screens.PlayScreen;
 import com.lavendersalem.game.utils.B2DVars;
 
 public abstract class InteractiveTileObject {
@@ -18,9 +19,9 @@ public abstract class InteractiveTileObject {
     protected short bit;
     protected String userData;
 
-    public InteractiveTileObject(World world, TiledMap map, Rectangle bounds, short bit, String userData) {
-        this.world = world;
-        this.map = map;
+    public InteractiveTileObject(PlayScreen screen, Rectangle bounds, short bit, String userData) {
+        this.world = screen.getWorld();
+        this.map = screen.getMap();
         this.bounds = bounds;
         this.bit = bit;
         this.userData = userData;

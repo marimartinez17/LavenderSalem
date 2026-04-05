@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lavendersalem.game.LavenderSalemGame;
+import com.lavendersalem.game.screens.PlayScreen;
 import com.lavendersalem.game.utils.B2DVars;
 import com.lavendersalem.game.utils.Enums;
 
@@ -18,9 +19,9 @@ public class Lavender extends Player {
     private float posMuerteX, posMuerteY;
 
     // Constructor (Crea a Lavender)
-    public Lavender(World world, float x, float y, float width, float height) {
+    public Lavender(PlayScreen screen, float x, float y, float width, float height) {
 
-        super(world, x, y, width, height);
+        super(screen, x, y, width, height);
 
         // Spritesheets
         sheetIdle = new Texture(Gdx.files.internal("sprites/lavender/Lavender-idle-sheet.png"));
