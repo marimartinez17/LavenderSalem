@@ -54,14 +54,14 @@ public class Batty extends Enemy{
         sheetDieDer = new Texture(Gdx.files.internal("sprites/bat/BatDeath-right.png"));
         sheetDieIzq = new Texture(Gdx.files.internal("sprites/bat/BatDeath.png"));
         // load animations and divide spritesheets
-        animAttackDer = new Animation<>(0.25f, TextureRegion.split(sheetAttackDer, 16, 32)[0]);
-        animAttackIzq = new Animation<>(0.25f, TextureRegion.split(sheetAttackIzq, 16, 32)[0]);
-        animMoveDer = new Animation<>(0.2f, TextureRegion.split(sheetMoveDer, 16, 32)[0]);
-        animMoveIzq = new Animation<>(0.2f, TextureRegion.split(sheetMoveIzq, 16, 32)[0]);
-        animDamageDer = new Animation<>(0.2f, TextureRegion.split(sheetDamageDer, 16, 32)[0]);
-        animDamageIzq = new Animation<>(0.2f, TextureRegion.split(sheetDamageIzq, 16, 32)[0]);
-        animDieDer = new Animation<>(0.2f, TextureRegion.split(sheetDieDer, 16, 32)[0]);
-        animDieIzq = new Animation<>(0.2f, TextureRegion.split(sheetDieIzq, 16, 32)[0]);
+        animAttackDer = new Animation<>(0.25f, TextureRegion.split(sheetAttackDer, 32, 32)[0]);
+        animAttackIzq = new Animation<>(0.25f, TextureRegion.split(sheetAttackIzq, 32, 32)[0]);
+        animMoveDer = new Animation<>(0.2f, TextureRegion.split(sheetMoveDer, 32, 32)[0]);
+        animMoveIzq = new Animation<>(0.2f, TextureRegion.split(sheetMoveIzq, 32, 32)[0]);
+        animDamageDer = new Animation<>(0.2f, TextureRegion.split(sheetDamageDer, 32, 32)[0]);
+        animDamageIzq = new Animation<>(0.2f, TextureRegion.split(sheetDamageIzq, 32, 32)[0]);
+        animDieDer = new Animation<>(0.2f, TextureRegion.split(sheetDieDer, 32, 32)[0]);
+        animDieIzq = new Animation<>(0.2f, TextureRegion.split(sheetDieIzq, 32, 32)[0]);
     }
 
     @Override
