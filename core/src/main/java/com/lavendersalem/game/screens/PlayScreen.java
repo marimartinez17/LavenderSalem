@@ -101,7 +101,7 @@ public class PlayScreen implements Screen {
 
         // loading player sprites
         lavender = new Lavender(this,200,200,16,32);
-        salem = new Salem(this, 200,200,16,16);
+        salem = new Salem(this, 180,200,16,16);
         lastMovement = new Vector2(lavender.b2body.getPosition().x, lavender.b2body.getPosition().y);
 
         // establish contact listener

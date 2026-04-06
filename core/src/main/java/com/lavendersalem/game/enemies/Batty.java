@@ -4,9 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.lavendersalem.game.screens.PlayScreen;
 import com.lavendersalem.game.utils.B2DVars;
 import com.lavendersalem.game.utils.Enums;
@@ -39,13 +38,20 @@ public class Batty extends Enemy{
     protected Enums.State currentState;
     protected Enums.State previousState;
     protected float stateTimer;
+    private float deathTimer;
 
+    // to destroy the body
+    public boolean setToDestroy;
+    public boolean destroyed;
 
     public Batty(PlayScreen screen, float x, float y) {
         super(screen, x, y);
         b2body.setUserData("batty");
         miraDer = true;
         stateTimer = 0;
+        deathTimer = 0;
+        setToDestroy = false;
+        destroyed = false;
 
         // load textures
         sheetAttackDer = new Texture(Gdx.files.internal("sprites/bat/BatAttack-right.png"));
@@ -65,6 +71,7 @@ public class Batty extends Enemy{
         animDamageIzq = new Animation<>(0.2f, TextureRegion.split(sheetDamageIzq, 32, 32)[0]);
         animDieDer = new Animation<>(0.2f, TextureRegion.split(sheetDieDer, 32, 32)[0]);
         animDieIzq = new Animation<>(0.2f, TextureRegion.split(sheetDieIzq, 32, 32)[0]);
+
 
         // Se config el frame inicial
         currentFrame = TextureRegion.split(sheetMoveDer, 32, 32)[0][0];
@@ -99,16 +106,54 @@ public class Batty extends Enemy{
         fdef.filter.maskBits = B2DVars.PLATFORMS | B2DVars.OBJECTS_OBSTACLES | B2DVars.BIT_SALEM | B2DVars.BIT_LAVENDER;
         fdef.shape = shape;
         b2body.createFixture(fdef);
+
+        // create head fixture for collisions
+        PolygonShape head = new PolygonShape();
+        Vector2 vertice[] = new Vector2[4];
+        vertice[0] = new Vector2(-8,12).scl(1/B2DVars.PPM);
+        vertice[1] = new Vector2(8,12).scl(1/B2DVars.PPM);
+        vertice[2] = new Vector2(-9,9).scl(1/B2DVars.PPM);
+        vertice[3] = new Vector2(9,9).scl(1/B2DVars.PPM);
+        head.set(vertice);
+
+        fdef.restitution = 0.5f;
+        fdef.density = 0f;
+        fdef.isSensor = true;
+        fdef.filter.categoryBits = B2DVars.BIT_ENEMY_HEAD;
+        fdef.shape = head;
+        b2body.createFixture(fdef).setUserData(this); // this -> to access this data from the collision hanfler
     }
 
     public void update(float delta) {
         stateTimer  += delta;
+        float deathDuration = animDieDer.getAnimationDuration();
 
-        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-        setRegion(miraDer ? animMoveDer.getKeyFrame(stateTimer, true) : animMoveIzq.getKeyFrame(stateTimer, true));
+        if (setToDestroy && !destroyed) {
+            deathTimer += delta;
+            b2body.setLinearVelocity(0, 0);
+            setPosition(
+                b2body.getPosition().x - getWidth() / 2,b2body.getPosition().y - getHeight() / 2
+            );
+            setRegion(miraDer ? animDieDer.getKeyFrame(stateTimer) : animDieIzq.getKeyFrame(stateTimer));
 
-        //Gdx.app.log("Batty", "pos: " + b2body.getPosition() + " w: " + getWidth() + " h: " + getHeight());
+            if (animDieIzq.isAnimationFinished(deathTimer) || animDieDer.isAnimationFinished(deathTimer)){
+                world.destroyBody(b2body);
+                destroyed = true;
+            }
 
+        } else if(!destroyed){
+            setPosition(b2body.getPosition().x - (32f / 2 / B2DVars.PPM), b2body.getPosition().y - (32f / 2 / B2DVars.PPM));
+            setRegion(miraDer ? animMoveDer.getKeyFrame(stateTimer, true) : animMoveIzq.getKeyFrame(stateTimer, true));
+        }
+    }
 
+    @Override
+    public void hitOnHead() {
+        setToDestroy = true;
+
+        // gets rid of collisions in the body that is going to be destroyed
+        for (Fixture fixture : b2body.getFixtureList()){
+            fixture.setSensor(true);
+        }
     }
 }

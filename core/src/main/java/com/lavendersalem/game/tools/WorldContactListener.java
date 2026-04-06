@@ -4,8 +4,11 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.lavendersalem.game.LavenderSalemGame;
+import com.lavendersalem.game.enemies.Enemy;
 import com.lavendersalem.game.screens.Hud;
 import com.lavendersalem.game.sprites.InteractiveTileObject;
+import com.lavendersalem.game.utils.B2DVars;
+import com.lavendersalem.game.utils.B2DVars.*;
 
 public class WorldContactListener implements ContactListener {
     private Array<Body> bodiesToRemove = new Array<Body>();
@@ -15,6 +18,9 @@ public class WorldContactListener implements ContactListener {
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
+
+        // combination of bits during a collision
+        int cDef = fixtureA.getFilterData().categoryBits | fixtureB.getFilterData().categoryBits;
 
         if (fixtureA.getUserData()== "foot" || fixtureB.getUserData() == "foot"){
 
@@ -30,6 +36,17 @@ public class WorldContactListener implements ContactListener {
                 LavenderSalemGame.manager.get("sounds/WAV/Powerup.wav", Sound.class).play();
                 Hud.addCrystal();
             }
+        }
+
+        switch (cDef){
+            case (B2DVars.BIT_ENEMY_HEAD | B2DVars.BIT_LAVENDER):
+                if (fixtureA.getFilterData().categoryBits == B2DVars.BIT_ENEMY_HEAD){
+                    ((Enemy)fixtureA.getUserData()).hitOnHead();
+                } else if (fixtureB.getFilterData().categoryBits == B2DVars.BIT_ENEMY_HEAD){
+                    ((Enemy)fixtureB.getUserData()).hitOnHead();
+                }
+                LavenderSalemGame.manager.get("sounds/WAV/Hurt.wav", Sound.class).play();
+                break;
         }
     }
     public Array<Body> getBodiesToRemove() {

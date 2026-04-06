@@ -22,5 +22,7 @@ public abstract class Enemy extends Sprite {
         defineEnemy();
     }
 
+    public abstract void hitOnHead();
+
     protected abstract void defineEnemy();
 }

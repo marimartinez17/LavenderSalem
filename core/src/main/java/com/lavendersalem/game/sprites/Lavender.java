@@ -57,7 +57,7 @@ public class Lavender extends Player {
 
     @Override
     protected short getMaskBits(){
-        return B2DVars.PLATFORMS | B2DVars.BIT_ENEMY | B2DVars.OBJECTS_CRYSTALS;
+        return B2DVars.PLATFORMS | B2DVars.BIT_ENEMY | B2DVars.BIT_ENEMY_HEAD | B2DVars.OBJECTS_CRYSTALS;
     }
 
 
@@ -65,7 +65,7 @@ public class Lavender extends Player {
     @Override
     protected void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && onSuelo){
-            b2body.applyLinearImpulse(new Vector2(0,2f),b2body.getWorldCenter(),true);
+            b2body.applyLinearImpulse(new Vector2(0,3f),b2body.getWorldCenter(),true);
             // play jumping sound
             LavenderSalemGame.manager.get("sounds/WAV/Jump.wav", Sound.class).play();
         }

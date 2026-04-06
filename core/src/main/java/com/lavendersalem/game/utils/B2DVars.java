@@ -27,6 +27,7 @@ public class B2DVars {
     public static final short BIT_ENEMY = 32;
     public static final short OBJECTS_OBSTACLES= 64;
     public static final short OBJECTS_CRYSTALS = 128;
+    public static final short BIT_ENEMY_HEAD = 256;
 
     // Misc
     public static final float PPM = 100f;
