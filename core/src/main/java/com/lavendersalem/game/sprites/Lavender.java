@@ -49,6 +49,18 @@ public class Lavender extends Player {
         currentFrame = TextureRegion.split(sheetIdle, 16, 32)[0][0];
         setRegion(currentFrame);
     }
+
+    @Override
+    protected short getCategoryBits(){
+        return B2DVars.BIT_LAVENDER;
+    }
+
+    @Override
+    protected short getMaskBits(){
+        return B2DVars.PLATFORMS | B2DVars.BIT_ENEMY | B2DVars.OBJECTS_CRYSTALS;
+    }
+
+
     // Configuramos movimiento
     @Override
     protected void handleInput() {

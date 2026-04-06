@@ -24,11 +24,11 @@ public class LevelCreator {
         Body body;
 
 
-/*        // Print names of tiled layers
+       // Print names of tiled layers
         System.out.println("Map has " + map.getLayers().size() + " layers:");
         for (int i = 0; i < map.getLayers().size(); i++) {
             System.out.println("  [" + i + "] " + map.getLayers().get(i).getName());
-        }*/
+        }
 
         // Create fixtures -> platforms
         for (MapObject object: map.getLayers().get("platforms").getObjects().getByType(RectangleMapObject.class)){
@@ -42,7 +42,7 @@ public class LevelCreator {
             shape.setAsBox(rect.getWidth() / 2 / B2DVars.PPM, rect.getHeight() / 2 / B2DVars.PPM); // divided by two bcs it is located in the center of the boxes
             fdef.shape = shape;
             fdef.filter.categoryBits = B2DVars.PLATFORMS;
-            fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+            fdef.filter.maskBits = B2DVars.BIT_PLAYER | B2DVars.BIT_LAVENDER | B2DVars.BIT_SALEM | B2DVars.BIT_ENEMY;
             body.createFixture(fdef);
         }
 
@@ -65,7 +65,7 @@ public class LevelCreator {
             fDef.shape = cs;
             fDef.isSensor = true;
             fDef.filter.categoryBits = B2DVars.OBJECTS_CRYSTALS;
-            fDef.filter.maskBits = B2DVars.BIT_PLAYER;
+            fDef.filter.maskBits = B2DVars.BIT_LAVENDER | B2DVars.BIT_SALEM;
 
             body = world.createBody(bDef);
 
@@ -89,7 +89,7 @@ public class LevelCreator {
             shape.setAsBox(rect.getWidth() / 2 / B2DVars.PPM, rect.getHeight() / 2 / B2DVars.PPM); // divided by two bcs it is located in the center of the boxes
             fdef.shape = shape;
             fdef.filter.categoryBits = B2DVars.OBJECTS_OBSTACLES;
-            fdef.filter.maskBits = B2DVars.BIT_ENEMY;
+            fdef.filter.maskBits = B2DVars.BIT_ENEMY | B2DVars.PLATFORMS;
             body.createFixture(fdef);
         }
 

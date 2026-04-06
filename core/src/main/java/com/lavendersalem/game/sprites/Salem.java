@@ -49,6 +49,16 @@ public class Salem extends Player {
         setRegion(currentFrame);
     }
 
+    @Override
+    protected short getCategoryBits(){
+        return B2DVars.BIT_SALEM;
+    }
+
+    @Override
+    protected short getMaskBits(){
+        return B2DVars.PLATFORMS | B2DVars.BIT_ENEMY | B2DVars.OBJECTS_CRYSTALS;
+    }
+
     // Configuramos movimiento
     @Override
     protected void handleInput() {

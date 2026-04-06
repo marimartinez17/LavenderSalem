@@ -63,6 +63,8 @@ public abstract class Player extends Sprite {
     protected State previousState;
     protected float stateTimer;
 
+    protected FixtureDef fdef;
+
     public Player(PlayScreen screen, float x, float y, float width, float height) {
         this.world = screen.getWorld();
         this.x = x;
@@ -81,6 +83,9 @@ public abstract class Player extends Sprite {
         setBounds(0,0,width / B2DVars.PPM,height / B2DVars.PPM);
     }
 
+    protected abstract short getCategoryBits();
+    protected abstract short getMaskBits();
+
     public void definePlayer() {
         // create body from bodydef
         BodyDef bdef = new BodyDef();
@@ -91,20 +96,20 @@ public abstract class Player extends Sprite {
         b2body = world.createBody(bdef);
 
         // create fixturedef for player collision box
-        FixtureDef fdef = new FixtureDef();
+        fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
         shape.setAsBox((width / 2)/B2DVars.PPM, (height/2)/B2DVars.PPM);
         fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.PLATFORMS;
+        fdef.filter.categoryBits = getCategoryBits();
+        fdef.filter.maskBits = getMaskBits();
         b2body.createFixture(fdef);
 
         // create box shape for player foot
         shape.setAsBox(((width - 2) / 2 /B2DVars.PPM), ((height + 0.01f) /2/B2DVars.PPM));
         fdef.isSensor = true;
         // collision filtering
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.PLATFORMS;
+        fdef.filter.categoryBits = getCategoryBits();
+        fdef.filter.maskBits = getMaskBits();
         b2body.createFixture(fdef).setUserData("foot");
 
     }
@@ -202,23 +207,6 @@ public abstract class Player extends Sprite {
     public void setVidas(int vidas) { this.vidas = vidas; }
 
     public boolean isTocadoEnemigo() { return tocadoEnemigo; }
-
-
-    public int getNumCrystals() {
-        return numCrystals;
-    }
-
-    public void collectCrystals() {
-        numCrystals = numCrystals++;
-    }
-
-    public int setTotalCrystals(int i) {
-        return totalCrystals = 1;
-    }
-
-    public int getTotalCrystals() {
-        return totalCrystals;
-    }
 
 
     // Elimina basura de la grafica

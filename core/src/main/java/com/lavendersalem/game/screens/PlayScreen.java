@@ -107,7 +107,7 @@ public class PlayScreen implements Screen {
         // establish contact listener
         world.setContactListener(contactListener);
 
-        batty = new Batty(this,220,220);
+        batty = new Batty(this,220,200);
 
         music = LavenderSalemGame.manager.get("music/powder.mp3", Music.class);
         music.setLooping(true);
@@ -147,8 +147,6 @@ public class PlayScreen implements Screen {
             Body b = bodies.get(i);
             crystals.removeValue((Crystal) b.getUserData(), true);
             world.destroyBody(b);
-            lavender.collectCrystals();
-            salem.collectCrystals();
         }
         bodies.clear();
 

@@ -94,9 +94,9 @@ public class Batty extends Enemy{
         // create fixturedef for player collision box
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(width / 2 / B2DVars.PPM);
+        shape.setRadius(12 / B2DVars.PPM);
         fdef.filter.categoryBits = B2DVars.BIT_ENEMY;
-        fdef.filter.maskBits = B2DVars.PLATFORMS | B2DVars.BIT_PLAYER | B2DVars.OBJECTS_OBSTACLES;
+        fdef.filter.maskBits = B2DVars.PLATFORMS | B2DVars.OBJECTS_OBSTACLES | B2DVars.BIT_SALEM | B2DVars.BIT_LAVENDER;
         fdef.shape = shape;
         b2body.createFixture(fdef);
     }
@@ -104,17 +104,11 @@ public class Batty extends Enemy{
     public void update(float delta) {
         stateTimer  += delta;
 
-        setPosition(
-            b2body.getPosition().x - getWidth() / 2,
-            b2body.getPosition().y - getHeight() / 2
-        );
-
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        setRegion(miraDer ? animMoveDer.getKeyFrame(stateTimer, true) : animMoveIzq.getKeyFrame(stateTimer, true));
 
-        if (miraDer){
-            setRegion(animMoveDer.getKeyFrame(stateTimer, true));
-        } else {
-            setRegion(animMoveIzq.getKeyFrame(stateTimer, true));
-        }
+        //Gdx.app.log("Batty", "pos: " + b2body.getPosition() + " w: " + getWidth() + " h: " + getHeight());
+
+
     }
 }
