@@ -30,7 +30,7 @@ public class Batty extends Enemy{
     protected Animation<TextureRegion> animDamageIzq;
     protected Animation<TextureRegion> animDieIzq;
     protected Animation<TextureRegion> animDieDer;
-    protected boolean miraDer;
+
     protected String estadoAnim = "";
     protected float timeAnimacion = 0f;
     protected TextureRegion currentFrame;
@@ -48,8 +48,6 @@ public class Batty extends Enemy{
 
     public Batty(PlayScreen screen, float x, float y) {
         super(screen, x, y);
-        b2body.setUserData("batty");
-        miraDer = true;
         stateTimer = 0;
         deathTimer = 0;
         setToDestroy = false;

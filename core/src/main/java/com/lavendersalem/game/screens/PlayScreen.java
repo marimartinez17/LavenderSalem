@@ -111,7 +111,7 @@ public class PlayScreen implements Screen {
         // establish contact listener
         world.setContactListener(contactListener);
 
-        batty = new Batty(this,160,200);
+        batty = new Batty(this,100,160);
         box = new Box(this, 100,40,16,16);
 
         music = LavenderSalemGame.manager.get("music/powder.mp3", Music.class);

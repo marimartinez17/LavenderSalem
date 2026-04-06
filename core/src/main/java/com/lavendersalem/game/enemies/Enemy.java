@@ -13,13 +13,15 @@ public abstract class Enemy extends Sprite {
     protected float x;
     protected float y;
     public Body b2body;
-    public Vector2 velocity;
+    protected Vector2 velocity;
+    protected boolean miraDer;
 
     public Enemy (PlayScreen screen, float x, float y){
         this.world = screen.getWorld();
         this.screen = screen;
         this.x = x;
         this.y = y;
+        miraDer = true;
         setPosition(x / B2DVars.PPM, y / B2DVars.PPM);
         defineEnemy();
         velocity = new Vector2(1,0);
@@ -32,5 +34,6 @@ public abstract class Enemy extends Sprite {
     public void reverseVelocity(boolean x, boolean y){
         if (x)velocity.x = -velocity.x;
         if (y)velocity.y = -velocity.y;
+        miraDer = velocity.x > 0;
     }
 }

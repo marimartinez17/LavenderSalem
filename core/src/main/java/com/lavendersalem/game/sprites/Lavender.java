@@ -65,7 +65,7 @@ public class Lavender extends Player {
     @Override
     protected void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && onSuelo){
-            b2body.applyLinearImpulse(new Vector2(0,3f),b2body.getWorldCenter(),true);
+            b2body.applyLinearImpulse(new Vector2(0,2.5f),b2body.getWorldCenter(),true);
             // play jumping sound
             LavenderSalemGame.manager.get("sounds/WAV/Jump.wav", Sound.class).play();
         }

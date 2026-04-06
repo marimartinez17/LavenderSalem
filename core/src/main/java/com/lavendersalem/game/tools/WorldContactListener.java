@@ -49,6 +49,7 @@ public class WorldContactListener implements ContactListener {
 
         switch (cDef){
             case (B2DVars.BIT_ENEMY_HEAD | B2DVars.BIT_LAVENDER):
+                // lavender salta sobre el batty
                 if (fixtureA.getFilterData().categoryBits == B2DVars.BIT_ENEMY_HEAD){
                     ((Enemy)fixtureA.getUserData()).hitOnHead();
                 } else {
@@ -57,16 +58,18 @@ public class WorldContactListener implements ContactListener {
                 LavenderSalemGame.manager.get("sounds/WAV/Hurt.wav", Sound.class).play();
                 break;
             case (B2DVars.BIT_ENEMY | B2DVars.OBJECTS_OBSTACLES):
-                if (fixtureA.getUserData().equals(B2DVars.OBJECTS_OBSTACLES)){
-                    ((Enemy)fixtureA.getUserData()).reverseVelocity(true,false);
-                } else {
-                    ((Enemy)fixtureA.getUserData()).reverseVelocity(true,false);
+                // batty / enemy choca con su limite y cambia de sentido
+                Fixture enemyFixture = fixtureA.getFilterData().categoryBits == B2DVars.BIT_ENEMY ? fixtureA : fixtureB;
+                if (enemyFixture.getUserData() instanceof Enemy){
+                    ((Enemy)enemyFixture.getUserData()).reverseVelocity(true,false);
                 }
                 break;
             case(B2DVars.BIT_LAVENDER | B2DVars.BIT_ENEMY):
+                // lavender toca enemigo y muere
                 Gdx.app.log("LAVENDER","DIE");
                 break;
             case(B2DVars.BIT_SALEM | B2DVars.BIT_ENEMY):
+                // salem toca enemigo y muere
                 Gdx.app.log("SALEM","DIE");
                 break;
         }
