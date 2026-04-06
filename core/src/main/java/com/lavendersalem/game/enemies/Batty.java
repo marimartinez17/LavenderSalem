@@ -43,14 +43,17 @@ public class Batty extends Enemy{
 
     public Batty(PlayScreen screen, float x, float y) {
         super(screen, x, y);
+        b2body.setUserData("batty");
         miraDer = true;
+        stateTimer = 0;
+
         // load textures
         sheetAttackDer = new Texture(Gdx.files.internal("sprites/bat/BatAttack-right.png"));
         sheetAttackIzq = new Texture(Gdx.files.internal("sprites/bat/BatAttack.png"));
         sheetMoveDer = new Texture(Gdx.files.internal("sprites/bat/BatMovement-right.png"));
         sheetMoveIzq = new Texture(Gdx.files.internal("sprites/bat/BatMovement.png"));
-        sheetDamageDer = new Texture(Gdx.files.internal("sprites/bat/Batdamaged-right.png"));
-        sheetDamageIzq = new Texture(Gdx.files.internal("sprites/bat/Batdamaged.png"));
+        sheetDamageDer = new Texture(Gdx.files.internal("sprites/bat/BatdamagedColor-right.png"));
+        sheetDamageIzq = new Texture(Gdx.files.internal("sprites/bat/BatdamagedColor.png"));
         sheetDieDer = new Texture(Gdx.files.internal("sprites/bat/BatDeath-right.png"));
         sheetDieIzq = new Texture(Gdx.files.internal("sprites/bat/BatDeath.png"));
         // load animations and divide spritesheets
@@ -62,6 +65,17 @@ public class Batty extends Enemy{
         animDamageIzq = new Animation<>(0.2f, TextureRegion.split(sheetDamageIzq, 32, 32)[0]);
         animDieDer = new Animation<>(0.2f, TextureRegion.split(sheetDieDer, 32, 32)[0]);
         animDieIzq = new Animation<>(0.2f, TextureRegion.split(sheetDieIzq, 32, 32)[0]);
+
+        // Se config el frame inicial
+        currentFrame = TextureRegion.split(sheetMoveDer, 32, 32)[0][0];
+        setRegion(currentFrame);
+
+        setBounds(
+            b2body.getPosition().x - (32f / B2DVars.PPM / 2),
+            b2body.getPosition().y - (32f / B2DVars.PPM / 2),
+            32f / B2DVars.PPM,
+            32f / B2DVars.PPM
+        );
     }
 
     @Override
@@ -85,5 +99,22 @@ public class Batty extends Enemy{
         fdef.filter.maskBits = B2DVars.PLATFORMS | B2DVars.BIT_PLAYER | B2DVars.OBJECTS_OBSTACLES;
         fdef.shape = shape;
         b2body.createFixture(fdef);
+    }
+
+    public void update(float delta) {
+        stateTimer  += delta;
+
+        setPosition(
+            b2body.getPosition().x - getWidth() / 2,
+            b2body.getPosition().y - getHeight() / 2
+        );
+
+        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+
+        if (miraDer){
+            setRegion(animMoveDer.getKeyFrame(stateTimer, true));
+        } else {
+            setRegion(animMoveIzq.getKeyFrame(stateTimer, true));
+        }
     }
 }

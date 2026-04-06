@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lavendersalem.game.LavenderSalemGame;
 import com.lavendersalem.game.collectables.Crystal;
+import com.lavendersalem.game.enemies.Batty;
 import com.lavendersalem.game.sprites.Lavender;
 import com.lavendersalem.game.sprites.Salem;
 import com.lavendersalem.game.tools.LevelCreator;
@@ -26,6 +27,9 @@ public class PlayScreen implements Screen {
     // player sprites
     private Lavender lavender;
     private Salem salem;
+
+    // enemy sprites
+    private Batty batty;
 
     // collectionables
     private Array<Crystal> crystals;
@@ -103,6 +107,8 @@ public class PlayScreen implements Screen {
         // establish contact listener
         world.setContactListener(contactListener);
 
+        batty = new Batty(this,220,220);
+
         music = LavenderSalemGame.manager.get("music/powder.mp3", Music.class);
         music.setLooping(true);
         music.play();
@@ -149,6 +155,7 @@ public class PlayScreen implements Screen {
         // update player sprites
         lavender.update(delta);
         salem.update(delta);
+        batty.update(delta);
 
         //update hud
         hud.update(delta);
@@ -189,7 +196,7 @@ public class PlayScreen implements Screen {
         game.batch.begin();
         lavender.draw(game.batch);
         salem.draw(game.batch);
-        //draw crystals
+        batty.draw(game.batch);
 
         //draw crystals
         for (int i=0;i<crystals.size;i++){

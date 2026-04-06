@@ -22,7 +22,6 @@ public class Lavender extends Player {
     public Lavender(PlayScreen screen, float x, float y, float width, float height) {
 
         super(screen, x, y, width, height);
-        b2body.setUserData("lavender");
 
         // Spritesheets
         sheetIdle = new Texture(Gdx.files.internal("sprites/lavender/Lavender-idle-sheet.png"));

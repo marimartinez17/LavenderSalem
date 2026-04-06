@@ -77,6 +77,7 @@ public class LevelCreator {
         }
 
         // create invisible career for enemies
+
         for (MapObject object: map.getLayers().get("objects-obstacles").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 

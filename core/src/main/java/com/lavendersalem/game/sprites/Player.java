@@ -153,7 +153,7 @@ public abstract class Player extends Sprite {
             case FALLING:
             case STANDING:
             default:
-                region = miraDer ? animIdleDer.getKeyFrame(stateTimer,true) : animIdleIzq.getKeyFrame(stateTimer);
+                region = miraDer ? animIdleDer.getKeyFrame(stateTimer,true) : animIdleIzq.getKeyFrame(stateTimer,true);
                 break;
         }
 
