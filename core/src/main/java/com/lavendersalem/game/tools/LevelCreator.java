@@ -1,18 +1,27 @@
 package com.lavendersalem.game.tools;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.CircleMapObject;
+import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.lavendersalem.game.enemies.Batty;
 import com.lavendersalem.game.screens.PlayScreen;
 import com.lavendersalem.game.collectables.Crystal;
 import com.lavendersalem.game.utils.B2DVars;
 
+import static java.lang.System.getProperties;
+
 public class LevelCreator {
     private Array<Crystal> crystals = new Array<>();
+    private Array<Batty> batties;
+
 
     public LevelCreator(PlayScreen screen) {
         World world = screen.getWorld();
@@ -93,6 +102,23 @@ public class LevelCreator {
             body.createFixture(fdef);
         }
 
+        // create enemies -> battys
+        batties = new Array<Batty>();
+
+        float mapHeight = ((Number)map.getProperties().get("height", Integer.class)).floatValue() * ((Number)map.getProperties().get("tileheight",Integer.class)).floatValue();
+
+        for (MapObject obj : map.getLayers().get("objects-enemies").getObjects().getByType(EllipseMapObject.class)) {
+            Ellipse ellipse = ((EllipseMapObject) obj).getEllipse();
+            float x = (float)obj.getProperties().get("x");
+            float y = mapHeight - (float)obj.getProperties().get("y");
+            Gdx.app.log("Batty spawn", "x=" + x + " y=" + y);
+            batties.add(new Batty(screen,x,y));
+        }
+
+    }
+
+    public Array<Batty> getBatties() {
+        return batties;
     }
 
     public Array<Crystal> getCrystals() { return crystals; }

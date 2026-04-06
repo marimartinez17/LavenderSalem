@@ -30,7 +30,7 @@ public class PlayScreen implements Screen {
     private Salem salem;
 
     // enemy sprites
-    private Batty batty;
+    private Array<Batty> batties;
 
     // Box test
     private Box box;
@@ -58,6 +58,7 @@ public class PlayScreen implements Screen {
     private World world; // to create a simulation world
     private Box2DDebugRenderer b2dr; // to visualize the underlying physics simulation
     private WorldContactListener contactListener;
+    private LevelCreator creator;
 
     // Music
     private Music music;
@@ -95,8 +96,8 @@ public class PlayScreen implements Screen {
 
         // load level
 
-        LevelCreator levelCreator = new LevelCreator(this);
-        crystals = levelCreator.getCrystals();
+        creator = new LevelCreator(this);
+        crystals = creator.getCrystals();
         totalCrystals = crystals.size;
 
         // game HUD for crystals/timer/level info
@@ -111,7 +112,6 @@ public class PlayScreen implements Screen {
         // establish contact listener
         world.setContactListener(contactListener);
 
-        batty = new Batty(this,100,160);
         box = new Box(this, 100,40,16,16);
 
         music = LavenderSalemGame.manager.get("music/powder.mp3", Music.class);
@@ -158,7 +158,9 @@ public class PlayScreen implements Screen {
         // update player sprites
         lavender.update(delta);
         salem.update(delta);
-        batty.update(delta);
+        for (Batty b: creator.getBatties()) {
+            b.update(delta);
+        }
         box.update(delta);
 
         //update hud
@@ -200,7 +202,9 @@ public class PlayScreen implements Screen {
         game.batch.begin();
         lavender.draw(game.batch);
         salem.draw(game.batch);
-        batty.draw(game.batch);
+        for (Batty b: creator.getBatties()) {
+            b.draw(game.batch);
+        }
         box.draw(game.batch);
 
         //draw crystals
