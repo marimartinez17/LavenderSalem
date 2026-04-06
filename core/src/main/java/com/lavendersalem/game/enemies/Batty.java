@@ -20,6 +20,7 @@ public class Batty extends Enemy{
     protected Texture sheetDamageIzq;
     protected Texture sheetDieDer;
     protected Texture sheetDieIzq;
+
     // Para cada frame de animaciones
     protected Animation<TextureRegion> animAttackDer;
     protected Animation<TextureRegion> animAttackIzq;
@@ -43,6 +44,7 @@ public class Batty extends Enemy{
     // to destroy the body
     public boolean setToDestroy;
     public boolean destroyed;
+
 
     public Batty(PlayScreen screen, float x, float y) {
         super(screen, x, y);
@@ -105,7 +107,7 @@ public class Batty extends Enemy{
         fdef.filter.categoryBits = B2DVars.BIT_ENEMY;
         fdef.filter.maskBits = B2DVars.PLATFORMS | B2DVars.OBJECTS_OBSTACLES | B2DVars.BIT_SALEM | B2DVars.BIT_LAVENDER;
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef).setUserData(this);
 
         // create head fixture for collisions
         PolygonShape head = new PolygonShape();
@@ -128,20 +130,26 @@ public class Batty extends Enemy{
         stateTimer  += delta;
         float deathDuration = animDieDer.getAnimationDuration();
 
+        // destroy batty
         if (setToDestroy && !destroyed) {
             deathTimer += delta;
             b2body.setLinearVelocity(0, 0);
             setPosition(
                 b2body.getPosition().x - getWidth() / 2,b2body.getPosition().y - getHeight() / 2
             );
+
+            // loads death animation
             setRegion(miraDer ? animDieDer.getKeyFrame(stateTimer) : animDieIzq.getKeyFrame(stateTimer));
 
+            // Plays full animation, then destroy body
             if (animDieIzq.isAnimationFinished(deathTimer) || animDieDer.isAnimationFinished(deathTimer)){
                 world.destroyBody(b2body);
                 destroyed = true;
             }
 
         } else if(!destroyed){
+            b2body.setLinearVelocity(velocity);
+            // for alive batties
             setPosition(b2body.getPosition().x - (32f / 2 / B2DVars.PPM), b2body.getPosition().y - (32f / 2 / B2DVars.PPM));
             setRegion(miraDer ? animMoveDer.getKeyFrame(stateTimer, true) : animMoveIzq.getKeyFrame(stateTimer, true));
         }

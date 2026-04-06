@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lavendersalem.game.LavenderSalemGame;
 import com.lavendersalem.game.collectables.Crystal;
 import com.lavendersalem.game.enemies.Batty;
+import com.lavendersalem.game.sprites.Box;
 import com.lavendersalem.game.sprites.Lavender;
 import com.lavendersalem.game.sprites.Salem;
 import com.lavendersalem.game.tools.LevelCreator;
@@ -30,6 +31,9 @@ public class PlayScreen implements Screen {
 
     // enemy sprites
     private Batty batty;
+
+    // Box test
+    private Box box;
 
     // collectionables
     private Array<Crystal> crystals;
@@ -100,14 +104,15 @@ public class PlayScreen implements Screen {
 
 
         // loading player sprites
-        lavender = new Lavender(this,200,200,16,32);
-        salem = new Salem(this, 180,200,16,16);
+        lavender = new Lavender(this,200,160,16,32);
+        salem = new Salem(this, 180,160,16,16);
         lastMovement = new Vector2(lavender.b2body.getPosition().x, lavender.b2body.getPosition().y);
 
         // establish contact listener
         world.setContactListener(contactListener);
 
-        batty = new Batty(this,220,200);
+        batty = new Batty(this,160,200);
+        box = new Box(this, 100,40,16,16);
 
         music = LavenderSalemGame.manager.get("music/powder.mp3", Music.class);
         music.setLooping(true);
@@ -154,6 +159,7 @@ public class PlayScreen implements Screen {
         lavender.update(delta);
         salem.update(delta);
         batty.update(delta);
+        box.update(delta);
 
         //update hud
         hud.update(delta);
@@ -195,6 +201,7 @@ public class PlayScreen implements Screen {
         lavender.draw(game.batch);
         salem.draw(game.batch);
         batty.draw(game.batch);
+        box.draw(game.batch);
 
         //draw crystals
         for (int i=0;i<crystals.size;i++){

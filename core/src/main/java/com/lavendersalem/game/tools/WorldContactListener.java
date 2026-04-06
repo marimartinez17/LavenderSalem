@@ -1,14 +1,18 @@
 package com.lavendersalem.game.tools;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.lavendersalem.game.LavenderSalemGame;
 import com.lavendersalem.game.enemies.Enemy;
 import com.lavendersalem.game.screens.Hud;
+import com.lavendersalem.game.sprites.Box;
 import com.lavendersalem.game.sprites.InteractiveTileObject;
+import com.lavendersalem.game.sprites.Player;
 import com.lavendersalem.game.utils.B2DVars;
 import com.lavendersalem.game.utils.B2DVars.*;
+import com.lavendersalem.game.utils.Enums;
 
 public class WorldContactListener implements ContactListener {
     private Array<Body> bodiesToRemove = new Array<Body>();
@@ -31,6 +35,11 @@ public class WorldContactListener implements ContactListener {
                 ((InteractiveTileObject) object.getUserData()).hit();
             }
 
+            if (object.getUserData() != null && object.getUserData() instanceof Box){
+                LavenderSalemGame.manager.get("sounds/WAV/Bump.wav", Sound.class).play();
+                ((Player)fixtureA.getUserData()).setState(Enums.State.STANDING);
+            }
+
             if (object.getUserData() == "crystal"){
                 bodiesToRemove.add(object.getBody());
                 LavenderSalemGame.manager.get("sounds/WAV/Powerup.wav", Sound.class).play();
@@ -42,10 +51,23 @@ public class WorldContactListener implements ContactListener {
             case (B2DVars.BIT_ENEMY_HEAD | B2DVars.BIT_LAVENDER):
                 if (fixtureA.getFilterData().categoryBits == B2DVars.BIT_ENEMY_HEAD){
                     ((Enemy)fixtureA.getUserData()).hitOnHead();
-                } else if (fixtureB.getFilterData().categoryBits == B2DVars.BIT_ENEMY_HEAD){
+                } else {
                     ((Enemy)fixtureB.getUserData()).hitOnHead();
                 }
                 LavenderSalemGame.manager.get("sounds/WAV/Hurt.wav", Sound.class).play();
+                break;
+            case (B2DVars.BIT_ENEMY | B2DVars.OBJECTS_OBSTACLES):
+                if (fixtureA.getUserData().equals(B2DVars.OBJECTS_OBSTACLES)){
+                    ((Enemy)fixtureA.getUserData()).reverseVelocity(true,false);
+                } else {
+                    ((Enemy)fixtureA.getUserData()).reverseVelocity(true,false);
+                }
+                break;
+            case(B2DVars.BIT_LAVENDER | B2DVars.BIT_ENEMY):
+                Gdx.app.log("LAVENDER","DIE");
+                break;
+            case(B2DVars.BIT_SALEM | B2DVars.BIT_ENEMY):
+                Gdx.app.log("SALEM","DIE");
                 break;
         }
     }
@@ -56,6 +78,7 @@ public class WorldContactListener implements ContactListener {
     // fin de la colision
     @Override
     public void endContact(Contact contact) {
+
 
     }
 

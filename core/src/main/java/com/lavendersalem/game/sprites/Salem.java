@@ -56,7 +56,7 @@ public class Salem extends Player {
 
     @Override
     protected short getMaskBits(){
-        return B2DVars.PLATFORMS | B2DVars.BIT_ENEMY | B2DVars.OBJECTS_CRYSTALS;
+        return B2DVars.PLATFORMS | B2DVars.BIT_ENEMY | B2DVars.OBJECTS_CRYSTALS| B2DVars.OBJECTS_INTERACTIVE;
     }
 
     // Configuramos movimiento

@@ -189,6 +189,10 @@ public abstract class Player extends Sprite {
         this.currentState = state;
     }
 
+    public void setOnSuelo(Boolean onSuelo) {
+        this.onSuelo = onSuelo;
+    }
+
     public void resetear() {
         // falta set position
         vidas = vidasInicial;
