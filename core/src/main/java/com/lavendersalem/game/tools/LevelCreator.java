@@ -68,8 +68,8 @@ public class LevelCreator {
 
         for (MapObject obj : layer.getObjects()) {
             bDef.type = BodyDef.BodyType.StaticBody;
-            float x = ((float) obj.getProperties().get("x") + 32f/2) / B2DVars.PPM;
-            float y = (mapHeight - (float)obj.getProperties().get("y") + 32f/2) / B2DVars.PPM;
+            float x = ((float) obj.getProperties().get("x")) / B2DVars.PPM;
+            float y = ((float)obj.getProperties().get("y") + 32f/2) / B2DVars.PPM;
 
             bDef.position.set(x, y);
 
