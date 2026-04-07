@@ -105,8 +105,8 @@ public class PlayScreen implements Screen {
 
 
         // loading player sprites
-        lavender = new Lavender(this,200,160,16,32);
-        salem = new Salem(this, 180,160,16,16);
+        lavender = new Lavender(this,300,260,16,32);
+        salem = new Salem(this, 320,260,16,16);
         lastMovement = new Vector2(lavender.b2body.getPosition().x, lavender.b2body.getPosition().y);
 
         // establish contact listener
@@ -158,10 +158,7 @@ public class PlayScreen implements Screen {
         // update player sprites
         lavender.update(delta);
         salem.update(delta);
-        for (Batty b: creator.getBatties()) {
-            b.update(delta);
-        }
-        box.update(delta);
+
 
         //update hud
         hud.update(delta);
@@ -169,6 +166,11 @@ public class PlayScreen implements Screen {
         for (int i=0;i<crystals.size;i++){
             crystals.get(i).update(delta);
         }
+
+        for (Batty b: creator.getBatties()) {
+            b.update(delta);
+        }
+        box.update(delta);
 
         //update camera
         gameCam.update();
@@ -202,15 +204,17 @@ public class PlayScreen implements Screen {
         game.batch.begin();
         lavender.draw(game.batch);
         salem.draw(game.batch);
-        for (Batty b: creator.getBatties()) {
-            b.draw(game.batch);
-        }
-        box.draw(game.batch);
 
         //draw crystals
         for (int i=0;i<crystals.size;i++){
             crystals.get(i).render(game.batch);
         }
+
+        for (Batty b: creator.getBatties()) {
+            b.draw(game.batch);
+        }
+        box.draw(game.batch);
+
 
         game.batch.end();
 

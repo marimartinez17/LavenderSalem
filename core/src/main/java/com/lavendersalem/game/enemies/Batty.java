@@ -77,12 +77,7 @@ public class Batty extends Enemy{
         currentFrame = TextureRegion.split(sheetMoveDer, 32, 32)[0][0];
         setRegion(currentFrame);
 
-        setBounds(
-            b2body.getPosition().x - (32f / B2DVars.PPM / 2),
-            b2body.getPosition().y - (32f / B2DVars.PPM / 2),
-            32f / B2DVars.PPM,
-            32f / B2DVars.PPM
-        );
+        setBounds(0, 0, 32f / B2DVars.PPM, 32f / B2DVars.PPM);
     }
 
     @Override
@@ -96,7 +91,9 @@ public class Batty extends Enemy{
         // create box shape for player collision box
         bdef.position.set(x / B2DVars.PPM,y/B2DVars.PPM );
         bdef.type = BodyDef.BodyType.DynamicBody;
+        bdef.gravityScale = 0f;
         b2body = world.createBody(bdef);
+        b2body.setUserData(this);
 
         // create fixturedef for player collision box
         FixtureDef fdef = new FixtureDef();

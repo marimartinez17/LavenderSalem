@@ -58,14 +58,18 @@ public class LevelCreator {
         crystals = new Array<Crystal>();
 
         MapLayer layer = new MapLayer();
+
+        float mapHeight = ((Number)map.getProperties().get("height", Integer.class)).floatValue() * ((Number)map.getProperties().get("tileheight",Integer.class)).floatValue();
+
+
         layer = map.getLayers().get("objects-crystals");
         BodyDef bDef = new BodyDef();
         FixtureDef fDef = new FixtureDef();
 
         for (MapObject obj : layer.getObjects()) {
             bDef.type = BodyDef.BodyType.StaticBody;
-            float x = (float) obj.getProperties().get("x") / B2DVars.PPM;
-            float y = (float) obj.getProperties().get("y") / B2DVars.PPM;
+            float x = ((float) obj.getProperties().get("x") + 32f/2) / B2DVars.PPM;
+            float y = (mapHeight - (float)obj.getProperties().get("y") + 32f/2) / B2DVars.PPM;
 
             bDef.position.set(x, y);
 
@@ -85,7 +89,7 @@ public class LevelCreator {
             crystals.add(c);
         }
 
-        // create invisible career for enemies
+        // create invisible bareer for enemies
 
         for (MapObject object: map.getLayers().get("objects-obstacles").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -105,12 +109,12 @@ public class LevelCreator {
         // create enemies -> battys
         batties = new Array<Batty>();
 
-        float mapHeight = ((Number)map.getProperties().get("height", Integer.class)).floatValue() * ((Number)map.getProperties().get("tileheight",Integer.class)).floatValue();
-
         for (MapObject obj : map.getLayers().get("objects-enemies").getObjects().getByType(EllipseMapObject.class)) {
             Ellipse ellipse = ((EllipseMapObject) obj).getEllipse();
+
             float x = (float)obj.getProperties().get("x");
-            float y = mapHeight - (float)obj.getProperties().get("y");
+            float y = (float)obj.getProperties().get("y");
+
             Gdx.app.log("Batty spawn", "x=" + x + " y=" + y);
             batties.add(new Batty(screen,x,y));
         }
