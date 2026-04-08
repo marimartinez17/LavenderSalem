@@ -108,10 +108,10 @@ public class Batty extends Enemy{
         // create head fixture for collisions
         PolygonShape head = new PolygonShape();
         Vector2 vertice[] = new Vector2[4];
-        vertice[0] = new Vector2(-13,14).scl(1/B2DVars.PPM);
-        vertice[1] = new Vector2(13,14).scl(1/B2DVars.PPM);
-        vertice[2] = new Vector2(-13,9).scl(1/B2DVars.PPM);
-        vertice[3] = new Vector2(13,9).scl(1/B2DVars.PPM);
+        vertice[0] = new Vector2(-8,14).scl(1/B2DVars.PPM);
+        vertice[1] = new Vector2(8,14).scl(1/B2DVars.PPM);
+        vertice[2] = new Vector2(-9,9).scl(1/B2DVars.PPM);
+        vertice[3] = new Vector2(9,9).scl(1/B2DVars.PPM);
         head.set(vertice);
 
         fdef.restitution = 0.5f;
@@ -119,7 +119,7 @@ public class Batty extends Enemy{
         fdef.isSensor = true;
         fdef.filter.categoryBits = B2DVars.BIT_ENEMY_HEAD;
         fdef.shape = head;
-        b2body.createFixture(fdef).setUserData(this); // this -> to access this data from the collision hanfler
+        b2body.createFixture(fdef).setUserData(this); // this -> to access this data from the collision hanfaler
     }
 
     public void update(float delta) {

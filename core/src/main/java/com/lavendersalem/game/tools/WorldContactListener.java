@@ -3,6 +3,8 @@ package com.lavendersalem.game.tools;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Base64Coder;
+import com.lavendersalem.game.enemies.Batty;
 import com.lavendersalem.game.sprites.*;
 import com.lavendersalem.game.world.LavenderSalemGame;
 import com.lavendersalem.game.enemies.Enemy;
@@ -65,8 +67,17 @@ public class WorldContactListener implements ContactListener {
                 break;
             case((B2DVars.BIT_LAVENDER | B2DVars.BIT_ENEMY)):
                 Fixture lavenderFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_LAVENDER ? fixtureA : fixtureB;
-                // lavender toca enemigo y muere
-                ((Lavender)lavenderFix.getUserData()).hit();
+                Fixture enemyFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_ENEMY ? fixtureA : fixtureB;
+
+                if (enemyFix.getUserData() instanceof Batty){
+                    if(((Batty) enemyFix.getUserData()).setToDestroy){
+                        break;
+                    }
+                }
+
+                if (lavenderFix.getUserData() instanceof Lavender){
+                    ((Lavender)lavenderFix.getUserData()).hit();
+                }
                 break;
             case(B2DVars.BIT_SALEM | B2DVars.BIT_ENEMY):
                 Fixture salemFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_SALEM ? fixtureA : fixtureB;

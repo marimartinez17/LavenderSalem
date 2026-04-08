@@ -136,6 +136,7 @@ public class LevelCreator {
             fdef.shape = shape;
             fdef.filter.categoryBits = B2DVars.OBJECTS_DANGER;
             fdef.filter.maskBits = B2DVars.BIT_LAVENDER | B2DVars.BIT_SALEM | B2DVars.PLATFORMS;
+            fdef.isSensor = true;
             body.createFixture(fdef);
         }
 
