@@ -124,6 +124,21 @@ public class LevelCreator {
             boxes.add(new Box(screen,x,y,rect.getWidth(),rect.getHeight()));
         }
 
+        for (MapObject object: map.getLayers().get("objects-danger").getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2)/ B2DVars.PPM, (rect.getY() + rect.getHeight() / 2)/ B2DVars.PPM);
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 / B2DVars.PPM, rect.getHeight() / 2 / B2DVars.PPM); // divided by two bcs it is located in the center of the boxes
+            fdef.shape = shape;
+            fdef.filter.categoryBits = B2DVars.OBJECTS_DANGER;
+            fdef.filter.maskBits = B2DVars.BIT_LAVENDER | B2DVars.BIT_SALEM | B2DVars.PLATFORMS;
+            body.createFixture(fdef);
+        }
+
         // create enemies -> battys
         batties = new Array<Batty>();
 
