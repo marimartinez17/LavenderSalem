@@ -90,6 +90,7 @@ public class LevelCreator {
             body.createFixture(fDef).setUserData("crystal");
             body.setUserData(c);
 
+            //
             crystals.add(c);
 
             cs.dispose();
