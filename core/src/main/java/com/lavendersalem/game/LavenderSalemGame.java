@@ -5,12 +5,17 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.lavendersalem.game.screens.MenuPrincipal;
 import com.lavendersalem.game.screens.PlayScreen;
 
 public class LavenderSalemGame extends Game {
     public static LavenderSalemGame game; // Intanciar la clase para el cambio entre screens
     public SpriteBatch batch;
+    // Tiled map attributes
+    private TmxMapLoader mapLoader;
+    private TiledMap map1;
 
     public static AssetManager manager;
     @Override
@@ -19,6 +24,9 @@ public class LavenderSalemGame extends Game {
         batch = new SpriteBatch(); // LLeva los assets "apilados" a la GPU
 
         manager = new AssetManager();
+
+        mapLoader = new TmxMapLoader();
+        map1 = mapLoader.load("maps/nivel1/nivel1.tmx");
 
         // loading music
         manager.load("music/cooties.mp3", Music.class);
@@ -59,7 +67,7 @@ public class LavenderSalemGame extends Game {
         manager.load("sounds/WAV/Water_Splash.wav", Sound.class);
         manager.finishLoading();
 
-        setScreen(new PlayScreen(game, 1));
+        setScreen(new PlayScreen(game, 1, map1));
     }
 
     @Override
@@ -73,5 +81,9 @@ public class LavenderSalemGame extends Game {
         super.dispose();
         manager.dispose();
         batch.dispose();
+    }
+
+    public TiledMap getLvl1(){
+        return map1;
     }
 }

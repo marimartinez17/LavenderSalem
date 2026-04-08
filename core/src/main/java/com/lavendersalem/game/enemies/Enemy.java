@@ -25,9 +25,12 @@ public abstract class Enemy extends Sprite {
         setPosition(x / B2DVars.PPM, y / B2DVars.PPM);
         defineEnemy();
         velocity = new Vector2(1,0);
+        b2body.setActive(false);
     }
 
     public abstract void hitOnHead();
+
+    public abstract void update(float dt);
 
     protected abstract void defineEnemy();
 

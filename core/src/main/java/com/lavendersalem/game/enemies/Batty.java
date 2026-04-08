@@ -62,6 +62,7 @@ public class Batty extends Enemy{
         sheetDamageIzq = new Texture(Gdx.files.internal("sprites/bat/BatdamagedColor.png"));
         sheetDieDer = new Texture(Gdx.files.internal("sprites/bat/BatDeath-right.png"));
         sheetDieIzq = new Texture(Gdx.files.internal("sprites/bat/BatDeath.png"));
+
         // load animations and divide spritesheets
         animAttackDer = new Animation<>(0.25f, TextureRegion.split(sheetAttackDer, 32, 32)[0]);
         animAttackIzq = new Animation<>(0.25f, TextureRegion.split(sheetAttackIzq, 32, 32)[0]);

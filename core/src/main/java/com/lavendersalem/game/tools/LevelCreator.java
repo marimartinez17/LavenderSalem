@@ -33,11 +33,11 @@ public class LevelCreator {
         Body body;
 
 
-       // Print names of tiled layers
+/*       // Print names of tiled layers
         System.out.println("Map has " + map.getLayers().size() + " layers:");
         for (int i = 0; i < map.getLayers().size(); i++) {
             System.out.println("  [" + i + "] " + map.getLayers().get(i).getName());
-        }
+        }*/
 
         // Create fixtures -> platforms
         for (MapObject object: map.getLayers().get("platforms").getObjects().getByType(RectangleMapObject.class)){
@@ -115,7 +115,6 @@ public class LevelCreator {
             float x = (float)obj.getProperties().get("x");
             float y = (float)obj.getProperties().get("y");
 
-            Gdx.app.log("Batty spawn", "x=" + x + " y=" + y);
             batties.add(new Batty(screen,x,y));
         }
 
@@ -126,4 +125,8 @@ public class LevelCreator {
     }
 
     public Array<Crystal> getCrystals() { return crystals; }
+
+    public int getGetTotalCrystals() {
+        return crystals.size;
+    }
 }

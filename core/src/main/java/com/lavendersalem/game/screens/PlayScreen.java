@@ -64,9 +64,10 @@ public class PlayScreen implements Screen {
     private Music music;
 
     // Constructor
-    public PlayScreen(LavenderSalemGame game, int lvl) {
+    public PlayScreen(LavenderSalemGame game, int lvl, TiledMap map) {
         this.game = game;
         this.lvl = lvl;
+        this.map = map;
         contactListener = new WorldContactListener();
 
         // To follow the characters through cam world
@@ -74,11 +75,6 @@ public class PlayScreen implements Screen {
 
         // mantain aspect ratio
         gamePort = new FitViewport(480 / B2DVars.PPM, 416 / B2DVars.PPM, gameCam);
-
-
-        // load tiled map
-        mapLoader = new TmxMapLoader();
-        map = mapLoader.load("maps/nivel1/nivel1.tmx");
 
         // get width and height of the tilemap for the game camera (provisional)
         int width = (int) map.getProperties().get("width", Integer.class);
@@ -169,6 +165,9 @@ public class PlayScreen implements Screen {
 
         for (Batty b: creator.getBatties()) {
             b.update(delta);
+            if (b.getX() < lavender.getX() + 124 / B2DVars.PPM || b.getX() < salem.getX() + 124/B2DVars.PPM) {
+                b.b2body.setActive(true);
+            }
         }
         box.update(delta);
 

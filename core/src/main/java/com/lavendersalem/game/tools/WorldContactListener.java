@@ -72,6 +72,12 @@ public class WorldContactListener implements ContactListener {
                 // salem toca enemigo y muere
                 Gdx.app.log("SALEM","DIE");
                 break;
+            case(B2DVars.BIT_ENEMY | B2DVars.BIT_ENEMY):
+                // two enemies collide
+                ((Enemy)fixtureA.getUserData()).reverseVelocity(true,false);
+                ((Enemy)fixtureB.getUserData()).reverseVelocity(true,false);
+                break;
+
         }
     }
     public Array<Body> getBodiesToRemove() {
