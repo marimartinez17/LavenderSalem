@@ -87,7 +87,7 @@ public class Hud implements Disposable {
 
     public static void addCrystal(){
         collectedCrystals++;
-        collectedLabel.setText(String.format(collectedCrystals+" / "+totalCrystals));
+        collectedLabel.setText(collectedCrystals+" / "+totalCrystals);
     }
 
 

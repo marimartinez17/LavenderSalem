@@ -37,11 +37,14 @@ public class WorldContactListener implements ContactListener {
             }
 
             if (object.getUserData() == "crystal"){
-                bodiesToRemove.add(object.getBody());
-                LavenderSalemGame.manager.get("sounds/WAV/Powerup.wav", Sound.class).play();
-                Hud.addCrystal();
+                if (!bodiesToRemove.contains(object.getBody(), true)) {
+                    bodiesToRemove.add(object.getBody());
+                    LavenderSalemGame.manager.get("sounds/WAV/Powerup.wav", Sound.class).play();
+                    Hud.addCrystal();
+                }
             }
         }
+
 
         switch (cDef){
             case (B2DVars.BIT_ENEMY_HEAD | B2DVars.BIT_LAVENDER):
@@ -60,28 +63,28 @@ public class WorldContactListener implements ContactListener {
                     ((Enemy)enemyFixture.getUserData()).reverseVelocity(true,false);
                 }
                 break;
-            case(B2DVars.BIT_LAVENDER | B2DVars.BIT_ENEMY):
+            case((B2DVars.BIT_LAVENDER | B2DVars.BIT_ENEMY)):
+                Fixture lavenderFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_LAVENDER ? fixtureA : fixtureB;
                 // lavender toca enemigo y muere
-                if (fixtureA.getFilterData().categoryBits == B2DVars.BIT_LAVENDER){
-                    ((Lavender)fixtureA.getUserData()).hit();
-                } else {
-                    ((Lavender)fixtureB.getUserData()).hit();
-                }
+                ((Lavender)lavenderFix.getUserData()).hit();
                 break;
             case(B2DVars.BIT_SALEM | B2DVars.BIT_ENEMY):
-                // salem toca enemigo y muere
-                if (fixtureA.getFilterData().categoryBits == B2DVars.BIT_SALEM){
-                    ((Salem)fixtureA.getUserData()).hit();
-                } else {
-                    ((Salem)fixtureB.getUserData()).hit();
-                }
+                Fixture salemFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_SALEM ? fixtureA : fixtureB;
+                ((Salem)salemFix.getUserData()).hit();
                 break;
-            case(B2DVars.BIT_ENEMY | B2DVars.BIT_ENEMY):
-                // two enemies collide
-                ((Enemy)fixtureA.getUserData()).reverseVelocity(true,false);
-                ((Enemy)fixtureB.getUserData()).reverseVelocity(true,false);
+            case(B2DVars.BIT_LAVENDER | B2DVars.BIT_DANGER):
+                // lavender toca enemigo y muere
+                lavenderFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_LAVENDER ? fixtureA : fixtureB;
+                ((Lavender)lavenderFix.getUserData()).hit();
                 break;
-
+            case(B2DVars.BIT_SALEM | B2DVars.BIT_DANGER):
+                salemFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_SALEM ? fixtureA : fixtureB;
+                ((Salem)salemFix.getUserData()).hit();
+                break;
+            case(B2DVars.BIT_SALEM | B2DVars.BIT_WATER):
+                salemFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_SALEM ? fixtureA : fixtureB;
+                ((Salem)salemFix.getUserData()).hit();
+                break;
         }
     }
     public Array<Body> getBodiesToRemove() {

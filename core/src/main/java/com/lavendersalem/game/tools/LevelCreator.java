@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
+import com.badlogic.gdx.maps.objects.PointMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Ellipse;
@@ -14,12 +15,14 @@ import com.badlogic.gdx.utils.Array;
 import com.lavendersalem.game.enemies.Batty;
 import com.lavendersalem.game.screens.PlayScreen;
 import com.lavendersalem.game.collectables.Crystal;
+import com.lavendersalem.game.sprites.Box;
 import com.lavendersalem.game.utils.B2DVars;
 
 import static java.lang.System.getProperties;
 
 public class LevelCreator {
-    private Array<Crystal> crystals = new Array<>();
+    private Array<Crystal> crystals;
+    private Array<Box> boxes;
     private Array<Batty> batties;
 
 
@@ -62,31 +65,34 @@ public class LevelCreator {
         float mapHeight = ((Number)map.getProperties().get("height", Integer.class)).floatValue() * ((Number)map.getProperties().get("tileheight",Integer.class)).floatValue();
 
 
-        layer = map.getLayers().get("objects-crystals");
         BodyDef bDef = new BodyDef();
         FixtureDef fDef = new FixtureDef();
 
-        for (MapObject obj : layer.getObjects()) {
-            bDef.type = BodyDef.BodyType.StaticBody;
+        for (MapObject obj : map.getLayers().get("objects-crystals").getObjects().getByType(EllipseMapObject.class)) {
             float x = ((float) obj.getProperties().get("x")) / B2DVars.PPM;
             float y = ((float)obj.getProperties().get("y")) / B2DVars.PPM;
 
-            bDef.position.set(x, y);
+            bDef.type = BodyDef.BodyType.StaticBody;
+            bDef.position.set(x + (8/ B2DVars.PPM), y + (8/ B2DVars.PPM));
 
+            // create fixture shape
             CircleShape cs = new CircleShape();
             cs.setRadius(8 / B2DVars.PPM);
+
+            // create fixturedef for player collision box
             fDef.shape = cs;
             fDef.isSensor = true;
             fDef.filter.categoryBits = B2DVars.OBJECTS_CRYSTALS;
             fDef.filter.maskBits = B2DVars.BIT_LAVENDER | B2DVars.BIT_SALEM;
 
             body = world.createBody(bDef);
-
             Crystal c = new Crystal(body);
             body.createFixture(fDef).setUserData("crystal");
             body.setUserData(c);
 
             crystals.add(c);
+
+            cs.dispose();
         }
 
         // create invisible bareer for enemies
@@ -104,6 +110,17 @@ public class LevelCreator {
             fdef.filter.categoryBits = B2DVars.OBJECTS_OBSTACLES;
             fdef.filter.maskBits = B2DVars.BIT_ENEMY | B2DVars.PLATFORMS;
             body.createFixture(fdef);
+        }
+
+        //boxes
+        boxes = new Array<>();
+        for (MapObject object: map.getLayers().get("objects-interactive").getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            float x = (float)rect.getX() - rect.getWidth() / 2;
+            float y = (float)rect.getY() - rect.getHeight() / 2;
+
+            boxes.add(new Box(screen,x,y,rect.getWidth(),rect.getHeight()));
         }
 
         // create enemies -> battys
@@ -125,6 +142,8 @@ public class LevelCreator {
     }
 
     public Array<Crystal> getCrystals() { return crystals; }
+
+    public Array<Box> getBoxes() { return boxes; }
 
     public int getGetTotalCrystals() {
         return crystals.size;

@@ -50,6 +50,7 @@ public class Box extends Sprite {
         fdef.filter.categoryBits = B2DVars.OBJECTS_INTERACTIVE;
         fdef.filter.maskBits = B2DVars.PLATFORMS | B2DVars.BIT_SALEM | B2DVars.BIT_LAVENDER;
         b2body.createFixture(fdef);
+        b2body.setUserData(this);
 
         // create box shape for prop foot
         shape.setAsBox(((width) / 2 /B2DVars.PPM), ((height) /2/B2DVars.PPM));

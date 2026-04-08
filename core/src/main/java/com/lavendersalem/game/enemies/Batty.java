@@ -108,10 +108,10 @@ public class Batty extends Enemy{
         // create head fixture for collisions
         PolygonShape head = new PolygonShape();
         Vector2 vertice[] = new Vector2[4];
-        vertice[0] = new Vector2(-8,12).scl(1/B2DVars.PPM);
-        vertice[1] = new Vector2(8,12).scl(1/B2DVars.PPM);
-        vertice[2] = new Vector2(-9,9).scl(1/B2DVars.PPM);
-        vertice[3] = new Vector2(9,9).scl(1/B2DVars.PPM);
+        vertice[0] = new Vector2(-13,14).scl(1/B2DVars.PPM);
+        vertice[1] = new Vector2(13,14).scl(1/B2DVars.PPM);
+        vertice[2] = new Vector2(-13,9).scl(1/B2DVars.PPM);
+        vertice[3] = new Vector2(13,9).scl(1/B2DVars.PPM);
         head.set(vertice);
 
         fdef.restitution = 0.5f;

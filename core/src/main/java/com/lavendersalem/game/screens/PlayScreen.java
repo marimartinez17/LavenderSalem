@@ -41,6 +41,9 @@ public class PlayScreen implements Screen {
     private int numCrystals;
     private int totalCrystals;
 
+    // Interactuables
+    private Array<Box> boxes;
+
     private LavenderSalemGame game;
     private int lvl;
     private Hud hud;
@@ -97,6 +100,8 @@ public class PlayScreen implements Screen {
         crystals = creator.getCrystals();
         totalCrystals = crystals.size;
 
+        boxes = creator.getBoxes();
+
         // game HUD for crystals/timer/level info
         hud = new Hud(game.batch, lvl, totalCrystals);
 
@@ -108,8 +113,6 @@ public class PlayScreen implements Screen {
 
         // establish contact listener
         world.setContactListener(contactListener);
-
-        box = new Box(this, 100,40,16,16);
 
         music = LavenderSalemGame.manager.get("music/powder.mp3", Music.class);
         music.setLooping(true);
@@ -131,9 +134,9 @@ public class PlayScreen implements Screen {
         float lavenderVelY = lavender.b2body.getLinearVelocity().y;
 
         // setting up camera to follow the last player who moved
-        if ((salemVelX != 0f || salemVelY != 0f)|| (salem.getState() != Enums.State.DEAD)) {
+        if (salemVelX != 0f || salemVelY != 0f) {
             lastMovement.set(salem.b2body.getPosition().x, salem.b2body.getPosition().y);
-        } else if ((lavenderVelX != 0f || lavenderVelY != 0f) || lavender.getState() != Enums.State.DEAD) {
+        } else if (lavenderVelX != 0f || lavenderVelY != 0f){
             lastMovement.set(lavender.b2body.getPosition().x,lavender.b2body.getPosition().y);
         }
 
@@ -163,6 +166,10 @@ public class PlayScreen implements Screen {
         //update hud
         hud.update(delta);
 
+        for (Box box : boxes) {
+            box.update(delta);
+        }
+
         for (int i=0;i<crystals.size;i++){
             crystals.get(i).update(delta);
         }
@@ -173,7 +180,6 @@ public class PlayScreen implements Screen {
                 b.b2body.setActive(true);
             }
         }
-        box.update(delta);
 
         //update camera
         gameCam.update();
@@ -216,7 +222,10 @@ public class PlayScreen implements Screen {
         for (Batty b: creator.getBatties()) {
             b.draw(game.batch);
         }
-        box.draw(game.batch);
+
+        for (Box box : boxes) {
+            box.draw(game.batch);
+        }
 
 
         game.batch.end();
