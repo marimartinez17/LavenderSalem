@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.lavendersalem.game.LavenderSalemGame;
+import com.lavendersalem.game.world.LavenderSalemGame;
 import com.lavendersalem.game.utils.Constants;
 
 

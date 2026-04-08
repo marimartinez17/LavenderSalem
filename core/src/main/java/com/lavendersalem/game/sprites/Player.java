@@ -1,13 +1,15 @@
 package com.lavendersalem.game.sprites;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.lavendersalem.game.world.LavenderSalemGame;
 import com.lavendersalem.game.screens.PlayScreen;
-import com.lavendersalem.game.tools.WorldContactListener;
 import com.lavendersalem.game.utils.B2DVars;
 import com.lavendersalem.game.utils.Enums.*;
 
@@ -29,10 +31,6 @@ public abstract class Player extends Sprite {
 
     //Atributos de Player
     protected boolean onSuelo; // Si el personaje esta en el suelo
-    protected boolean vivo;
-    protected int vidasInicial;
-    protected int vidas; // Numero de vidas del personaje
-    protected boolean tocadoEnemigo = false;
 
     // Para sprites
     protected Texture sheetIdle;
@@ -44,7 +42,9 @@ public abstract class Player extends Sprite {
     protected Texture sheetSaltoIzq;
     protected Texture sheetInteractDer;
     protected Texture sheetInteractIzq;
+    protected Texture sheetDieDer;
     // Para cada frame de animaciones
+    protected Animation<TextureRegion> animDieDer;
     protected Animation<TextureRegion> animIdle;
     protected Animation<TextureRegion> animIdleDer;
     protected Animation<TextureRegion> animIdleIzq;
@@ -65,6 +65,9 @@ public abstract class Player extends Sprite {
 
     protected FixtureDef fdef;
 
+    //vida
+    protected boolean isDead;
+
     public Player(PlayScreen screen, float x, float y, float width, float height) {
         this.world = screen.getWorld();
         this.x = x;
@@ -77,6 +80,7 @@ public abstract class Player extends Sprite {
         stateTimer = 0f;
         onSuelo = true;
         miraDer = true;
+        isDead = false;
 
         definePlayer();
 
@@ -102,7 +106,7 @@ public abstract class Player extends Sprite {
         fdef.shape = shape;
         fdef.filter.categoryBits = getCategoryBits();
         fdef.filter.maskBits = getMaskBits();
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef).setUserData(this);
 
         // create box shape for player foot
         shape.setAsBox(((width - 2) / 2 /B2DVars.PPM), ((height + 0.01f) /2/B2DVars.PPM));
@@ -116,19 +120,25 @@ public abstract class Player extends Sprite {
 
 
     protected abstract void handleInput(); // Cada player tiene su configuracion de movimientos
-    public void tocadoPorEnemigo() {
-        tocadoEnemigo = true;
+
+    public void hit(){
+        LavenderSalemGame.manager.get("music/powder.mp3", Music.class).stop();
+        isDead = true;
+        Filter filter = new Filter();
+        filter.maskBits = B2DVars.BIT_NOTHING;
+        for (Fixture fixture : b2body.getFixtureList()) {
+            fixture.setFilterData(filter);
+        }
+        b2body.applyLinearImpulse(new Vector2(0,4f),b2body.getLocalCenter(),true);
     }
-    public void resetTocadoPorEnemigo() {
-        tocadoEnemigo = false;
-    }
-    /* PARA CUANDO MUERE O RESPAWNEA */
+
+/*    *//* PARA CUANDO MUERE O RESPAWNEA *//*
     public void morir() {
         vidas--;
         setPosition((b2body.getPosition().x - getWidth() / 2  ), (b2body.getPosition().y - getHeight() / 2  - 0.01f));
         b2body.applyLinearImpulse(new Vector2(-0.08f,0f),b2body.getWorldCenter(),true);
         if (vidas <= 0) vivo = false;
-    }
+    }*/
 
     public void update(float delta) {
         setPosition((b2body.getPosition().x - getWidth() / 2  ), (b2body.getPosition().y - getHeight() / 2  - 0.01f));
@@ -149,6 +159,10 @@ public abstract class Player extends Sprite {
 
         // Seleccionar animación del sprite según estado
         switch (currentState) {
+            case DEAD:
+                isDead = true;
+                region = animDieDer.getKeyFrame(stateTimer);
+                break;
             case JUMPING:
                 region = miraDer ? animSaltarDer.getKeyFrame(stateTimer) : animSaltarIzq.getKeyFrame(stateTimer);
                 break;
@@ -179,6 +193,8 @@ public abstract class Player extends Sprite {
         } else if (b2body.getLinearVelocity().x != 0) {
             onSuelo = true;
             return State.RUNNING;
+        } else if (isDead){
+            return State.DEAD;
         } else {
             onSuelo = true;
             return State.STANDING;
@@ -195,23 +211,10 @@ public abstract class Player extends Sprite {
 
     public void resetear() {
         // falta set position
-        vidas = vidasInicial;
-        vivo = true;
         onSuelo = false;
         estadoAnim = "";
         timeAnimacion = 0f;
     }
-
-    // GETTERS Y SETTER PARA EL GAMESCREEN
-
-    public boolean isVivo() { return vivo; }
-    public void setVivo(boolean vivo) { this.vivo = vivo; }
-
-    public int getVidas() { return vidas; }
-    public void setVidas(int vidas) { this.vidas = vidas; }
-
-    public boolean isTocadoEnemigo() { return tocadoEnemigo; }
-
 
     // Elimina basura de la grafica
     public abstract void dispose();

@@ -1,4 +1,4 @@
-package com.lavendersalem.game;
+package com.lavendersalem.game.world;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
@@ -7,7 +7,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.lavendersalem.game.screens.MenuPrincipal;
 import com.lavendersalem.game.screens.PlayScreen;
 
 public class LavenderSalemGame extends Game {

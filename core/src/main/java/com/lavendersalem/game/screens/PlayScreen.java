@@ -13,7 +13,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lavendersalem.game.LavenderSalemGame;
+import com.lavendersalem.game.utils.Enums;
+import com.lavendersalem.game.world.LavenderSalemGame;
 import com.lavendersalem.game.collectables.Crystal;
 import com.lavendersalem.game.enemies.Batty;
 import com.lavendersalem.game.sprites.Box;
@@ -130,10 +131,14 @@ public class PlayScreen implements Screen {
         float lavenderVelY = lavender.b2body.getLinearVelocity().y;
 
         // setting up camera to follow the last player who moved
-        if (salemVelX != 0f || salemVelY != 0f) {
+        if ((salemVelX != 0f || salemVelY != 0f)|| (salem.getState() != Enums.State.DEAD)) {
             lastMovement.set(salem.b2body.getPosition().x, salem.b2body.getPosition().y);
-        } else if (lavenderVelX != 0f || lavenderVelY != 0f) {
+        } else if ((lavenderVelX != 0f || lavenderVelY != 0f) || lavender.getState() != Enums.State.DEAD) {
             lastMovement.set(lavender.b2body.getPosition().x,lavender.b2body.getPosition().y);
+        }
+
+        if (lavender.getState() == Enums.State.DEAD || salem.getState() == Enums.State.DEAD) {
+            gameCam.zoom = 0.2f;
         }
 
         // change position of the camera to the last movement and use LERP for linear interpolation
@@ -154,7 +159,6 @@ public class PlayScreen implements Screen {
         // update player sprites
         lavender.update(delta);
         salem.update(delta);
-
 
         //update hud
         hud.update(delta);
@@ -232,6 +236,10 @@ public class PlayScreen implements Screen {
 
     public  World getWorld(){
         return world;
+    }
+
+    public int getNumCrystals(){
+        return numCrystals;
     }
 
     @Override

@@ -1,17 +1,13 @@
 package com.lavendersalem.game.tools;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.lavendersalem.game.LavenderSalemGame;
+import com.lavendersalem.game.sprites.*;
+import com.lavendersalem.game.world.LavenderSalemGame;
 import com.lavendersalem.game.enemies.Enemy;
 import com.lavendersalem.game.screens.Hud;
-import com.lavendersalem.game.sprites.Box;
-import com.lavendersalem.game.sprites.InteractiveTileObject;
-import com.lavendersalem.game.sprites.Player;
 import com.lavendersalem.game.utils.B2DVars;
-import com.lavendersalem.game.utils.B2DVars.*;
 import com.lavendersalem.game.utils.Enums;
 
 public class WorldContactListener implements ContactListener {
@@ -66,11 +62,19 @@ public class WorldContactListener implements ContactListener {
                 break;
             case(B2DVars.BIT_LAVENDER | B2DVars.BIT_ENEMY):
                 // lavender toca enemigo y muere
-                Gdx.app.log("LAVENDER","DIE");
+                if (fixtureA.getFilterData().categoryBits == B2DVars.BIT_LAVENDER){
+                    ((Lavender)fixtureA.getUserData()).hit();
+                } else {
+                    ((Lavender)fixtureB.getUserData()).hit();
+                }
                 break;
             case(B2DVars.BIT_SALEM | B2DVars.BIT_ENEMY):
                 // salem toca enemigo y muere
-                Gdx.app.log("SALEM","DIE");
+                if (fixtureA.getFilterData().categoryBits == B2DVars.BIT_SALEM){
+                    ((Salem)fixtureA.getUserData()).hit();
+                } else {
+                    ((Salem)fixtureB.getUserData()).hit();
+                }
                 break;
             case(B2DVars.BIT_ENEMY | B2DVars.BIT_ENEMY):
                 // two enemies collide

@@ -18,6 +18,7 @@ public class B2DVars {
     public static final int OBJECTS_PRIZE = 17;
 
     // Box2D category and mask bits for collisions
+    public static final short BIT_NOTHING = 0;
     public static final short BIT_LAVENDER = 1;
     public static final short BIT_PLAYER= 1;
     public static final short BIT_SALEM= 2;

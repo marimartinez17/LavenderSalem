@@ -7,11 +7,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.lavendersalem.game.LavenderSalemGame;
+import com.lavendersalem.game.utils.Enums;
+import com.lavendersalem.game.world.LavenderSalemGame;
 import com.lavendersalem.game.screens.PlayScreen;
 import com.lavendersalem.game.utils.B2DVars;
-import com.lavendersalem.game.utils.Enums;
 
 public class Lavender extends Player {
 
@@ -33,6 +32,7 @@ public class Lavender extends Player {
         sheetSaltoDer = new Texture(Gdx.files.internal("sprites/lavender/Lavender-jumpright-sheet.png"));
         sheetInteractIzq = new Texture(Gdx.files.internal("sprites/lavender/Lavender-interactleft-sheet.png"));
         sheetInteractDer = new Texture(Gdx.files.internal("sprites/lavender/Lavender-interactright-sheet.png"));
+        sheetDieDer = new Texture(Gdx.files.internal("sprites/lavender/Lavender-dieder-sheet.png"));
 
         // Crear animaciones en 0 porque hay una sola fila y con 0.15f tiempo de frame
         animIdle = new Animation<>(0.25f, TextureRegion.split(sheetIdle, 16, 32)[0]);
@@ -64,40 +64,34 @@ public class Lavender extends Player {
     // Configuramos movimiento
     @Override
     protected void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && onSuelo){
-            b2body.applyLinearImpulse(new Vector2(0,2.5f),b2body.getWorldCenter(),true);
-            // play jumping sound
-            LavenderSalemGame.manager.get("sounds/WAV/Jump.wav", Sound.class).play();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && b2body.getLinearVelocity().x <= 2){
-            b2body.applyLinearImpulse(new Vector2(0.08f,0f),b2body.getWorldCenter(),true);
-            miraDer = true;
-        }
+        if (currentState != Enums.State.DEAD){
+            if ((Gdx.input.isKeyJustPressed(Input.Keys.UP) && onSuelo)){
+                b2body.applyLinearImpulse(new Vector2(0,2.5f),b2body.getWorldCenter(),true);
+                // play jumping sound
+                LavenderSalemGame.manager.get("sounds/WAV/Jump.wav", Sound.class).play();
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && b2body.getLinearVelocity().x <= 2){
+                b2body.applyLinearImpulse(new Vector2(0.08f,0f),b2body.getWorldCenter(),true);
+                miraDer = true;
+            }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -2){
-            b2body.applyLinearImpulse(new Vector2(-0.08f,0f),b2body.getWorldCenter(),true);
-            miraDer = false;
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -2){
+                b2body.applyLinearImpulse(new Vector2(-0.08f,0f),b2body.getWorldCenter(),true);
+                miraDer = false;
+            }
         }
-        // Si esta esperando no se mueve
-        if (esperaRescate) {
-            b2body.applyLinearImpulse(new Vector2(0,0),b2body.getWorldCenter(),true);
-            return;
-        }
-
     }
+
 
     @Override
     public TextureRegion getFrame(float delta) {
-        if (esperaRescate){
-            stateTimer = 0f;
-        }
 
         TextureRegion frame = super.getFrame(delta);
 
-        if (esperaRescate){
-            frame = miraDer ? animIdleDer.getKeyFrame(stateTimer) : animIdleIzq.getKeyFrame(stateTimer);
-
+        if (getState() == Enums.State.DEAD){
+            frame = animDieDer.getKeyFrame(stateTimer, false);
         }
+
         return frame;
     }
 
@@ -112,22 +106,7 @@ public class Lavender extends Player {
         esperaRescate = false;
     }
 
-    public void recibirVida () {
-        vidas++;
-        esperaRescate = false;
-        vivo = true;
-        // SET POSITION
-        b2body.applyLinearImpulse(new Vector2(0f,0f),b2body.getWorldCenter(),true);
-        //setOnSuelo(false); // Para que mantega sobre el suelo
-    }
 
-    public void morirEspera () {
-        // Bloquea a lavender en el sitio y activa esperaRescate
-        //posicion.set(posX, posY);
-        b2body.applyLinearImpulse(new Vector2(0f,0f),b2body.getWorldCenter(),true);
-        esperaRescate = true;
-        vivo = true; // No muere hasta culminar contrareloj
-    }
 
     // Elimina basura de la grafica*/
     @Override

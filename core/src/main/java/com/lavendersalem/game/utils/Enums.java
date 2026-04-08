@@ -19,7 +19,8 @@ public class Enums {
         JUMPING,
         STANDING,
         RUNNING,
-        FALLING
+        FALLING,
+        DEAD
     }
 
     public enum EnemyState {
