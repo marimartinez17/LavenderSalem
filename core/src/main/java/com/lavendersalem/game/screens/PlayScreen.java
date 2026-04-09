@@ -297,9 +297,10 @@ public class PlayScreen implements Screen {
             mp.draw(game.batch);
         }
 
-
-
         game.batch.end();
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
+
 
         if (pausado && !derrota && !victoria) {
 

@@ -45,6 +45,7 @@ public class WorldContactListener implements ContactListener {
             if (object.getUserData() == "crystal"){
                 if (!bodiesToRemove.contains(object.getBody(), true)) {
                     bodiesToRemove.add(object.getBody());
+
                     LavenderSalemGame.manager.get("sounds/WAV/Powerup.wav", Sound.class).play();
                     Hud.addCrystal();
                 }
