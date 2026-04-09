@@ -55,7 +55,7 @@ public class Salem extends Player {
 
     @Override
     protected short getMaskBits(){
-        return B2DVars.PLATFORMS | B2DVars.BIT_ENEMY | B2DVars.OBJECTS_CRYSTALS| B2DVars.OBJECTS_INTERACTIVE | B2DVars.BIT_DANGER | B2DVars.BIT_MOVING;
+        return B2DVars.PLATFORMS | B2DVars.BIT_ENEMY | B2DVars.OBJECTS_CRYSTALS| B2DVars.OBJECTS_INTERACTIVE | B2DVars.BIT_DANGER | B2DVars.BIT_MOVING |  B2DVars.BIT_WATER  | B2DVars.BIT_PORTALS;
     }
 
     // Configuramos movimiento
@@ -68,12 +68,12 @@ public class Salem extends Player {
                 LavenderSalemGame.manager.get("sounds/WAV/Cat_Meow.wav", Sound.class).play();
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D) && b2body.getLinearVelocity().x <= 2) {
-                b2body.applyLinearImpulse(new Vector2(0.08f, 0f), b2body.getWorldCenter(), true);
+                b2body.applyLinearImpulse(new Vector2(0.07f, 0f), b2body.getWorldCenter(), true);
                 miraDer = true;
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.A) && b2body.getLinearVelocity().x >= -2) {
-                b2body.applyLinearImpulse(new Vector2(-0.08f, 0f), b2body.getWorldCenter(), true);
+                b2body.applyLinearImpulse(new Vector2(-0.07f, 0f), b2body.getWorldCenter(), true);
                 miraDer = false;
             }
         }

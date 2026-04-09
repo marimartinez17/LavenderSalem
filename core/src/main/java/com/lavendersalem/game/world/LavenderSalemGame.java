@@ -16,6 +16,7 @@ public class LavenderSalemGame extends Game {
     // Tiled map attributes
     private TmxMapLoader mapLoader;
     private static TiledMap map1;
+    private static TiledMap map2;
 
     public static AssetManager manager;
     @Override
@@ -27,6 +28,8 @@ public class LavenderSalemGame extends Game {
 
         mapLoader = new TmxMapLoader();
         map1 = mapLoader.load("maps/nivel1/nivel1.tmx");
+        map2 = mapLoader.load("maps/nivel1/nivel2.tmx");
+
 
         // loading music
         manager.load("music/cooties.mp3", Music.class);
@@ -85,5 +88,8 @@ public class LavenderSalemGame extends Game {
 
     public static TiledMap getLvl1(){
         return map1;
+    }
+    public static TiledMap getLvl2(){
+        return map2;
     }
 }

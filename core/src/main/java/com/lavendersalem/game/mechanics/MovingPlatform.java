@@ -72,9 +72,6 @@ public class MovingPlatform extends Sprite {
         }
 
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-        System.out.println("Platform pos: " + b2body.getPosition());
-        System.out.println("pos A: " + positionA.x + ",: " + positionA.y);
-        System.out.println("pos B: " + positionB.x + ",: " + positionB.y);
     }
 
     public void dispose(){

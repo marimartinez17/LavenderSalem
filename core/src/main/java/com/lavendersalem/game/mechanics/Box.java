@@ -46,19 +46,11 @@ public class Box extends Sprite {
         shape.setAsBox((width / 2)/B2DVars.PPM, (height/2)/B2DVars.PPM);
         fdef.shape = shape;
         fdef.restitution = 0.5f;
+        fdef.isSensor = false;
         fdef.filter.categoryBits = B2DVars.OBJECTS_INTERACTIVE;
         fdef.filter.maskBits = B2DVars.PLATFORMS | B2DVars.BIT_SALEM | B2DVars.BIT_LAVENDER;
         b2body.createFixture(fdef);
         b2body.setUserData(this);
-
-        // create box shape for prop foot
-        shape.setAsBox(((width) / 2 /B2DVars.PPM), ((height) /2/B2DVars.PPM));
-        fdef.isSensor = true;
-
-        // collision filtering
-        fdef.filter.categoryBits = B2DVars.OBJECTS_INTERACTIVE;
-        fdef.filter.maskBits = B2DVars.PLATFORMS | B2DVars.BIT_SALEM | B2DVars.BIT_LAVENDER;
-        b2body.createFixture(fdef).setUserData("foot");
     }
 
     public void update(float delta){

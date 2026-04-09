@@ -26,6 +26,7 @@ public abstract class Player extends Sprite {
 
     // Dirección de la animación
     protected boolean miraDer;
+    protected boolean finished;
 
     // manejo de coleccionables (cristales)
     private int numCrystals;
@@ -85,6 +86,7 @@ public abstract class Player extends Sprite {
         onSuelo = true;
         miraDer = true;
         isDead = false;
+        finished = false;
 
         definePlayer();
 
@@ -125,6 +127,10 @@ public abstract class Player extends Sprite {
     }
 
 
+    public boolean isDead() {
+        return isDead;
+    }
+
     protected abstract void handleInput(); // Cada player tiene su configuracion de movimientos
 
     public void hit(){
@@ -136,6 +142,14 @@ public abstract class Player extends Sprite {
             fixture.setFilterData(filter);
         }
         b2body.applyLinearImpulse(new Vector2(0,4f),b2body.getLocalCenter(),true);
+    }
+
+    public void setFinished(boolean finished){
+        this.finished = finished;
+    }
+
+    public boolean getFinished(){
+        return finished;
     }
 
     public void update(float delta) {

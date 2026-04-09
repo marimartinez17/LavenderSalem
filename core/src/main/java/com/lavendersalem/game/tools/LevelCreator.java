@@ -38,11 +38,11 @@ public class LevelCreator {
         Body body;
 
 
-/*       // Print names of tiled layers
+       // Print names of tiled layers
         System.out.println("Map has " + map.getLayers().size() + " layers:");
         for (int i = 0; i < map.getLayers().size(); i++) {
             System.out.println("  [" + i + "] " + map.getLayers().get(i).getName());
-        }*/
+        }
 
         // Create fixtures -> platforms
         for (MapObject object: map.getLayers().get("platforms").getObjects().getByType(RectangleMapObject.class)){
@@ -163,7 +163,23 @@ public class LevelCreator {
             body.createFixture(fdef);
         }
 
-/*
+        for (MapObject object: map.getLayers().get("objects-portals").getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2)/ B2DVars.PPM, (rect.getY() + rect.getHeight() / 2)/ B2DVars.PPM);
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 / B2DVars.PPM, rect.getHeight() / 2 / B2DVars.PPM); // divided by two bcs it is located in the center of the boxes
+            fdef.shape = shape;
+            fdef.filter.categoryBits = B2DVars.BIT_PORTALS;
+            fdef.filter.maskBits = B2DVars.BIT_LAVENDER | B2DVars.BIT_SALEM;
+            fdef.isSensor = true;
+            body.createFixture(fdef);
+        }
+
+
         for (MapObject object: map.getLayers().get("objects-water").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
@@ -176,10 +192,9 @@ public class LevelCreator {
             fdef.shape = shape;
             fdef.filter.categoryBits = B2DVars.BIT_WATER;
             fdef.filter.maskBits = B2DVars.BIT_LAVENDER | B2DVars.BIT_SALEM | B2DVars.PLATFORMS;
-            fdef.isSensor = true;
             body.createFixture(fdef);
         }
-*/
+
 
         // create enemies -> battys
         batties = new Array<Batty>();

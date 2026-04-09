@@ -2,6 +2,7 @@ package com.lavendersalem.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -19,9 +20,7 @@ import com.lavendersalem.game.utils.Constants;
 public class MenuPrincipal implements Screen {
     private final LavenderSalemGame game;
     private final Stage stage;
-    private Texture texFondoPantalla, texLogoGame, texPanelFondo, texJugarUp, texJugarHover,
-        texNivelesUp, texNivelesHover, texOpcionesUp, texOpcionesHover,
-        texSalirUp, texSalirHover;
+    private Texture texFondoPantalla, texLogoGame, texPanelFondo, texJugarUp, texJugarHover, texNivelesUp, texNivelesHover, texOpcionesUp, texOpcionesHover, texSalirUp, texSalirHover;
 
     public MenuPrincipal (LavenderSalemGame game) {
         this.game = game;
@@ -106,14 +105,13 @@ public class MenuPrincipal implements Screen {
         style.over = new TextureRegionDrawable(new TextureRegion(over));
         return new ImageButton(style);
     }
-    private void configurarListeners(ImageButton btnJugar, ImageButton btnNiveles, ImageButton btnOpciones,
-                                     ImageButton btnSalir) {
+    private void configurarListeners(ImageButton btnJugar, ImageButton btnNiveles, ImageButton btnOpciones, ImageButton btnSalir) {
         /* MANEJO DE CLICKS */
         btnJugar.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new PlayScreen(game, 1, LavenderSalemGame.getLvl1()));
-                dispose();
+                game.setScreen(new PlayScreen(game, 1, LavenderSalemGame.getLvl1(), LavenderSalemGame.manager.get("music/cooties.mp3", Music.class)));
+                //game.setScreen(new PlayScreen(game, 2, LavenderSalemGame.getLvl2()));
             }
         });
 
@@ -161,7 +159,7 @@ public class MenuPrincipal implements Screen {
     @Override
     public void resume() {}
     @Override
-    public void hide() {}
+    public void hide() { Gdx.input.setInputProcessor(null); }
 
     @Override
     public void dispose() {

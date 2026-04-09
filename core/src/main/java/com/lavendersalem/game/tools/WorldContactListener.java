@@ -33,9 +33,13 @@ public class WorldContactListener implements ContactListener {
             Fixture foot = fixtureA.getUserData() == "foot" ? fixtureA : fixtureB;
             Fixture object = foot == fixtureA ? fixtureB : fixtureA;
 
-            if (object.getUserData() != null && object.getUserData() instanceof Box){
+/*            if (object.getUserData() != null && object.getUserData() instanceof Box){
                 LavenderSalemGame.manager.get("sounds/WAV/Bump.wav", Sound.class).play();
                 ((Player)foot.getBody().getUserData()).setState(Enums.State.STANDING);
+            }*/
+
+            if (!(foot.getBody().getUserData() instanceof Player)) {
+                return;
             }
 
             if (object.getUserData() == "crystal"){
@@ -80,28 +84,45 @@ public class WorldContactListener implements ContactListener {
                         break;
                     }
                 }
-
                 if (lavenderFix.getUserData() instanceof Lavender){
                     ((Lavender)lavenderFix.getUserData()).hit();
                 }
                 break;
             case(B2DVars.BIT_SALEM | B2DVars.BIT_ENEMY):
                 Fixture salemFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_SALEM ? fixtureA : fixtureB;
-                ((Salem)salemFix.getUserData()).hit();
+
+                if (salemFix.getUserData() instanceof Salem){
+                    ((Salem)salemFix.getUserData()).hit();
+                }
                 break;
             case(B2DVars.BIT_LAVENDER | B2DVars.BIT_DANGER):
                 // lavender toca enemigo y muere
                 lavenderFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_LAVENDER ? fixtureA : fixtureB;
-                ((Lavender)lavenderFix.getUserData()).hit();
+                if (lavenderFix.getUserData() instanceof Lavender){
+                    ((Lavender)lavenderFix.getUserData()).hit();
+                }
                 break;
             case(B2DVars.BIT_SALEM | B2DVars.BIT_DANGER):
                 salemFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_SALEM ? fixtureA : fixtureB;
-                ((Salem)salemFix.getUserData()).hit();
+
+                if (salemFix.getUserData() instanceof Salem){
+                    ((Salem)salemFix.getUserData()).hit();
+                }
                 break;
             case(B2DVars.BIT_SALEM | B2DVars.BIT_WATER):
                 salemFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_SALEM ? fixtureA : fixtureB;
-                ((Salem)salemFix.getUserData()).hit();
+
+                if (salemFix.getUserData() instanceof Salem){
+                    ((Salem)salemFix.getBody().getUserData()).hit();
+                }
                 break;
+            case(B2DVars.BIT_LAVENDER | B2DVars.BIT_PORTALS):
+                lavenderFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_LAVENDER ? fixtureA : fixtureB;
+                ((Lavender)lavenderFix.getBody().getUserData()).setFinished(true);
+                break;
+            case(B2DVars.BIT_SALEM | B2DVars.BIT_PORTALS):
+                salemFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_SALEM ? fixtureA : fixtureB;
+                ((Salem)salemFix.getBody().getUserData()).setFinished(true);
         }
     }
     public Array<Body> getBodiesToRemove() {
@@ -118,6 +139,10 @@ public class WorldContactListener implements ContactListener {
 
             Fixture foot = "foot".equals(fixtureA.getUserData()) ? fixtureA : fixtureB;
             Fixture other = foot == fixtureA ? fixtureB : fixtureA;
+
+            if (!(foot.getBody().getUserData() instanceof Player)) {
+                return;
+            }
 
             Player player = (Player) foot.getBody().getUserData();
 
