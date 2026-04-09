@@ -5,12 +5,16 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.lavendersalem.game.enemies.Batty;
 import com.lavendersalem.game.mechanics.Box;
+import com.lavendersalem.game.mechanics.MovingPlatform;
 import com.lavendersalem.game.sprites.*;
 import com.lavendersalem.game.world.LavenderSalemGame;
 import com.lavendersalem.game.enemies.Enemy;
 import com.lavendersalem.game.screens.Hud;
 import com.lavendersalem.game.utils.B2DVars;
 import com.lavendersalem.game.utils.Enums;
+
+import static com.badlogic.gdx.utils.JsonSkimmer.JsonToken.TokenType.other;
+import static com.badlogic.gdx.utils.JsonValue.ValueType.object;
 
 public class WorldContactListener implements ContactListener {
     private Array<Body> bodiesToRemove = new Array<Body>();
@@ -24,14 +28,14 @@ public class WorldContactListener implements ContactListener {
         // combination of bits during a collision
         int cDef = fixtureA.getFilterData().categoryBits | fixtureB.getFilterData().categoryBits;
 
-        if (fixtureA.getUserData()== "foot" || fixtureB.getUserData() == "foot"){
+        if ("foot".equals(fixtureA.getUserData()) || "foot".equals(fixtureB.getUserData())) {
 
             Fixture foot = fixtureA.getUserData() == "foot" ? fixtureA : fixtureB;
             Fixture object = foot == fixtureA ? fixtureB : fixtureA;
 
             if (object.getUserData() != null && object.getUserData() instanceof Box){
                 LavenderSalemGame.manager.get("sounds/WAV/Bump.wav", Sound.class).play();
-                ((Player)fixtureA.getUserData()).setState(Enums.State.STANDING);
+                ((Player)foot.getBody().getUserData()).setState(Enums.State.STANDING);
             }
 
             if (object.getUserData() == "crystal"){
@@ -40,6 +44,12 @@ public class WorldContactListener implements ContactListener {
                     LavenderSalemGame.manager.get("sounds/WAV/Powerup.wav", Sound.class).play();
                     Hud.addCrystal();
                 }
+            }
+
+            if (object.getUserData() instanceof MovingPlatform) {
+                Player player = (Player) foot.getBody().getUserData();
+                MovingPlatform movingPlatform = (MovingPlatform) object.getUserData();
+                player.setPlatform(movingPlatform);
             }
         }
 
@@ -101,7 +111,21 @@ public class WorldContactListener implements ContactListener {
     // fin de la colision
     @Override
     public void endContact(Contact contact) {
+        Fixture fixtureA = contact.getFixtureA();
+        Fixture fixtureB = contact.getFixtureB();
 
+        if ("foot".equals(fixtureA.getUserData()) || "foot".equals(fixtureB.getUserData())) {
+
+            Fixture foot = "foot".equals(fixtureA.getUserData()) ? fixtureA : fixtureB;
+            Fixture other = foot == fixtureA ? fixtureB : fixtureA;
+
+            Player player = (Player) foot.getBody().getUserData();
+
+            // dejar plataforma
+            if (other.getUserData() instanceof MovingPlatform) {
+                player.setPlatform(null);
+            }
+        }
     }
 
     // cambiar caracteristicas de la colision

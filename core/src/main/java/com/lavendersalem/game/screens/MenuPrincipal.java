@@ -2,126 +2,175 @@ package com.lavendersalem.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.lavendersalem.game.world.LavenderSalemGame;
 import com.lavendersalem.game.utils.Constants;
 
-
 public class MenuPrincipal implements Screen {
     private final LavenderSalemGame game;
-    private final OrthographicCamera camera;
-    private final FitViewport viewport;
-    private final BitmapFont font; // Para texto
-    private final ShapeRenderer shapeRenderer;
-    private final SpriteBatch spriteBatch;
-    // Botones del menu (Como rectangulos para dibujar)
-    private final Rectangle btnJugar;
-    private final Rectangle btnSelecNivel;
-    private final Rectangle btnOpciones;
-    private final Rectangle btnSalir;
-    // Dimensiones de cada boton
-    private static final float BOTON_ANCHO = 200f;
-    private static final float BOTON_ALTO = 30f;
-    private static final float BOTON_X = (Constants.VIRTUAL_WIDTH / 2f) - (BOTON_ANCHO / 2f);
-    // Botones apilados
-    private static final float Y_JUGAR = 200f;
-    private static final float Y_NIVELES = 155f;
-    private static final float Y_OPCIONES = 110f;
-    private static final float Y_SALIR = 65f;
-    // Constructor
-    public MenuPrincipal(LavenderSalemGame game) {
+    private final Stage stage;
+    private Texture texFondoPantalla, texLogoGame, texPanelFondo, texJugarUp, texJugarHover,
+        texNivelesUp, texNivelesHover, texOpcionesUp, texOpcionesHover,
+        texSalirUp, texSalirHover;
+
+    public MenuPrincipal (LavenderSalemGame game) {
         this.game = game;
-        camera = new OrthographicCamera();
-        viewport = new FitViewport(Constants.VIRTUAL_WIDTH, Constants.VIRTUAL_HEIGHT, camera);
-        font = new BitmapFont();
-        shapeRenderer = new ShapeRenderer();
-        spriteBatch = new SpriteBatch();
-        // Config. botones
-        btnJugar = new Rectangle(BOTON_X, Y_JUGAR, BOTON_ANCHO, BOTON_ALTO);
-        btnSelecNivel = new Rectangle(BOTON_X, Y_NIVELES, BOTON_ANCHO, BOTON_ALTO);
-        btnOpciones = new Rectangle(BOTON_X, Y_OPCIONES, BOTON_ANCHO, BOTON_ALTO);
-        btnSalir = new Rectangle(BOTON_X, Y_SALIR, BOTON_ANCHO, BOTON_ALTO);
+        // Se crea el escenario con fitVieport
+        this.stage = new Stage(new FitViewport(Constants.VIRTUAL_WIDTH, Constants.VIRTUAL_HEIGHT));
+        Gdx.input.setInputProcessor(stage); // El stage recibe los cliks
+
+        cargarTexturas();
+        cargarInterfaz();
+    }
+
+    private void cargarTexturas() {
+        texFondoPantalla = new Texture("ui/menus/Fondo_menuppal.png");
+        texFondoPantalla.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        texLogoGame = new Texture("ui/menus/Logo_lavendersalem.png");
+        texLogoGame.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        texPanelFondo = new Texture("ui/menus/Panel_fondo_menu.png");
+        texPanelFondo.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        texJugarUp = new Texture("ui/menus/Boton_jugar.png");
+        texJugarHover = new Texture("ui/menus/Boton_jugar_hover.png");
+
+        texNivelesUp = new Texture("ui/menus/Boton_niveles.png");
+        texNivelesHover = new Texture("ui/menus/Boton_niveles_hover.png");
+
+        texOpcionesUp = new Texture("ui/menus/Boton_opciones.png");
+        texOpcionesHover = new Texture("ui/menus/Boton_opciones_hover.png");
+
+        texSalirUp = new Texture("ui/menus/Boton_salir.png");
+        texSalirHover = new Texture("ui/menus/Boton_salir_hover.png");
+    }
+
+    private void cargarInterfaz() {
+        // Fondo pantalla
+        Image fondoPantalla = new Image(texFondoPantalla);
+        fondoPantalla.setFillParent(true);
+        stage.addActor(fondoPantalla);
+
+        Table contenedorPrincipal = new Table(); // Para alinear los assets
+        contenedorPrincipal.setFillParent(true);
+        contenedorPrincipal.left().top(); // Centra arriba a la izquierda
+
+        Image logo = new Image(texLogoGame);
+        contenedorPrincipal.add(logo).width(210f).height(110f).padTop(10f).padBottom(10).
+            padLeft(40).left().row(); // Espacio del logo
+        // Para el menu como tal
+        Table menuTable = new Table();
+        TextureRegionDrawable fondo = new TextureRegionDrawable(new TextureRegion(texPanelFondo));
+        menuTable.setBackground(fondo);
+        // Tamaños
+        float panelAncho = 210f;
+        float panelAlto = 215f;
+        float btnAncho = 140f;
+        float btnAlto = 30f;
+        /* BOTONES */
+        menuTable.add().height(10).row(); // Espacio vacio
+        // Boton jugar
+        ImageButton btnJugar = crearBoton(texJugarUp, texJugarHover);
+        menuTable.add(btnJugar).width(btnAncho).height(btnAlto).pad(3).row();
+        // Boton niveles
+        ImageButton btnNiveles = crearBoton(texNivelesUp, texNivelesHover);
+        menuTable.add(btnNiveles).width(btnAncho).height(btnAlto).pad(3).row();
+        // boton Opciones
+        ImageButton btnOpciones = crearBoton(texOpcionesUp, texOpcionesHover);
+        menuTable.add(btnOpciones).width(btnAncho).height(btnAlto).pad(3).row();
+        // Boton Salir
+        ImageButton btnSalir = crearBoton(texSalirUp, texSalirHover);
+        menuTable.add(btnSalir).width(btnAncho).height(btnAlto).pad(3).padBottom(10).row(); // Con pad para que no se pegue al borde inferior
+        // Añadir el panel del menu a la tabla principal con separación del borde
+        contenedorPrincipal.add(menuTable).width(panelAncho).height(panelAlto).padLeft(50).left();
+        // Añadimos la tabla al escenario para que se dibuje
+        stage.addActor(contenedorPrincipal);
+        // Configuarcion de clicks
+        configurarListeners(btnJugar, btnNiveles, btnOpciones, btnSalir);
+    }
+
+    private ImageButton crearBoton(Texture up, Texture over) {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.up = new TextureRegionDrawable(new TextureRegion(up));
+        style.over = new TextureRegionDrawable(new TextureRegion(over));
+        return new ImageButton(style);
+    }
+    private void configurarListeners(ImageButton btnJugar, ImageButton btnNiveles, ImageButton btnOpciones,
+                                     ImageButton btnSalir) {
+        /* MANEJO DE CLICKS */
+        btnJugar.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new PlayScreen(game, 1, LavenderSalemGame.getLvl1()));
+                dispose();
+            }
+        });
+
+        btnNiveles.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("BOTON NIVELES");
+            }
+        });
+
+        btnOpciones.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("BOTON OPCIONES");
+            }
+        });
+
+        btnSalir.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
     }
     @Override
-    public void show() { }
+    public void show() {}
 
     @Override
     public void render(float delta) {
-        // Limpiar pantalla
-        ScreenUtils.clear(Color.DARK_GRAY);
-        viewport.apply();
-        camera.update();
-        // Detectar el clic y convertir coordenadas de pantalla a virtual
-        if (Gdx.input.justTouched()) {
-            Vector3 click = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            viewport.unproject(click); // Para pasar a coor. virtual
-
-            if (btnJugar.contains(click.x, click.y)) {
-                game.setScreen(new PlayScreen(game,1, game.getLvl1()));
-                dispose();
-                return;
-            }
-            if (btnSelecNivel.contains(click.x, click.y)) {
-                System.out.println("NIVELES");
-            }
-            if (btnOpciones.contains(click.x, click.y)) {
-                System.out.println("OPCIONES");
-            }
-            if (btnSalir.contains(click.x, click.y)) {
-                Gdx.app.exit();
-            }
-        }
-        // Dinujar rectangulos botones
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        shapeRenderer.setColor(Color.PURPLE);
-        shapeRenderer.rect(btnJugar.x, btnJugar.y, btnJugar.width, btnJugar.height);
-        shapeRenderer.rect(btnSelecNivel.x, btnSelecNivel.y, btnSelecNivel.width, btnSelecNivel.height);
-        shapeRenderer.rect(btnOpciones.x, btnOpciones.y, btnOpciones.width, btnOpciones.height);
-        shapeRenderer.rect(btnSalir.x, btnSalir.y, btnSalir.width, btnSalir.height);
-
-        shapeRenderer.end();
-        // Se pasa el batch para cargar font
-        spriteBatch.setProjectionMatrix(camera.combined);
-        spriteBatch.begin();
-
-        font.setColor(Color.WHITE);
-        font.draw(spriteBatch, "LAVENDER & SALEM", BOTON_X + 20f, 260f);
-        font.draw(spriteBatch, "Jugar", BOTON_X + 20f, Y_JUGAR + 20f);
-        font.draw(spriteBatch, "Niveles", BOTON_X + 20f, Y_NIVELES + 20f);
-        font.draw(spriteBatch, "Opciones", BOTON_X + 20f, Y_OPCIONES + 20f);
-        font.draw(spriteBatch, "Salir", BOTON_X + 20f, Y_SALIR + 20f);
-
-        spriteBatch.end();
+        ScreenUtils.clear(0,0,0,1);
+        stage.getViewport().apply();
+        // Fondo
+        stage.act(delta); // Actualiza la lógica del menú
+        stage.draw(); // Dibuja los assets
     }
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        // Con scene2d el resize se hace directamente al Viewport del Stage
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
-    public void pause() { }
-
+    public void pause() {}
     @Override
-    public void resume() { }
-
+    public void resume() {}
     @Override
-    public void hide() { }
+    public void hide() {}
 
     @Override
     public void dispose() {
-        spriteBatch.dispose();
-        shapeRenderer.dispose();
-        font.dispose();
+        stage.dispose();
+        texFondoPantalla.dispose();
+        texPanelFondo.dispose();
+        texJugarUp.dispose(); texJugarHover.dispose();
+        texNivelesUp.dispose(); texNivelesHover.dispose();
+        texOpcionesUp.dispose(); texOpcionesHover.dispose();
+        texSalirUp.dispose(); texSalirHover.dispose();
     }
 }

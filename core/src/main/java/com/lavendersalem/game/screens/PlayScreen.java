@@ -13,7 +13,9 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.lavendersalem.game.enemies.Enemy;
 import com.lavendersalem.game.mechanics.MovingPlatform;
+import com.lavendersalem.game.utils.Constants;
 import com.lavendersalem.game.utils.Enums;
 import com.lavendersalem.game.world.LavenderSalemGame;
 import com.lavendersalem.game.collectables.Crystal;
@@ -26,6 +28,14 @@ import com.lavendersalem.game.tools.WorldContactListener;
 import com.lavendersalem.game.utils.B2DVars;
 
 public class PlayScreen implements Screen {
+
+    private final OverlayPausa overlayPausa;
+    private final OverlayLose overlayLose;
+    private final OverlayWin overlayWin;
+
+    private boolean derrota;
+    private boolean pausado;
+    private boolean victoria;
 
     // player sprites
     private Lavender lavender;
@@ -75,6 +85,11 @@ public class PlayScreen implements Screen {
         this.lvl = lvl;
         this.map = map;
         contactListener = new WorldContactListener();
+        derrota = false;
+        pausado = false;
+        overlayPausa = new OverlayPausa(game);
+        overlayLose = new OverlayLose(game);
+        overlayWin = new OverlayWin(game);
 
         // To follow the characters through cam world
         gameCam = new OrthographicCamera();
@@ -110,8 +125,8 @@ public class PlayScreen implements Screen {
 
 
         // loading player sprites
-        lavender = new Lavender(this,300,260,16,32);
-        salem = new Salem(this, 320,260,16,16);
+        lavender = creator.getLavender();
+        salem = creator.getSalem();
         lastMovement = new Vector2(lavender.b2body.getPosition().x, lavender.b2body.getPosition().y);
 
         // establish contact listener
@@ -119,6 +134,7 @@ public class PlayScreen implements Screen {
 
         music = LavenderSalemGame.manager.get("music/powder.mp3", Music.class);
         music.setLooping(true);
+        music.setVolume(0.05f);
         music.play();
     }
 
@@ -162,6 +178,29 @@ public class PlayScreen implements Screen {
         }
         bodies.clear();
 
+        // --- TECLA DE PRUEBA PARA VICTORIA (Temporal) ---
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.V) && !victoria) {
+            activarVictoria();
+            pausado = true;
+        }
+        // Para pantalla de pausa
+        if (Gdx.input.isKeyJustPressed(Constants.PAUSE_ESC)
+            || Gdx.input.isKeyJustPressed(Constants.PAUSE_P)) {
+            pausado = !pausado;
+            if (pausado) {
+                overlayPausa.show();
+            } else {
+                overlayPausa.setVisible(false);
+                Gdx.input.setInputProcessor(null);
+            }
+        }
+        // Para pantalla de Derrota
+        if (Gdx.input.isKeyJustPressed(Constants.RESET_KEY) && derrota) {
+            resetNivel();
+            derrota = false;
+        }
+
+
         // update player sprites
         lavender.update(delta);
         salem.update(delta);
@@ -204,6 +243,30 @@ public class PlayScreen implements Screen {
     public void render(float delta) {
         update(delta);
 
+        delta = Math.min(delta, Constants.DELTA_MAXIMO);
+        // --- TECLA DE PRUEBA PARA VICTORIA (Temporal) ---
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.V) && !victoria) {
+            activarVictoria();
+            pausado = true;
+        }
+        // Para pantalla de pausa
+        if (Gdx.input.isKeyJustPressed(Constants.PAUSE_ESC)
+            || Gdx.input.isKeyJustPressed(Constants.PAUSE_P)) {
+            pausado = !pausado;
+            if (pausado) {
+                overlayPausa.show();
+            } else {
+                overlayPausa.setVisible(false);
+                Gdx.input.setInputProcessor(null);
+            }
+        }
+        // Para pantalla de Derrota
+        if (Gdx.input.isKeyJustPressed(Constants.RESET_KEY) && derrota) {
+            resetNivel();
+            derrota = false;
+        }
+
+
         // clear game screen with black
         Gdx.gl.glClearColor(0.18f, 0.18f, 0.18f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -240,8 +303,68 @@ public class PlayScreen implements Screen {
 
         game.batch.end();
 
-        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        hud.stage.draw();
+        if (pausado && !derrota && !victoria) {
+
+            if (overlayPausa.isContinuar()) {
+                pausado = false;
+                overlayPausa.setVisible(false);
+                overlayPausa.setContinuar(false);
+                Gdx.input.setInputProcessor(null);
+            }
+
+            if (overlayPausa.isResetearNivel()) {
+                resetNivel();
+                pausado = false;
+                overlayPausa.setResetearNivel(false);
+                overlayPausa.setVisible(false);
+                Gdx.input.setInputProcessor(null);
+            }
+
+        } else {
+            overlayPausa.setVisible(false);
+        }
+        // Overlay de derrota
+        if (derrota) {
+            if (!overlayLose.isVisible()) overlayLose.show();
+
+            if (overlayLose.isReintentar()) {
+                resetNivel();
+                derrota = false;
+                overlayLose.setReintentar(false);
+                overlayLose.setVisible(false);
+                Gdx.input.setInputProcessor(null);
+            }
+        } else {
+            overlayLose.setVisible(false);
+        }
+        overlayLose.render(delta);
+
+        // Overlay de Victoria
+        if (victoria) {
+            if (!overlayWin.isVisible()) {
+                // Llamamos a preparar interfaz con los datos reales
+                overlayWin.prepararInterfaz(2, 3, 2);
+                overlayWin.show();
+            }
+            if (overlayWin.isSiguienteNivel()) {
+                System.out.println("Pasar a siguente nivel");
+            }
+        }
+        overlayWin.render(delta);
+    }
+
+    private void resetNivel () {
+        lavender = creator.getLavender();
+        salem =  creator.getSalem();
+        batties = creator.getBatties();
+        crystals = creator.getCrystals();
+        boxes = creator.getBoxes();
+        movingPlatforms = creator.getMovingPlatforms();
+    }
+
+    private void activarVictoria() {
+        victoria = true;
+        Gdx.input.setInputProcessor(null);
     }
 
     @Override

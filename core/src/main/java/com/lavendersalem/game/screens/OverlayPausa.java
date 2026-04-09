@@ -1,103 +1,173 @@
 package com.lavendersalem.game.screens;
 
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.lavendersalem.game.utils.*;
+import com.lavendersalem.game.world.LavenderSalemGame;
+import com.lavendersalem.game.screens.*;
+import com.lavendersalem.game.utils.Constants;
 
 public class OverlayPausa {
-    private final OrthographicCamera camara;
-    private final FitViewport viewport;
-    private final BitmapFont font;
-    private final SpriteBatch spriteBatch;
-    private final ShapeRenderer shapeRenderer;
-    // Overlay (panel)
-    private final float ANCHO_PANEL = 200f;
-    private final float ALTO_PANEL = 200f;
-    private final float PANEL_X = (Constants.VIRTUAL_WIDTH / 2f) - (ANCHO_PANEL / 2f);
-    private final float PANEL_Y = (Constants.VIRTUAL_HEIGHT / 2f) - (ALTO_PANEL / 2f);
-    // Botones
-    private final float PBTN_ANCHO = 125f;
-    private final float PBTN_ALTO = 25f;
-    private final float PBTN_X = PANEL_X + (ANCHO_PANEL /2f ) - (PBTN_ANCHO / 2f);
-    private final float PBTN_CONTINUAR_Y = PANEL_Y + 160f;
-    private final float PBTN_RESET_Y = PANEL_Y + 120f;
-    private final float PBTN_MENUP_Y = PANEL_Y + 80f;
+    private final LavenderSalemGame game;
+    private final Stage stage;
+    private boolean visible = false;
+    private boolean continuar = false;
+    private boolean resetearNivel = false;
 
-    private final Rectangle btnContinuar;
-    private final Rectangle btnReset;
-    private final Rectangle btnMenuPpal;
-    // Constructor
-    public OverlayPausa (OrthographicCamera camara, FitViewport viewport) {
-        this.camara = camara;
-        this.viewport = viewport;
-        font = new BitmapFont();
-        spriteBatch = new SpriteBatch();
-        shapeRenderer = new ShapeRenderer();
-        btnContinuar = new Rectangle(PBTN_X, PBTN_CONTINUAR_Y, PBTN_ANCHO, PBTN_ALTO);
-        btnReset = new Rectangle(PBTN_X, PBTN_RESET_Y, PBTN_ANCHO, PBTN_ALTO);
-        btnMenuPpal = new Rectangle(PBTN_X, PBTN_MENUP_Y, PBTN_ANCHO, PBTN_ALTO);
+    private Texture texContinuarUp, texContinuarOver, texReintentarUp, texReintentarOver,
+        texOpcionesUp, texOpcionesOver, texMenuUp, texMenuOver;
+    private Texture texPanelMenu, texPergaminoTitulo;
+    private Texture texFondoOscuro;
+
+    public OverlayPausa(LavenderSalemGame game) {
+        this.game = game;
+        this.stage = new Stage(new FitViewport(Constants.VIRTUAL_WIDTH, Constants.VIRTUAL_HEIGHT));
+
+        cargarTexturas();
+        cargarInterfaz();
     }
 
-    public void dibujar () {
-        shapeRenderer.setProjectionMatrix(camara.combined);
-
-        // Activar blending para la transparencia del fondo (opnGl)
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        // Fondo oscuro semitransparente
-        shapeRenderer.setColor(0f, 0f,0f,0.6f);
-        shapeRenderer.rect(0,0,Constants.VIRTUAL_WIDTH,Constants.VIRTUAL_HEIGHT);
+    private void cargarTexturas() {
+        // Para el fondo
+        Pixmap pixmap = new Pixmap(1,1,Pixmap.Format.RGBA4444);
+        pixmap.setColor(0,0,0,0.6f); // Opaca al 60%
+        pixmap.fill();
+        texFondoOscuro = new Texture(pixmap);
         // Panel
-        shapeRenderer.setColor(Color.DARK_GRAY);
-        shapeRenderer.rect(PANEL_X, PANEL_Y,ANCHO_PANEL, ALTO_PANEL);
-        // Cuadros de botones
-        shapeRenderer.setColor(Color.PURPLE);
-        shapeRenderer.rect(btnContinuar.x, btnContinuar.y, btnContinuar.width, btnContinuar.height);
-        shapeRenderer.rect(btnReset.x, btnReset.y, btnReset.width, btnReset.height);
-        shapeRenderer.rect(btnMenuPpal.x, btnMenuPpal.y, btnMenuPpal.width, btnMenuPpal.height);
-
-        shapeRenderer.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND); // Desactivar el blendig
-
-        spriteBatch.setProjectionMatrix(camara.combined);
-        spriteBatch.begin();
-
-        font.setColor(Color.WHITE);
-        font.draw(spriteBatch, "PAUSA", PANEL_X + (ANCHO_PANEL / 2f) - 22.5f,
-            PANEL_Y + ALTO_PANEL + 10f);
-        font.draw(spriteBatch, "Continuar", PBTN_X + 10f, PBTN_CONTINUAR_Y + 18f);
-        font.draw(spriteBatch, "Resetear Nivel", PBTN_X + 10f, PBTN_RESET_Y + 18f);
-        font.draw(spriteBatch, "Menú Principal", PBTN_X + 10f, PBTN_MENUP_Y + 18f);
-
-        spriteBatch.end();
+        texPanelMenu = new Texture("ui/menus/Panel_fondo_menu.png");
+        texPergaminoTitulo = new Texture("ui/menus/Pausa_titulo.png");
+        // Botones
+        texContinuarUp = new Texture("ui/menus/Boton_continuar.png");
+        texContinuarOver = new Texture("ui/menus/Boton_continuar_over.png");
+        texReintentarUp = new Texture("ui/menus/Boton_reintentar.png");
+        texReintentarOver = new Texture("ui/menus/Boton_reintentar_over.png");
+        texOpcionesUp = new Texture("ui/menus/Boton_opciones.png");
+        texOpcionesOver = new Texture("ui/menus/Boton_opciones_hover.png");
+        texMenuUp = new Texture("ui/menus/Boton_menu.png");
+        texMenuOver = new Texture("ui/menus/Boton_menu_over.png");
     }
 
-    public Enums.AccionPausa manejarClicks () {
-        if (!Gdx.input.justTouched()) return Enums.AccionPausa.NINGUNA;
+    private void cargarInterfaz() {
+        Table contenedorPpal = new Table();
+        contenedorPpal.setFillParent(true);
 
-        Vector3 click = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.unproject(click);
+        Image fondo = new Image(texFondoOscuro);
+        fondo.setFillParent(true);
+        stage.addActor(fondo); // Para que quede detras del menu
 
-        if (btnContinuar.contains(click.x, click.y)) return Enums.AccionPausa.CONTINUAR;
-        if (btnReset.contains(click.x, click.y)) return Enums.AccionPausa.RESET;
-        if (btnMenuPpal.contains(click.x, click.y)) return Enums.AccionPausa.MENU_PPAL;
+        // Menu centrado
+        Table panelMenu = new Table();
 
-        return Enums.AccionPausa.NINGUNA; // Click fuera de los botones
+        Image tituloPaussa = new Image(texPergaminoTitulo);
+        panelMenu.add(tituloPaussa).width(180).height(60).padBottom(-10).row();
+        // Para organizar el menu con stack
+        Stack stackMenu = new Stack();
+        Image marcoMenu = new Image(texPanelMenu);
+        // Para los botones que quedan sobre el panel por stack
+        Table botones = new Table();
+
+        // Botones
+        Button btnContinuar = crearBoton(texContinuarUp, texContinuarOver);
+        Button btnReintentar = crearBoton(texReintentarUp, texReintentarOver);
+        Button btnOpciones = crearBoton(texOpcionesUp, texOpcionesOver);
+        Button btnMenu = crearBoton(texMenuUp, texMenuOver);
+
+        configurarListener(btnContinuar, btnReintentar, btnOpciones, btnMenu);
+        // Configuración de layout de botones
+        float AnchoBoton = 160f;
+        float AltoBoton = 40f;
+
+        botones.add(btnContinuar).width(AnchoBoton).height(AltoBoton).padBottom(6).row();
+        botones.add(btnReintentar).width(AnchoBoton).height(AltoBoton).padBottom(6).row();
+        botones.add(btnOpciones).width(AnchoBoton).height(AltoBoton).padBottom(6).row();
+        botones.add(btnMenu).width(AnchoBoton).height(AltoBoton);
+
+        stackMenu.add(marcoMenu);    // Atrás
+        stackMenu.add(botones); // Adelante
+
+        // Añadimos el stack al contenedor del menú
+        panelMenu.add(stackMenu).width(220).height(230);
+
+        contenedorPpal.add(panelMenu);
+        stage.addActor(contenedorPpal);
+    }
+
+    private ImageButton crearBoton(Texture up, Texture over) {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.up = new TextureRegionDrawable(new TextureRegion(up));
+        style.over = new TextureRegionDrawable(new TextureRegion(over));
+        return new ImageButton(style);
+    }
+
+    private void configurarListener(Button btnContinuar, Button btnReintentar, Button btnOpcines, Button btnMenu) {
+        btnContinuar.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                continuar = true;
+            }
+        });
+        btnReintentar.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                resetearNivel = true;
+                visible = false;
+            }
+        });
+        btnOpcines.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("OPCIONES");
+            }
+        });
+        btnMenu.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MenuPrincipal(game));
+            }
+        });
+
+    }
+
+    public void show() {
+        visible = true;
+        Gdx.input.setInputProcessor(stage);
+    }
+
+    public void render(float delta) {
+        if (visible) {
+            stage.act(delta);
+            stage.draw();
+        }
+    }
+
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
     }
 
     public void dispose() {
-        spriteBatch.dispose();
-        shapeRenderer.dispose();
-        font.dispose();
+        stage.dispose();
+        texFondoOscuro.dispose();
+        texPergaminoTitulo.dispose();
+        texPanelMenu.dispose();
+        texContinuarUp.dispose();   texContinuarOver.dispose();
+        texReintentarUp.dispose();  texReintentarOver.dispose();
+        texOpcionesUp.dispose();    texOpcionesOver.dispose();
+        texMenuUp.dispose();        texMenuOver.dispose();
     }
+
+    public void setVisible(boolean visible) { this.visible = visible; }
+
+    public boolean isContinuar() { return continuar; }
+    public void setContinuar(boolean continuar) { this.continuar = continuar; }
+
+    public boolean isResetearNivel() { return resetearNivel; }
+    public void setResetearNivel(boolean resetearNivel) { this.resetearNivel = resetearNivel; }
 }

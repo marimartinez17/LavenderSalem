@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.lavendersalem.game.mechanics.Box;
+import com.lavendersalem.game.mechanics.MovingPlatform;
 import com.lavendersalem.game.world.LavenderSalemGame;
 import com.lavendersalem.game.screens.PlayScreen;
 import com.lavendersalem.game.utils.B2DVars;
@@ -28,6 +30,8 @@ public abstract class Player extends Sprite {
     // manejo de coleccionables (cristales)
     private int numCrystals;
     private int totalCrystals;
+
+    private MovingPlatform currentPlatform;
 
     //Atributos de Player
     protected boolean onSuelo; // Si el personaje esta en el suelo
@@ -116,6 +120,8 @@ public abstract class Player extends Sprite {
         fdef.filter.maskBits = getMaskBits();
         b2body.createFixture(fdef).setUserData("foot");
 
+        b2body.setUserData(this);
+
     }
 
 
@@ -133,9 +139,24 @@ public abstract class Player extends Sprite {
     }
 
     public void update(float delta) {
+        handleInput();
+
         setPosition((b2body.getPosition().x - getWidth() / 2  ), (b2body.getPosition().y - getHeight() / 2  - 0.01f));
 
-        handleInput();
+        if (currentPlatform != null) {
+            Vector2 platformVel = currentPlatform.b2body.getLinearVelocity();
+            Vector2 playerVel = new Vector2(b2body.getLinearVelocity());
+
+            float newVelY;
+
+            if (platformVel.y < 0){
+                newVelY = platformVel.y;
+            } else {
+                newVelY = (float) (playerVel.y + platformVel.y);
+            }
+            b2body.setLinearVelocity(playerVel.x+platformVel.x,newVelY);
+        }
+
         setRegion(getFrame(delta));
     }
 
@@ -172,6 +193,7 @@ public abstract class Player extends Sprite {
         stateTimer = (currentState == previousState)  ? stateTimer + delta : 0f;
 
         previousState = currentState;
+
         return region;
     }
 
@@ -191,6 +213,14 @@ public abstract class Player extends Sprite {
             onSuelo = true;
             return State.STANDING;
         }
+    }
+
+    public void setPlatform(MovingPlatform p){
+        this.currentPlatform = p;
+    }
+
+    public MovingPlatform getCurrentPlatform() {
+        return currentPlatform;
     }
 
     public void setState(State state) {

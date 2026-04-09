@@ -15,6 +15,8 @@ import com.lavendersalem.game.mechanics.MovingPlatform;
 import com.lavendersalem.game.screens.PlayScreen;
 import com.lavendersalem.game.collectables.Crystal;
 import com.lavendersalem.game.mechanics.Box;
+import com.lavendersalem.game.sprites.Lavender;
+import com.lavendersalem.game.sprites.Salem;
 import com.lavendersalem.game.utils.B2DVars;
 
 public class LevelCreator {
@@ -22,6 +24,8 @@ public class LevelCreator {
     private Array<Box> boxes;
     private Array<Batty> batties;
     private Array<MovingPlatform> movingPlatforms;
+    private Lavender lavender;
+    private Salem salem;
 
 
     public LevelCreator(PlayScreen screen) {
@@ -54,6 +58,26 @@ public class LevelCreator {
             fdef.filter.categoryBits = B2DVars.PLATFORMS;
             fdef.filter.maskBits = B2DVars.BIT_PLAYER | B2DVars.BIT_LAVENDER | B2DVars.BIT_SALEM | B2DVars.BIT_ENEMY;
             body.createFixture(fdef);
+        }
+
+        // Create fixtures -> platforms
+        for (MapObject obj: map.getLayers().get("objects-spawn-lavender").getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) obj).getRectangle();
+
+            float x = (float)obj.getProperties().get("x");
+            float y = (float)obj.getProperties().get("y");
+
+            lavender = new Lavender(screen,x,y,16,32);
+        }
+
+        // Create fixtures -> platforms
+        for (MapObject obj: map.getLayers().get("objects-spawn-salem").getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) obj).getRectangle();
+
+            float x = (float)obj.getProperties().get("x");
+            float y = (float)obj.getProperties().get("y");
+
+            salem = new Salem(screen,x,y,16,16);
         }
 
         crystals = new Array<Crystal>();
@@ -185,6 +209,14 @@ public class LevelCreator {
             movingPlatforms.add(new MovingPlatform(screen,rect.getWidth(),rect.getHeight(), new Vector2(ax,ay),new Vector2(bx,by),velocity));
         }
         shape.dispose();
+    }
+
+    public Lavender getLavender() {
+        return lavender;
+    }
+
+    public Salem getSalem() {
+        return salem;
     }
 
     public Array<Batty> getBatties() {
