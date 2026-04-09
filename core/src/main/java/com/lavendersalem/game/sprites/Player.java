@@ -132,14 +132,6 @@ public abstract class Player extends Sprite {
         b2body.applyLinearImpulse(new Vector2(0,4f),b2body.getLocalCenter(),true);
     }
 
-/*    *//* PARA CUANDO MUERE O RESPAWNEA *//*
-    public void morir() {
-        vidas--;
-        setPosition((b2body.getPosition().x - getWidth() / 2  ), (b2body.getPosition().y - getHeight() / 2  - 0.01f));
-        b2body.applyLinearImpulse(new Vector2(-0.08f,0f),b2body.getWorldCenter(),true);
-        if (vidas <= 0) vivo = false;
-    }*/
-
     public void update(float delta) {
         setPosition((b2body.getPosition().x - getWidth() / 2  ), (b2body.getPosition().y - getHeight() / 2  - 0.01f));
 

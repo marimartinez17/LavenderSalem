@@ -57,7 +57,7 @@ public class Lavender extends Player {
 
     @Override
     protected short getMaskBits(){
-        return B2DVars.PLATFORMS | B2DVars.BIT_ENEMY | B2DVars.BIT_ENEMY_HEAD | B2DVars.OBJECTS_CRYSTALS | B2DVars.OBJECTS_INTERACTIVE;
+        return B2DVars.PLATFORMS | B2DVars.BIT_ENEMY | B2DVars.BIT_ENEMY_HEAD | B2DVars.OBJECTS_CRYSTALS | B2DVars.OBJECTS_INTERACTIVE | B2DVars.BIT_DANGER | B2DVars.BIT_MOVING;
     }
 
 

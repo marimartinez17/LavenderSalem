@@ -3,8 +3,8 @@ package com.lavendersalem.game.tools;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Base64Coder;
 import com.lavendersalem.game.enemies.Batty;
+import com.lavendersalem.game.mechanics.Box;
 import com.lavendersalem.game.sprites.*;
 import com.lavendersalem.game.world.LavenderSalemGame;
 import com.lavendersalem.game.enemies.Enemy;
@@ -28,10 +28,6 @@ public class WorldContactListener implements ContactListener {
 
             Fixture foot = fixtureA.getUserData() == "foot" ? fixtureA : fixtureB;
             Fixture object = foot == fixtureA ? fixtureB : fixtureA;
-
-            if (object.getUserData() != null && object.getUserData() instanceof InteractiveTileObject){
-                ((InteractiveTileObject) object.getUserData()).hit();
-            }
 
             if (object.getUserData() != null && object.getUserData() instanceof Box){
                 LavenderSalemGame.manager.get("sounds/WAV/Bump.wav", Sound.class).play();
@@ -105,7 +101,6 @@ public class WorldContactListener implements ContactListener {
     // fin de la colision
     @Override
     public void endContact(Contact contact) {
-
 
     }
 

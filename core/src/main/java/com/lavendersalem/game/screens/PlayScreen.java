@@ -13,11 +13,12 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.lavendersalem.game.mechanics.MovingPlatform;
 import com.lavendersalem.game.utils.Enums;
 import com.lavendersalem.game.world.LavenderSalemGame;
 import com.lavendersalem.game.collectables.Crystal;
 import com.lavendersalem.game.enemies.Batty;
-import com.lavendersalem.game.sprites.Box;
+import com.lavendersalem.game.mechanics.Box;
 import com.lavendersalem.game.sprites.Lavender;
 import com.lavendersalem.game.sprites.Salem;
 import com.lavendersalem.game.tools.LevelCreator;
@@ -38,6 +39,7 @@ public class PlayScreen implements Screen {
 
     // collectionables
     private Array<Crystal> crystals;
+    private Array<MovingPlatform> movingPlatforms;
     private int numCrystals;
     private int totalCrystals;
 
@@ -101,6 +103,7 @@ public class PlayScreen implements Screen {
         totalCrystals = crystals.size;
 
         boxes = creator.getBoxes();
+        movingPlatforms = creator.getMovingPlatforms();
 
         // game HUD for crystals/timer/level info
         hud = new Hud(game.batch, lvl, totalCrystals);
@@ -181,6 +184,10 @@ public class PlayScreen implements Screen {
             }
         }
 
+        for (MovingPlatform mp: movingPlatforms) {
+            mp.update(delta);
+        }
+
         //update camera
         gameCam.update();
 
@@ -227,6 +234,9 @@ public class PlayScreen implements Screen {
             box.draw(game.batch);
         }
 
+        for (MovingPlatform mp: movingPlatforms) {
+            mp.draw(game.batch);
+        }
 
         game.batch.end();
 

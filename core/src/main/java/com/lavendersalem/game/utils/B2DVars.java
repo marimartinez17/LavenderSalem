@@ -31,6 +31,7 @@ public class B2DVars {
     public static final short BIT_ENEMY_HEAD = 256;
     public static final short BIT_DANGER = 512;
     public static final short BIT_WATER = 1024;
+    public static final short BIT_MOVING = 2048;
 
 
     // Misc

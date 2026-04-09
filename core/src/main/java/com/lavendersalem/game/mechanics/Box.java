@@ -1,8 +1,9 @@
-package com.lavendersalem.game.sprites;
+package com.lavendersalem.game.mechanics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.lavendersalem.game.screens.PlayScreen;
 import com.lavendersalem.game.utils.B2DVars;
@@ -18,14 +19,12 @@ public class Box extends Sprite {
     Texture texture;
 
     public Box(PlayScreen screen, float x, float y, float width, float height) {
+        super(new Texture(Gdx.files.internal("props/box.png")));
         this.world = screen.getWorld();
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-
-        texture = new Texture(Gdx.files.internal("props/brown_wall_stand_00.png"));
-        setTexture(texture);
 
         defineBox();
 
