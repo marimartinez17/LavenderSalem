@@ -346,30 +346,15 @@ public class PlayScreen implements Screen {
         }
 
         // Overlay de Victoria
-        activarVictoria();
+        if (!victoria) {
+            //activarVictoria();
+        }
         if (victoria) {
             if (!overlayWin.isVisible()) {
-                int tiempo = hud.getSegundosTrans();
-                int totales = 10;
-
-                int estrellas = ProgresoManager.calcularEstrellas(lvl, tiempo);
-                ProgresoManager.guardarProgreso(lvl,estrellas);
-
-
-                // Llamamos a preparar interfaz con los datos reales
-                overlayWin.prepararInterfaz(estrellas, totalCrystals, numCrystals);
-                overlayWin.show();
+                //overlayWin.show();
             }
             if (overlayWin.isSiguienteNivel()) {
-                music.pause();
-
-                int proximo = lvl + 1;
-                if (proximo <= 2){
-                    game.setScreen(new PlayScreen(game,proximo, LavenderSalemGame.getMap(proximo), LavenderSalemGame.getMusic(proximo)));
-                } else {
-                    game.setScreen(new MenuPrincipal(game));
-                }
-                dispose();
+                //dispose();
             }
         }
 
