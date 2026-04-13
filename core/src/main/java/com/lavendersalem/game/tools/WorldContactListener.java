@@ -63,6 +63,7 @@ public class WorldContactListener implements ContactListener {
             case (B2DVars.BIT_ENEMY_HEAD | B2DVars.BIT_LAVENDER):
                 // lavender salta sobre el batty
                 if (fixtureA.getFilterData().categoryBits == B2DVars.BIT_ENEMY_HEAD){
+                    LavenderSalemGame.manager.get("sounds/WAV/Hurt.wav", Sound.class).play();
                     ((Enemy)fixtureA.getUserData()).hitOnHead();
                 } else {
                     ((Enemy)fixtureB.getUserData()).hitOnHead();
@@ -114,16 +115,19 @@ public class WorldContactListener implements ContactListener {
                 salemFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_SALEM ? fixtureA : fixtureB;
 
                 if (salemFix.getUserData() instanceof Salem){
+                    LavenderSalemGame.manager.get("sounds/WAV/Water_Splash.wav", Sound.class).play();
                     ((Salem)salemFix.getBody().getUserData()).hit();
                 }
                 break;
             case(B2DVars.BIT_LAVENDER | B2DVars.BIT_PORTALS):
                 lavenderFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_LAVENDER ? fixtureA : fixtureB;
                 ((Lavender)lavenderFix.getBody().getUserData()).setFinished(true);
+                LavenderSalemGame.manager.get("sounds/WAV/Powerup.wav", Sound.class).play();
                 break;
             case(B2DVars.BIT_SALEM | B2DVars.BIT_PORTALS):
                 salemFix = fixtureA.getFilterData().categoryBits == B2DVars.BIT_SALEM ? fixtureA : fixtureB;
                 ((Salem)salemFix.getBody().getUserData()).setFinished(true);
+                LavenderSalemGame.manager.get("sounds/WAV/Powerup.wav", Sound.class).play();
         }
     }
     public Array<Body> getBodiesToRemove() {

@@ -20,7 +20,9 @@ import com.lavendersalem.game.utils.Constants;
 public class MenuPrincipal implements Screen {
     private final LavenderSalemGame game;
     private final Stage stage;
-    private Texture texFondoPantalla, texLogoGame, texPanelFondo, texJugarUp, texJugarHover, texNivelesUp, texNivelesHover, texOpcionesUp, texOpcionesHover, texSalirUp, texSalirHover;
+    private Texture texFondoPantalla, texLogoGame, texPanelFondo, texJugarUp, texJugarHover,
+        texNivelesUp, texNivelesHover, texCreditosUp, texCreditosHover,
+        texSalirUp, texSalirHover;
 
     public MenuPrincipal (LavenderSalemGame game) {
         this.game = game;
@@ -48,8 +50,8 @@ public class MenuPrincipal implements Screen {
         texNivelesUp = new Texture("ui/menus/Boton_niveles.png");
         texNivelesHover = new Texture("ui/menus/Boton_niveles_hover.png");
 
-        texOpcionesUp = new Texture("ui/menus/Boton_opciones.png");
-        texOpcionesHover = new Texture("ui/menus/Boton_opciones_hover.png");
+        texCreditosUp = new Texture("ui/menus/Boton_creditos.png");
+        texCreditosHover = new Texture("ui/menus/Boton_creditos_over.png");
 
         texSalirUp = new Texture("ui/menus/Boton_salir.png");
         texSalirHover = new Texture("ui/menus/Boton_salir_hover.png");
@@ -85,8 +87,8 @@ public class MenuPrincipal implements Screen {
         // Boton niveles
         ImageButton btnNiveles = crearBoton(texNivelesUp, texNivelesHover);
         menuTable.add(btnNiveles).width(btnAncho).height(btnAlto).pad(3).row();
-        // boton Opciones
-        ImageButton btnOpciones = crearBoton(texOpcionesUp, texOpcionesHover);
+        // boton Creditos
+        ImageButton btnOpciones = crearBoton(texCreditosUp, texCreditosHover);
         menuTable.add(btnOpciones).width(btnAncho).height(btnAlto).pad(3).row();
         // Boton Salir
         ImageButton btnSalir = crearBoton(texSalirUp, texSalirHover);
@@ -105,27 +107,28 @@ public class MenuPrincipal implements Screen {
         style.over = new TextureRegionDrawable(new TextureRegion(over));
         return new ImageButton(style);
     }
-    private void configurarListeners(ImageButton btnJugar, ImageButton btnNiveles, ImageButton btnOpciones, ImageButton btnSalir) {
+    private void configurarListeners(ImageButton btnJugar, ImageButton btnNiveles, ImageButton btnOpciones,
+                                     ImageButton btnSalir) {
         /* MANEJO DE CLICKS */
         btnJugar.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new PlayScreen(game, 1, LavenderSalemGame.getLvl1(), LavenderSalemGame.manager.get("music/cooties.mp3", Music.class)));
-                //game.setScreen(new PlayScreen(game, 2, LavenderSalemGame.getLvl2()));
+                dispose();
             }
         });
 
         btnNiveles.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("BOTON NIVELES");
+                game.setScreen(new MenuNiveles(game));
             }
         });
 
         btnOpciones.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("BOTON OPCIONES");
+                game.setScreen(new ScreenCreditos(game));
             }
         });
 
@@ -137,7 +140,9 @@ public class MenuPrincipal implements Screen {
         });
     }
     @Override
-    public void show() {}
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+    }
 
     @Override
     public void render(float delta) {
@@ -159,7 +164,9 @@ public class MenuPrincipal implements Screen {
     @Override
     public void resume() {}
     @Override
-    public void hide() { Gdx.input.setInputProcessor(null); }
+    public void hide() {
+        Gdx.input.setInputProcessor(null);
+    }
 
     @Override
     public void dispose() {
@@ -168,7 +175,7 @@ public class MenuPrincipal implements Screen {
         texPanelFondo.dispose();
         texJugarUp.dispose(); texJugarHover.dispose();
         texNivelesUp.dispose(); texNivelesHover.dispose();
-        texOpcionesUp.dispose(); texOpcionesHover.dispose();
+        texCreditosUp.dispose(); texCreditosHover.dispose();
         texSalirUp.dispose(); texSalirHover.dispose();
     }
 }

@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.lavendersalem.game.world.LavenderSalemGame;
-import com.lavendersalem.game.screens.*;
 import com.lavendersalem.game.utils.Constants;
 
 public class OverlayPausa {
@@ -23,7 +22,7 @@ public class OverlayPausa {
     private boolean resetearNivel = false;
 
     private Texture texContinuarUp, texContinuarOver, texReintentarUp, texReintentarOver,
-        texOpcionesUp, texOpcionesOver, texMenuUp, texMenuOver;
+        texMenuUp, texMenuOver;
     private Texture texPanelMenu, texPergaminoTitulo;
     private Texture texFondoOscuro;
 
@@ -49,8 +48,6 @@ public class OverlayPausa {
         texContinuarOver = new Texture("ui/menus/Boton_continuar_over.png");
         texReintentarUp = new Texture("ui/menus/Boton_reintentar.png");
         texReintentarOver = new Texture("ui/menus/Boton_reintentar_over.png");
-        texOpcionesUp = new Texture("ui/menus/Boton_opciones.png");
-        texOpcionesOver = new Texture("ui/menus/Boton_opciones_hover.png");
         texMenuUp = new Texture("ui/menus/Boton_menu.png");
         texMenuOver = new Texture("ui/menus/Boton_menu_over.png");
     }
@@ -77,17 +74,15 @@ public class OverlayPausa {
         // Botones
         Button btnContinuar = crearBoton(texContinuarUp, texContinuarOver);
         Button btnReintentar = crearBoton(texReintentarUp, texReintentarOver);
-        Button btnOpciones = crearBoton(texOpcionesUp, texOpcionesOver);
         Button btnMenu = crearBoton(texMenuUp, texMenuOver);
 
-        configurarListener(btnContinuar, btnReintentar, btnOpciones, btnMenu);
+        configurarListener(btnContinuar, btnReintentar, btnMenu);
         // Configuración de layout de botones
         float AnchoBoton = 160f;
         float AltoBoton = 40f;
 
-        botones.add(btnContinuar).width(AnchoBoton).height(AltoBoton).padBottom(6).row();
-        botones.add(btnReintentar).width(AnchoBoton).height(AltoBoton).padBottom(6).row();
-        botones.add(btnOpciones).width(AnchoBoton).height(AltoBoton).padBottom(6).row();
+        botones.add(btnContinuar).width(AnchoBoton).height(AltoBoton).padBottom(10).row();
+        botones.add(btnReintentar).width(AnchoBoton).height(AltoBoton).padBottom(10).row();
         botones.add(btnMenu).width(AnchoBoton).height(AltoBoton);
 
         stackMenu.add(marcoMenu);    // Atrás
@@ -107,7 +102,7 @@ public class OverlayPausa {
         return new ImageButton(style);
     }
 
-    private void configurarListener(Button btnContinuar, Button btnReintentar, Button btnOpcines, Button btnMenu) {
+    private void configurarListener(Button btnContinuar, Button btnReintentar, Button btnMenu) {
         btnContinuar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -119,12 +114,6 @@ public class OverlayPausa {
             public void clicked(InputEvent event, float x, float y) {
                 resetearNivel = true;
                 visible = false;
-            }
-        });
-        btnOpcines.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("OPCIONES");
             }
         });
         btnMenu.addListener(new ClickListener(){
@@ -159,10 +148,10 @@ public class OverlayPausa {
         texPanelMenu.dispose();
         texContinuarUp.dispose();   texContinuarOver.dispose();
         texReintentarUp.dispose();  texReintentarOver.dispose();
-        texOpcionesUp.dispose();    texOpcionesOver.dispose();
         texMenuUp.dispose();        texMenuOver.dispose();
     }
 
+    public boolean isVisible () { return visible; }
     public void setVisible(boolean visible) { this.visible = visible; }
 
     public boolean isContinuar() { return continuar; }

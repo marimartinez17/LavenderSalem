@@ -55,7 +55,7 @@ public class Salem extends Player {
 
     @Override
     protected short getMaskBits(){
-        return B2DVars.PLATFORMS | B2DVars.BIT_ENEMY | B2DVars.OBJECTS_CRYSTALS| B2DVars.OBJECTS_INTERACTIVE | B2DVars.BIT_DANGER | B2DVars.BIT_MOVING |  B2DVars.BIT_WATER  | B2DVars.BIT_PORTALS;
+        return B2DVars.PLATFORMS | B2DVars.BIT_ENEMY | B2DVars.OBJECTS_CRYSTALS| B2DVars.OBJECTS_INTERACTIVE | B2DVars.BIT_DANGER | B2DVars.BIT_MOVING |  B2DVars.BIT_WATER  | B2DVars.BIT_PORTALS | B2DVars.BIT_INTERACTIVE;
     }
 
     // Configuramos movimiento
@@ -63,7 +63,7 @@ public class Salem extends Player {
     protected void handleInput() {
         if (currentState != Enums.State.DEAD){
             if (Gdx.input.isKeyJustPressed(Input.Keys.W) && onSuelo) {
-                b2body.applyLinearImpulse(new Vector2(0, 2.8f), b2body.getWorldCenter(), true);
+                b2body.applyLinearImpulse(new Vector2(0, 3.2f), b2body.getWorldCenter(), true);
                 // Salem meows when he jumps
                 LavenderSalemGame.manager.get("sounds/WAV/Cat_Meow.wav", Sound.class).play();
             }
@@ -77,6 +77,12 @@ public class Salem extends Player {
                 miraDer = false;
             }
         }
+    }
+
+    @Override
+    public void hit(){
+        super.hit();
+        LavenderSalemGame.manager.get("sounds/WAV/Cat_Meow.wav", Sound.class).play();
     }
 
     @Override

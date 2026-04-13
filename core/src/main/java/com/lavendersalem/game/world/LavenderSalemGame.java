@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.lavendersalem.game.screens.MenuPrincipal;
 import com.lavendersalem.game.screens.PlayScreen;
 
@@ -17,6 +18,8 @@ public class LavenderSalemGame extends Game {
     private TmxMapLoader mapLoader;
     private static TiledMap map1;
     private static TiledMap map2;
+    private static TiledMap map2v2;
+    private static TiledMap map3;
 
     public static AssetManager manager;
     @Override
@@ -29,11 +32,14 @@ public class LavenderSalemGame extends Game {
         mapLoader = new TmxMapLoader();
         map1 = mapLoader.load("maps/nivel1/nivel1.tmx");
         map2 = mapLoader.load("maps/nivel1/nivel2.tmx");
-
+        map2v2 = mapLoader.load("maps/nivel1/nivel2v2.tmx");
+        map3 = mapLoader.load("maps/nivel1/nivel3.tmx");
 
         // loading music
         manager.load("music/cooties.mp3", Music.class);
         manager.load("music/powder.mp3", Music.class);
+        manager.load("music/numbers.mp3", Music.class);
+        manager.load("music/garbage.mp3", Music.class);
 
         //loading sfx sounds (.WAV files)
         manager.load("sounds/WAV/Bottle_Break.wav", Sound.class);
@@ -70,7 +76,9 @@ public class LavenderSalemGame extends Game {
         manager.load("sounds/WAV/Water_Splash.wav", Sound.class);
         manager.finishLoading();
 
+        manager.get("music/cooties.mp3", Music.class).play();
         setScreen(new MenuPrincipal(game));
+
     }
 
     @Override
@@ -86,10 +94,50 @@ public class LavenderSalemGame extends Game {
         batch.dispose();
     }
 
+    public static TiledMap getMap(int lvl){
+        TiledMap map = map1;
+        switch (lvl){
+            case 0:
+                map = map1;
+                break;
+            case 1:
+                map = map2;
+                break;
+            case 2:
+                map =  map3;
+                break;
+            default:
+                map = map1;
+                break;
+        }
+        return map;
+    }
+
+    public static Music getMusic(int lvl){
+        Music theme;
+        switch (lvl){
+            case 0:
+                theme = manager.get("music/cooties.mp3",Music.class);
+                break;
+            case 1:
+                theme = manager.get("music/powder.mp3",Music.class);
+                break;
+            case 2:
+                theme = manager.get("music/numbers.mp3",Music.class);
+                break;
+            default:
+                theme = LavenderSalemGame.manager.get("music/cooties.mp3",Music.class);
+                break;
+        }
+        return theme;
+    }
+
     public static TiledMap getLvl1(){
         return map1;
     }
     public static TiledMap getLvl2(){
         return map2;
     }
+    public static TiledMap getLvlV2(){return map2v2;}
+    public static TiledMap getLvl3(){return map3;}
 }

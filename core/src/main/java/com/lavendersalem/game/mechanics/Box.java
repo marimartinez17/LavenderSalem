@@ -54,7 +54,7 @@ public class Box extends Sprite {
     }
 
     public void update(float delta){
-        setPosition((b2body.getPosition().x - getWidth() / 2  ), (b2body.getPosition().y - getHeight() / 2  - 0.01f));
+        setPosition((b2body.getPosition().x - getWidth() / 2  ), (b2body.getPosition().y - getHeight() / 2));
     }
 
     public void dispose(){

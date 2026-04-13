@@ -99,13 +99,20 @@ public class PlayScreen implements Screen {
         // To follow the characters through cam world
         gameCam = new OrthographicCamera();
 
+
+        // amount of tiles
+        int width = (int) map.getProperties().get("width", Integer.class) * 16;
+        int height = (int) map.getProperties().get("height", Integer.class) * 16;
+
+
+        renderer = new OrthogonalTiledMapRenderer(map, 1/ B2DVars.PPM);
+
+
         // mantain aspect ratio
-        gamePort = new FitViewport(480 / B2DVars.PPM, 416 / B2DVars.PPM, gameCam);
+        gamePort = new FitViewport(width / B2DVars.PPM, height / B2DVars.PPM, gameCam);
 
         // get width and height of the tilemap for the game camera (provisional)
-        int width = (int) map.getProperties().get("width", Integer.class);
-        int height = (int) map.getProperties().get("height", Integer.class);
-        renderer = new OrthogonalTiledMapRenderer(map, 1/ B2DVars.PPM);
+
 
         // establishing game camera position
         gameCam.position.set((width / 2f) / B2DVars.PPM, (height / 2f) / B2DVars.PPM, 0);
@@ -138,7 +145,7 @@ public class PlayScreen implements Screen {
         world.setContactListener(contactListener);
 
         music.setLooping(true);
-        music.setVolume(0.25f);
+        music.setVolume(0.7f);
         music.play();
     }
 
@@ -148,7 +155,7 @@ public class PlayScreen implements Screen {
             // how bodies react to collisions
             world.step(1/60f, 6, 2);
 
-            gameCam.zoom = 0.5f;
+            gameCam.zoom = 0.4f;
 
             // get velocity in the x-axis
             float salemVelX   = salem.b2body.getLinearVelocity().x;
@@ -207,8 +214,10 @@ public class PlayScreen implements Screen {
             // it's important to remove after
             for (int i = 0; i < bodies.size; i++) {
                 Body b = bodies.get(i);
-                crystals.removeValue((Crystal) b.getUserData(), true);
-                world.destroyBody(b);
+                if (world.getBodyCount() > 0 && b!= null){
+                    crystals.removeValue((Crystal) b.getUserData(), true);
+                    world.destroyBody(b);
+                }
             }
             bodies.clear();
 
@@ -340,12 +349,27 @@ public class PlayScreen implements Screen {
         activarVictoria();
         if (victoria) {
             if (!overlayWin.isVisible()) {
+                int tiempo = hud.getSegundosTrans();
+                int totales = 10;
+
+                int estrellas = ProgresoManager.calcularEstrellas(lvl, tiempo);
+                ProgresoManager.guardarProgreso(lvl,estrellas);
+
+
                 // Llamamos a preparar interfaz con los datos reales
-                overlayWin.prepararInterfaz(3, totalCrystals, numCrystals);
+                overlayWin.prepararInterfaz(estrellas, totalCrystals, numCrystals);
                 overlayWin.show();
             }
             if (overlayWin.isSiguienteNivel()) {
-                System.out.println("Pasar a siguente nivel");
+                music.pause();
+
+                int proximo = lvl + 1;
+                if (proximo <= 2){
+                    game.setScreen(new PlayScreen(game,proximo, LavenderSalemGame.getMap(proximo), LavenderSalemGame.getMusic(proximo)));
+                } else {
+                    game.setScreen(new MenuPrincipal(game));
+                }
+                dispose();
             }
         }
 

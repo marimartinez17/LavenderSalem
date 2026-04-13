@@ -33,7 +33,7 @@ public class B2DVars {
     public static final short BIT_WATER = 1024;
     public static final short BIT_MOVING = 2048;
     public static final short BIT_PORTALS = 4096;
-
+    public static final short BIT_INTERACTIVE = 8192;
 
     // Misc
     public static final float PPM = 100f;

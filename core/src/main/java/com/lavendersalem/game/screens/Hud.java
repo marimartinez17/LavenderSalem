@@ -23,6 +23,7 @@ public class Hud implements Disposable {
     private boolean timeUp; // true when the world timer reaches 0
     private static Integer collectedCrystals; // static so that it can be accessed more easily from the playscreen without creating a reference
     private static Integer totalCrystals;
+    private int segundosTrans;
     private Integer level;
 
     // txt labels
@@ -37,8 +38,9 @@ public class Hud implements Disposable {
     public Hud(SpriteBatch sb, int level, int totalCrystals) {
         this.level = level;
         this.totalCrystals = totalCrystals;
-        worldTimer = 300;
+        worldTimer = 000;
         timeCount = 0;
+        this.segundosTrans = 0;
         collectedCrystals = 0;
 
         viewport = new FitViewport(Constants.VIRTUAL_WIDTH, Constants.VIRTUAL_HEIGHT, new OrthographicCamera());
@@ -74,13 +76,13 @@ public class Hud implements Disposable {
     public void update(float delta){
         timeCount += delta;
         while (timeCount >= 1 ){
-            if (worldTimer > 0){
-                worldTimer--;
-            } else {
-                timeUp = true;
+            if (worldTimer > 0) {
+                segundosTrans++;
+                int min = segundosTrans / 60;
+                int seg = segundosTrans % 60;
+                countdownLabel.setText(String.format("%02d:%02d", min, seg));
+                timeCount = 0;
             }
-            countdownLabel.setText(String.format("%03d", worldTimer));
-            timeCount = 0;
         }
 
     }
@@ -90,6 +92,13 @@ public class Hud implements Disposable {
         collectedLabel.setText(collectedCrystals+" / "+totalCrystals);
     }
 
+    public int getSegundosTrans() {
+        return segundosTrans;
+    }
+
+    public static Integer getCollectedCrystals() {
+        return collectedCrystals;
+    }
 
     @Override
     public void dispose(){

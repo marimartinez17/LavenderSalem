@@ -155,6 +155,7 @@ public class Batty extends Enemy{
     public void hitOnHead() {
         setToDestroy = true;
 
+
         // gets rid of collisions in the body that is going to be destroyed
         for (Fixture fixture : b2body.getFixtureList()){
             fixture.setSensor(true);
